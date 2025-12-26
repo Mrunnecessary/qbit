@@ -8,7 +8,7 @@ understand, decide, organize, and reuse information in daily life.
 
 ---
 
-## 🚀 Product Vision
+## 🚀 Vision
 Qbit is not just a chatbot. It is a **daily-use AI companion** that combines:
 - Transparent AI search
 - Simplified explanations
@@ -28,92 +28,18 @@ Qbit is not just a chatbot. It is a **daily-use AI companion** that combines:
 ---
 
 ## 🧩 MVP Features
-
-### Core AI
-- AI chat
-- Transparent, non-biased search
-- Decision-focused summaries (bullets, pros/cons)
-
-### Documents & Media
-- PDF/Text upload → simplified explanation
+- AI chat & transparent search
+- Decision-focused summaries (pros/cons)
+- PDF / text explanation
 - Audio upload → transcription → translation → summary
-- Video summary (audio-based)
-
-### Productivity
-- Pin any AI output
-- Right-side pinned panel
-- Project decks for research & work
-- Add AI outputs to project decks
-- Date & time stamped searchable history
-
-### Domain-Specific Guidance
-- Exam preparation (strategy, PYQ patterns)
-- Job role preparation & mock interviews (text-based)
-- Medical & legal explanation (informational only)
-- Small business & wealth idea guidance (idea-only)
-
-### Office & Daily Work
-- Generate Excel (.xlsx), PowerPoint (.pptx), and Word (.docx)
-- Manual in-app task reminders
-
-### Languages
-- English
-- Hindi
-- Bengali
-- Tamil
-- Telugu
-- Marathi
-- Kannada
-- Malayalam
-- Odia
+- Multi-language support (including Odia)
+- Pin responses & project decks
+- Date & time stamped history
+- Exam & job preparation guidance
+- Medical & legal explanation (informational)
+- Generate Excel / PPT / Word files
+- Manual task reminders
 
 ---
 
 ## 🗂 Repository Structure
-
-branding/ → Brand assets & logos
-docs/ → PRD, roadmap, planning PDFs
-website/ → Landing page (tryqbit.com)
-app/ → MVP application (Bubble)
-backend/ → AI prompts & backend notes
-
-yaml
-Copy code
-
----
-
-## 📄 Documentation
-- Qbit MVP PRD
-- MVP vs Phase cost, timeline & user targets
-- Long-term roadmap (Phase 5–7)
-
-(All documents are available inside the `docs/` folder.)
-
----
-
-## 🛠 Tech Stack (MVP)
-- Frontend: Bubble
-- AI: OpenAI API
-- Database: Bubble DB
-- Hosting: Netlify / Vercel
-- Domain: tryqbit.com
-
----
-
-## 📌 Project Status
-🚧 MVP under active development
-
-This repository tracks:
-- Product thinking
-- Planning documents
-- Brand assets
-- MVP execution steps
-
----
-
-## 🤝 Contribution
-This is an early-stage project. Contributions and feedback may be enabled in later phases.
-
----
-
-© Qbit — AI that thinks with you
