@@ -3,13 +3,13 @@
 **Qbit** is a next-generation AI assistant and research workspace designed to help users
 understand, decide, organize, and reuse information in daily life.
 
-🌐 Website: https://tryqbit.com  
-🧠 Tagline: *AI that thinks with you*
+Website: https://tryqbit.com  
+Tagline: AI that thinks with you
 
 ---
 
-## 🚀 Product Vision
-Qbit is not just a chatbot. It is a **daily-use AI companion** that combines:
+## Product Vision
+Qbit is not just a chatbot. It is a daily-use AI companion that combines:
 - Transparent AI search with summaries
 - Simplified document and audio explanations
 - Project organization with pinning and decks
@@ -18,7 +18,7 @@ Qbit is not just a chatbot. It is a **daily-use AI companion** that combines:
 
 ---
 
-## 🎯 MVP Goals
+## MVP Goals
 - Validate daily usefulness
 - Encourage repeat usage
 - Enable pinning and project decks
@@ -27,7 +27,7 @@ Qbit is not just a chatbot. It is a **daily-use AI companion** that combines:
 
 ---
 
-## 🧩 Features Included in MVP
+## Features Included in MVP
 - AI chat and transparent search
 - Decision-oriented summaries
 - Document (PDF/text) explanation
@@ -37,38 +37,28 @@ Qbit is not just a chatbot. It is a **daily-use AI companion** that combines:
 - Date & time stamped history
 - Exam and job guidance
 - Medical and legal explanation (informational)
-- Excel/PPT/Word generation
+- Excel, PPT, Word generation
 - Manual task reminders
 
 ---
 
-## 🗂 Repository Structure
-branding/ → Logo & brand assets
-docs/ → PRD, roadmap, planning PDFs
-website/ → Landing page (tryqbit.com)
-app/ → MVP app (Bubble files / notes)
-backend/ → AI prompt templates & backend notes
+## Repository Structure
+branding/   → Logo & brand assets  
+docs/       → PRD, roadmap, planning PDFs  
+website/    → Landing page  
+app/        → MVP app (Bubble notes)  
+backend/    → AI prompts & backend notes  
 
 ---
 
-## 📄 Documentation
-- **Qbit MVP PRD**  
-- **MVP vs Phase Roadmap**  
-- **Long-Term Phase Roadmap (Phase 5–7)**
-
----
-
-## 🛠 Tech Stack (MVP)
-- Frontend: Bubble  
-- AI: OpenAI API  
-- Hosting: Netlify / Vercel (website)  
+## Tech Stack (MVP)
+- Frontend: Bubble
+- AI: OpenAI API
+- Hosting: Netlify / Vercel
 - Database: Bubble DB
 
 ---
 
-## 🤝 Contribution
-This is an early-stage project — contributions and feedback are welcome.
+Status: MVP under development
 
----
-
-© 2025 Qbit | AI that thinks with you
+© 2025 Qbit
