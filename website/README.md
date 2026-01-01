@@ -1,18 +1,12 @@
-\# Qbit Website
+# Website
 
+This folder will contain the landing page for Qbit (tryqbit.com).
 
+Planned stack:
+- HTML/CSS (initial)
+- React / Next.js (later)
 
-This folder contains the landing page for https://tryqbit.com
-
-
-
-Planned:
-
-\- Hero section
-
-\- Feature highlights
-
-\- CTA to try Qbit
+Status: Not started
 
 
 
