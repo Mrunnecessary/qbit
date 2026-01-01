@@ -2,82 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Qbit – AI that thinks with you</title>
 
   <!-- SEO -->
   <meta name="description" content="Qbit is a transparent AI assistant and research workspace that helps you think, decide, and organize information." />
-  <meta name="keywords" content="AI assistant, research AI, productivity AI, document AI, Indian language AI" />
-  <meta name="author" content="Qbit" />
+  <meta name="keywords" content="AI assistant, research AI, transparent AI, productivity AI, Indian languages AI" />
 
-  <link rel="stylesheet" href="style.css" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Google Analytics (replace G-XXXX later) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXX');
+  </script>
 </head>
 
 <body>
 
-  <!-- HERO -->
-  <header class="hero fade-in">
-    <h1>Qbit</h1>
-    <p class="tagline">AI that thinks with you</p>
-    <p class="subtitle">
-      A transparent AI assistant and research workspace designed to help you
-      understand, decide, and reuse information — not just read it.
-    </p>
+<header class="hero fade-in">
+  <h1>Qbit</h1>
+  <p class="tagline">AI that thinks with you</p>
+  <p class="subtitle">
+    A transparent AI assistant and research workspace that helps you
+    <strong>understand, decide, and reuse information</strong>.
+  </p>
 
-    <!-- Netlify Form -->
-    <form name="early-access" method="POST" data-netlify="true" class="email-form">
-      <input type="hidden" name="form-name" value="early-access" />
-      <input type="email" name="email" placeholder="Enter your email" required />
-      <button type="submit">Get Early Access</button>
-    </form>
-  </header>
+  <!-- Netlify Waitlist Form -->
+  <form name="waitlist" method="POST" data-netlify="true" action="/success.html">
+    <input type="hidden" name="form-name" value="waitlist" />
+    <input type="email" name="email" placeholder="Enter your email" required />
+    <button type="submit">Join Early Access</button>
+  </form>
+</header>
 
-  <!-- WHAT -->
-  <section class="slide-up">
-    <h2>What Qbit Does</h2>
-    <ul class="features">
-      <li>🔍 Transparent AI search with decision-ready summaries</li>
-      <li>📄 Explain documents, audio, and complex topics in simple language</li>
-      <li>📌 Pin important answers and organize them into project decks</li>
-      <li>📊 Generate Excel, PowerPoint, and Word files instantly</li>
-      <li>🌏 Built for India — supports multiple Indian languages</li>
-    </ul>
-  </section>
+<section class="slide-up">
+  <h2>What Qbit Does</h2>
+  <ul>
+    <li>🔍 Transparent AI search with decision-ready summaries</li>
+    <li>📄 Explains documents, audio, and complex topics</li>
+    <li>📌 Pin answers and organize them into project decks</li>
+    <li>📊 Generate Excel, PPT, and Word instantly</li>
+    <li>🌏 Supports Indian languages including Odia</li>
+  </ul>
+</section>
 
-  <!-- WHO -->
-  <section class="slide-up">
-    <h2>Who It’s For</h2>
-    <p>
-      Students, professionals, job seekers, founders, and small businesses
-      who want clarity instead of endless searching.
-    </p>
-  </section>
+<section class="slide-up">
+  <h2>Why Qbit Exists</h2>
+  <p>
+    Most AI tools give answers.  
+    <strong>Qbit helps you think.</strong>
+    It’s built for clarity, reuse, and real decisions — not endless chat.
+  </p>
+</section>
 
-  <!-- WHY -->
-  <section class="slide-up">
-    <h2>Why Qbit</h2>
-    <p>
-      Most AI tools give answers.  
-      Qbit helps you **think, decide, organize, and reuse knowledge** —
-      like a second brain for daily life.
-    </p>
-  </section>
+<section class="slide-up">
+  <h2>Who Qbit Is For</h2>
+  <p>
+    Students • Professionals • Job seekers • Founders • Researchers  
+    Anyone tired of messy information and shallow AI responses.
+  </p>
+</section>
 
-  <!-- CTA -->
-  <section class="cta slide-up">
-    <h2>Be part of the early journey</h2>
-    <p>Qbit is in active development. Early users shape the future.</p>
-    <a href="#top" class="cta-button">Join Early Access</a>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-links">
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="investors.html">Investors</a>
-    </div>
-    <p>© 2025 Qbit. AI that thinks with you.</p>
-  </footer>
+<footer>
+  <p>© 2025 Qbit</p>
+  <div class="footer-links">
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/investors.html">Investors</a>
+  </div>
+</footer>
 
 </body>
 </html>
