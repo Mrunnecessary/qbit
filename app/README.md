@@ -1,24 +1,10 @@
-\# Qbit MVP App
+# App
 
+This folder will contain the MVP web app built using Bubble.
 
+Includes:
+- Feature flows
+- Screenshots
+- Workflow notes
 
-This folder tracks MVP implementation notes.
-
-
-
-Platform:
-
-\- Bubble.io
-
-
-
-Contents:
-
-\- Screenshots
-
-\- Workflow notes
-
-\- Feature mapping
-
-
-
+Status: Planning completed, build pending
