@@ -1,14 +1,8 @@
-\# Backend \& AI Notes
+# Backend
 
+This folder will store:
+- AI prompt templates
+- API design notes
+- Future backend architecture
 
-
-This folder will contain:
-
-\- AI prompt templates
-
-\- API notes
-
-\- Backend logic documentation
-
-
-
+Status: Design phase
