@@ -34,22 +34,31 @@
 
   <!-- Netlify Waitlist Form -->
   <form
-  name="waitlist"
+  <form
+  action="https://forms.gle/7iW1ESp5k28s1LHc7"
   method="POST"
-  data-netlify="true"
-  action="/success.html"
+  target="hidden_iframe"
+  onsubmit="submitted=true;"
 >
-  <input type="hidden" name="form-name" value="waitlist" />
-
   <input
     type="email"
-    name="email"
+    name="entry.XXXXXXXX"
     placeholder="Enter your email"
     required
   />
-
   <button type="submit">Join Early Access</button>
 </form>
+
+<iframe
+  name="hidden_iframe"
+  style="display:none;"
+  onload="if(submitted){window.location='/success.html';}"
+></iframe>
+
+<script>
+  var submitted = false;
+</script>
+
 </header>
 
 <section class="slide-up">
