@@ -32,31 +32,15 @@
     <strong>understand, decide, and reuse information</strong>.
   </p>
 
-<form name="waitlist" data-netlify="true" hidden>
-  <input type="email" name="email" />
-<input type="hidden" name="redirect" value="/success" />
-</form>
-
   <!-- Netlify Waitlist Form -->
   <form
   name="waitlist"
   method="POST"
   data-netlify="true"
-  netlify-honeypot="bot-field"
   action="/success"
 >
-
-  <!-- REQUIRED hidden field -->
   <input type="hidden" name="form-name" value="waitlist" />
 
-  <!-- Honeypot (spam protection, required by Netlify) -->
-  <p style="display:none;">
-    <label>Don’t fill this out if you're human:
-      <input name="bot-field" />
-    </label>
-  </p>
-
-  <!-- Actual input -->
   <input
     type="email"
     name="email"
@@ -65,7 +49,7 @@
   />
 
   <button type="submit">Join Early Access</button>
-  </form>
+</form>
 </header>
 
 <section class="slide-up">
