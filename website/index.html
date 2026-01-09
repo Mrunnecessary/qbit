@@ -32,21 +32,43 @@
     <strong>understand, decide, and reuse information</strong>.
   </p>
 
+
   <!-- Netlify Waitlist Form -->
-  <form
-  action="https://docs.google.com/forms/d/e/1FAIpQLScgGlR_mj84BDp-SYgCFprA26qEi9FUTVs6iNifRcOEIaIzCA/formResponse"
-  method="POST"
-  target="hidden_iframe"
-  onsubmit="submitted=true;"
->
+  <form id="waitlistForm">
   <input
     type="email"
-    name="entry.1591633300"
+    id="email"
     placeholder="Enter your email"
     required
   />
   <button type="submit">Join Early Access</button>
 </form>
+
+<script>
+  const form = document.getElementById("waitlistForm");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    const response = await fetch(
+      "https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbw1DcfEzg95NyF-uJSolvXVtBVIH86AeI2bnCSG4hPxJ9OO9oWXfIH5otkyA6HDkBun/exec/exec",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email })
+      }
+    );
+
+    if (response.ok) {
+      window.location.href = "/success.html";
+    } else {
+      alert("Something went wrong. Try again.");
+    }
+  });
+</script>
+
 
 <iframe
   name="hidden_iframe"
