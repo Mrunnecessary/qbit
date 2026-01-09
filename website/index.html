@@ -47,38 +47,28 @@
 <script>
   const form = document.getElementById("waitlistForm");
 
-  form.addEventListener("submit", async function (e) {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const email = document.getElementById("email").value;
 
-    const response = await fetch(
-      "https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbw1DcfEzg95NyF-uJSolvXVtBVIH86AeI2bnCSG4hPxJ9OO9oWXfIH5otkyA6HDkBun/exec/exec",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email })
-      }
-    );
+    const formData = new FormData();
+    formData.append("email", email);
 
-    if (response.ok) {
+    fetch("https://script.google.com/macros/s/AKfycbyv93oZUuHE1QS-90vV_yTM7q2nDkV-ZAW0IcZkuvvxqpP7TdieZ3-Zh7se5rcmpaQ/exec", {
+      method: "POST",
+      body: formData
+    })
+    .then(() => {
       window.location.href = "/success.html";
-    } else {
-      alert("Something went wrong. Try again.");
-    }
+    })
+    .catch(() => {
+      alert("Submission failed. Try again.");
+    });
   });
 </script>
 
 
-<iframe
-  name="hidden_iframe"
-  style="display:none;"
-  onload="if(submitted){window.location='/success.html';}"
-></iframe>
-
-<script>
-  var submitted = false;
-</script>
 
 </header>
 
