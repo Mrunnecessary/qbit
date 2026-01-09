@@ -73,12 +73,13 @@
     })
     .then(res => res.text())
     .then(text => {
-      if (text.includes("SUCCESS")) {
-        window.location.href = "/success.html";
-      } else {
-        statusText.textContent = "Error: " + text;
-      }
-    })
+  console.log("Server response:", text);
+  if (text.trim() === "SUCCESS") {
+    window.location.assign("/success.html");
+  } else {
+    statusText.textContent = "Server response: " + text;
+  }
+})
     .catch(() => {
       statusText.textContent = "Network error. Try again.";
     });
