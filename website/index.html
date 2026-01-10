@@ -20,14 +20,10 @@
     A transparent AI assistant and research workspace.
   </p>
 
-  <!-- 🔥 PURE GET FORM (MOST RELIABLE METHOD ON EARTH) -->
-  <form
-    action="https://script.google.com/macros/s/AKfycbwAnzMEaIpld3IEh8MnUxGtmcB17XkqSV5fFYp6VEcgJU9_iWBT-N2yZIKk3r_wjFKs/exec"
-    method="GET"
-  >
+  <form id="waitlistForm">
     <input
       type="email"
-      name="email"
+      id="email"
       placeholder="Enter your email"
       required
     />
@@ -35,18 +31,30 @@
   </form>
 </header>
 
-<section>
-  <h2>What Qbit Does</h2>
-  <ul>
-    <li>Transparent AI search</li>
-    <li>Explain documents & audio</li>
-    <li>Organize research</li>
-  </ul>
-</section>
+<script>
+  document.getElementById("waitlistForm").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-<footer>
-  <p>© 2025 Qbit</p>
-</footer>
+    const email = document.getElementById("email").value.trim();
+    if (!email) return;
+
+    const baseUrl =
+      "https://script.google.com/macros/s/AKfycbwAnzMEaIpld3IEh8MnUxGtmcB17XkqSV5fFYp6VEcgJU9_iWBT-N2yZIKk3r_wjFKs/exec";
+
+    // 🔥 cache-busting parameter (CRITICAL)
+    const url =
+      baseUrl +
+      "?email=" + encodeURIComponent(email) +
+      "&t=" + Date.now();
+
+    // Force execution (no caching)
+    const img = new Image();
+    img.src = url;
+
+    // Redirect user
+    window.location.href = "/success.html";
+  });
+</script>
 
 </body>
 </html>
