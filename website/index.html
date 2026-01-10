@@ -23,18 +23,19 @@
     <strong>understand, decide, and reuse information</strong>.
   </p>
 
-  <!-- WAITLIST FORM -->
-  <form id="waitlistForm">
+  <!-- WAITLIST FORM (PLAIN HTML POST) -->
+  <form
+    action="https://script.google.com/macros/s/AKfycbwX6nljgxWWiBxsBlT9y0-gflZP8Zm5joCY23-3oElCk-Uy3U4pNt7EvsEGgFJSWTso/exec"
+    method="POST"
+  >
     <input
       type="email"
-      id="email"
+      name="email"
       placeholder="Enter your email"
       required
     />
     <button type="submit">Join Early Access</button>
   </form>
-
-  <p id="status" style="margin-top:12px;color:#ccc;"></p>
 </header>
 
 <section>
@@ -53,38 +54,6 @@
   <a href="/privacy.html">Privacy Policy</a> |
   <a href="/investors.html">Investors</a>
 </footer>
-
-<script>
-  const form = document.getElementById("waitlistForm");
-  const statusText = document.getElementById("status");
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value;
-    statusText.textContent = "Submitting…";
-
-    const formData = new FormData();
-    formData.append("email", email);
-
-    fetch("https://script.google.com/macros/s/AKfycbwX6nljgxWWiBxsBlT9y0-gflZP8Zm5joCY23-3oElCk-Uy3U4pNt7EvsEGgFJSWTso/exec", {
-      method: "POST",
-      body: formData
-    })
-    .then(res => res.text())
-    .then(text => {
-  console.log("Server response:", text);
-  if (text.trim() === "SUCCESS") {
-    window.location.assign("/success.html");
-  } else {
-    statusText.textContent = "Server response: " + text;
-  }
-})
-    .catch(() => {
-      statusText.textContent = "Network error. Try again.";
-    });
-  });
-</script>
 
 </body>
 </html>
