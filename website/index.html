@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Qbit – AI that thinks with you</title>
 
-  <meta name="description" content="Qbit is a transparent AI assistant and research workspace." />
-  <meta name="keywords" content="AI assistant, research AI" />
+  <!-- SEO -->
+  <meta name="description" content="Qbit is a transparent AI assistant and research workspace that helps you think, decide, and organize information." />
+  <meta name="keywords" content="AI assistant, research AI, productivity AI, Indian languages AI" />
 
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css"/>
 </head>
 
@@ -17,13 +19,18 @@
   <h1>Qbit</h1>
   <p class="tagline">AI that thinks with you</p>
   <p class="subtitle">
-    A transparent AI assistant and research workspace.
+    A transparent AI assistant and research workspace that helps you
+    <strong>understand, decide, and reuse information</strong>.
   </p>
 
-  <form id="waitlistForm">
+  <!-- ✅ PURE GET FORM (THIS IS THE KEY) -->
+  <form
+    action="https://script.google.com/macros/s/AKfycbwAnzMEaIpld3IEh8MnUxGtmcB17XkqSV5fFYp6VEcgJU9_iWBT-N2yZIKk3r_wjFKs/exec"
+    method="GET"
+  >
     <input
       type="email"
-      id="email"
+      name="email"
       placeholder="Enter your email"
       required
     />
@@ -31,30 +38,22 @@
   </form>
 </header>
 
-<script>
-  document.getElementById("waitlistForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+<section>
+  <h2>What Qbit Does</h2>
+  <ul>
+    <li>Transparent AI search with clear summaries</li>
+    <li>Explain documents, audio, and complex topics</li>
+    <li>Pin answers and organize project decks</li>
+    <li>Generate Excel, PPT, and Word files</li>
+    <li>Supports Indian languages including Odia</li>
+  </ul>
+</section>
 
-    const email = document.getElementById("email").value.trim();
-    if (!email) return;
-
-    const baseUrl =
-      "https://script.google.com/macros/s/AKfycbwAnzMEaIpld3IEh8MnUxGtmcB17XkqSV5fFYp6VEcgJU9_iWBT-N2yZIKk3r_wjFKs/exec";
-
-    // 🔥 cache-busting parameter (CRITICAL)
-    const url =
-      baseUrl +
-      "?email=" + encodeURIComponent(email) +
-      "&t=" + Date.now();
-
-    // Force execution (no caching)
-    const img = new Image();
-    img.src = url;
-
-    // Redirect user
-    window.location.href = "/success.html";
-  });
-</script>
+<footer>
+  <p>© 2025 Qbit</p>
+  <a href="/privacy.html">Privacy Policy</a> |
+  <a href="/investors.html">Investors</a>
+</footer>
 
 </body>
 </html>
