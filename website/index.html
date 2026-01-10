@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Qbit – AI that thinks with you</title>
 
+  <!-- SEO -->
   <meta name="description" content="Qbit is a transparent AI assistant and research workspace that helps you think, decide, and organize information." />
-  <meta name="keywords" content="AI assistant, research AI, productivity AI" />
+  <meta name="keywords" content="AI assistant, research AI, productivity AI, Indian languages AI" />
 
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css"/>
 </head>
 
@@ -32,45 +34,16 @@
     <button type="submit">Join Early Access</button>
   </form>
 
-  <p id="status" style="margin-top:12px; opacity:0.8;"></p>
+  <p id="status" style="margin-top:12px; opacity:0.85;"></p>
 </header>
-
-<script>
-  const form = document.getElementById("waitlistForm");
-  const statusText = document.getElementById("status");
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value;
-    statusText.textContent = "Submitting…";
-
-    fetch(
-      "https://script.google.com/macros/s/AKfycbwAnzMEaIpld3IEh8MnUxGtmcB17XkqSV5fFYp6VEcgJU9_iWBT-N2yZIKk3r_wjFKs/exec",
-      {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: "email=" + encodeURIComponent(email),
-      }
-    );
-
-    // Redirect after silent submit
-    setTimeout(() => {
-      window.location.href = "/success.html";
-    }, 800);
-  });
-</script>
 
 <section>
   <h2>What Qbit Does</h2>
   <ul>
-    <li>Transparent AI search with clear summaries</li>
+    <li>Transparent AI search with decision-ready summaries</li>
     <li>Explain documents, audio, and complex topics</li>
     <li>Pin answers and organize project decks</li>
-    <li>Generate Excel, PPT, and Word files</li>
+    <li>Generate Excel, PPT, and Word instantly</li>
     <li>Supports Indian languages including Odia</li>
   </ul>
 </section>
@@ -80,6 +53,26 @@
   <a href="/privacy.html">Privacy Policy</a> |
   <a href="/investors.html">Investors</a>
 </footer>
+
+<script>
+  document.getElementById("waitlistForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    if (!email) return;
+
+    // 🔥 GOOGLE APPS SCRIPT DEPLOYED URL (DO NOT CHANGE)
+    const scriptURL =
+      "https://script.google.com/macros/s/AKfycbwAnzMEaIpld3IEh8MnUxGtmcB17XkqSV5fFYp6VEcgJU9_iWBT-N2yZIKk3r_wjFKs/exec";
+
+    // Tracking-pixel style GET request (MOST RELIABLE)
+    const img = new Image();
+    img.src = scriptURL + "?email=" + encodeURIComponent(email);
+
+    // Redirect user
+    window.location.href = "/success.html";
+  });
+</script>
 
 </body>
 </html>
