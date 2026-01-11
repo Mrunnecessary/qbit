@@ -10,6 +10,36 @@
   <meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI, Indian languages AI" />
 
   <link rel="stylesheet" href="style.css"/>
+
+  <!-- Inline enhancement for status message -->
+  <style>
+    .status-text {
+      margin-top: 16px;
+      font-size: 1.05rem;        /* 👈 enlarged */
+      font-weight: 500;
+      color: #cbd5f5;
+      text-align: center;
+      min-height: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .status-success {
+      color: #34d399;
+    }
+
+    .status-warning {
+      color: #fbbf24;
+    }
+
+    .status-error {
+      color: #f87171;
+    }
+
+    button[disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 
 <body>
@@ -36,7 +66,16 @@
     <button type="submit">Join Early Access</button>
   </form>
 
-  <p class="post-cta">
+  
+  <!-- STATUS MESSAGE -->
+  <p id="status" class="status-text"></p>
+
+  <!-- Bubble App CTA -->
+  <div class="cta-group">
+    <button class="secondary" disabled>
+      Open Qbit App (Coming Soon)
+    </button>
+<p class="post-cta">
     We’ll notify you when Qbit opens for early access.
   </p>
 
@@ -44,19 +83,11 @@
     No spam • Early users get priority access
   </p>
 
-  <p id="status" class="status-text"></p>
-
-  <!-- Bubble App CTA -->
-    <div class="cta-group">
-      <button class="secondary" onclick="alert('Qbit app coming soon')">
-        Open Qbit App (Soon)
-      </button>
-    </div>
+  
+</div>
 </header>
 
-
-
-<!-- WHAT IT DOES -->
+<!-- FEATURES -->
 <section class="features">
   <h2>What Qbit Helps You Do</h2>
   <ul>
@@ -78,7 +109,7 @@
   </ol>
 </section>
 
-<!-- WHO IT'S FOR -->
+<!-- AUDIENCE -->
 <section class="audience">
   <h2>Who Qbit Is For</h2>
   <p>
@@ -87,7 +118,7 @@
   </p>
 </section>
 
-<!-- SOCIAL PROOF (SAFE) -->
+<!-- SOCIAL PROOF -->
 <section class="social-proof">
   <p>
     Built for everyday decisions, academic work, and professional research.
@@ -107,13 +138,18 @@
 <script>
   const form = document.getElementById("waitlistForm");
   const statusText = document.getElementById("status");
+  const submitButton = form.querySelector("button");
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    statusText.textContent = "Saving your spot…pLease wait";
-    const email = document.getElementById("email").value;
+    submitButton.disabled = true;
+    submitButton.textContent = "Please wait…";
 
+    statusText.className = "status-text";
+    statusText.textContent = "Saving your spot in the waitlist… please wait";
+
+    const email = document.getElementById("email").value;
     const formData = new FormData();
     formData.append("email", email);
 
@@ -125,14 +161,25 @@
     .then(text => {
       if (text.includes("SUCCESS")) {
         window.location.href = "/success.html";
-      } else if (text.includes("DUPLICATE")) {
-        statusText.textContent = "You're already on the waitlist 🙂";
-      } else {
+      } 
+      else if (text.includes("DUPLICATE")) {
+        statusText.textContent = "You're already present on the waitlist 🙂";
+        statusText.classList.add("status-warning");
+        submitButton.disabled = false;
+        submitButton.textContent = "Join Early Access";
+      } 
+      else {
         statusText.textContent = "Something went wrong. Please try again.";
+        statusText.classList.add("status-error");
+        submitButton.disabled = false;
+        submitButton.textContent = "Join Early Access";
       }
     })
     .catch(() => {
       statusText.textContent = "Network error. Please try again.";
+      statusText.classList.add("status-error");
+      submitButton.disabled = false;
+      submitButton.textContent = "Join Early Access";
     });
   });
 </script>
