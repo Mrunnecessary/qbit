@@ -1,59 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Qbit – AI that thinks with you</title>
+<form id="waitlistForm">
+  <input
+    type="email"
+    id="email"
+    placeholder="Enter your email"
+    required
+  />
+  <button type="submit">Join Early Access</button>
+</form>
 
-  <!-- SEO -->
-  <meta name="description" content="Qbit is a transparent AI assistant and research workspace that helps you think, decide, and organize information." />
-  <meta name="keywords" content="AI assistant, research AI, productivity AI, Indian languages AI" />
+<p id="status" style="color:#ccc;margin-top:10px;"></p>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css"/>
-</head>
+<script>
+  const form = document.getElementById("waitlistForm");
+  const status = document.getElementById("status");
 
-<body>
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-<header class="hero">
-  <h1>Qbit</h1>
-  <p class="tagline">AI that thinks with you</p>
-  <p class="subtitle">
-    A transparent AI assistant and research workspace that helps you
-    <strong>understand, decide, and reuse information</strong>.
-  </p>
+    const email = document.getElementById("email").value;
+    status.textContent = "Submitting...";
 
-  <!-- ✅ PURE GET FORM (THIS IS THE KEY) -->
-  <form
-    action="https://script.google.com/macros/s/AKfycbwAnzMEaIpld3IEh8MnUxGtmcB17XkqSV5fFYp6VEcgJU9_iWBT-N2yZIKk3r_wjFKs/exec"
-    method="GET"
-  >
-    <input
-      type="email"
-      name="email"
-      placeholder="Enter your email"
-      required
-    />
-    <button type="submit">Join Early Access</button>
-  </form>
-</header>
+    const formData = new FormData();
+    formData.append("email", email);
 
-<section>
-  <h2>What Qbit Does</h2>
-  <ul>
-    <li>Transparent AI search with clear summaries</li>
-    <li>Explain documents, audio, and complex topics</li>
-    <li>Pin answers and organize project decks</li>
-    <li>Generate Excel, PPT, and Word files</li>
-    <li>Supports Indian languages including Odia</li>
-  </ul>
-</section>
+    try {
+      const res = await fetch(
+        "https://script.google.com/macros/s/AKfycbwAzlcs82UPSUNkix5YipDjJD4BWbrkawXVnNITghKeyxhwiRztjMomY9uTFxhsWA9d/exec",
+        { method: "POST", body: formData }
+      );
 
-<footer>
-  <p>© 2025 Qbit</p>
-  <a href="/privacy.html">Privacy Policy</a> |
-  <a href="/investors.html">Investors</a>
-</footer>
+      const text = await res.text();
 
-</body>
-</html>
+      if (text.includes("OK")) {
+        window.location.href = "/success.html";
+      } else {
+        status.textContent = "Submission failed. Try again.";
+      }
+    } catch {
+      status.textContent = "Network error.";
+    }
+  });
+</script>
