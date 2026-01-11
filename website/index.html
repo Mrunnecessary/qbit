@@ -6,191 +6,130 @@
   <title>Qbit – AI that thinks with you</title>
 
   <!-- SEO -->
-  <meta name="description" content="Qbit is a transparent AI assistant that helps you understand, decide, and reuse information." />
-  <meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI" />
+  <meta name="description" content="Qbit is a transparent AI assistant and research workspace that helps you understand, decide, and reuse information with clarity." />
+  <meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI, Indian languages AI" />
 
-  <!-- Basic styling (self-contained, safe) -->
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #020617, #0f172a);
-      color: #e5e7eb;
-    }
-
-    header {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .container {
-      max-width: 720px;
-      width: 100%;
-    }
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-
-    .tagline {
-      font-size: 1.2rem;
-      opacity: 0.85;
-      margin-bottom: 20px;
-    }
-
-    .subtitle {
-      font-size: 1.05rem;
-      opacity: 0.9;
-      margin-bottom: 35px;
-    }
-
-    form {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 25px;
-    }
-
-    input[type="email"] {
-      padding: 12px 14px;
-      border-radius: 8px;
-      border: none;
-      min-width: 240px;
-      font-size: 1rem;
-    }
-
-    button {
-      padding: 12px 18px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: #38bdf8;
-      color: #020617;
-    }
-
-    button.secondary {
-      background: transparent;
-      border: 1px solid #38bdf8;
-      color: #38bdf8;
-    }
-
-    .cta-group {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .features {
-      margin-top: 40px;
-      text-align: left;
-    }
-
-    .features li {
-      margin-bottom: 10px;
-      opacity: 0.9;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.85rem;
-      opacity: 0.6;
-    }
-
-    a {
-      color: #38bdf8;
-      text-decoration: none;
-      margin: 0 6px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
 
-<header>
-  <div class="container">
-    <h1>Qbit</h1>
-    <div class="tagline">AI that thinks with you</div>
+<!-- HERO -->
+<header class="hero">
+  <h1>Qbit</h1>
+  <p class="tagline">AI that thinks with you</p>
 
-    <div class="subtitle">
-      A transparent AI assistant and research workspace to help you
-      <strong>understand, decide, and reuse information</strong>.
-    </div>
+  <p class="subtitle">
+    A transparent AI assistant and research workspace designed to help you
+    <strong>understand, decide, and reuse information</strong> — without noise or bias.
+  </p>
 
-    <!-- WAITLIST FORM -->
-    <form id="waitlistForm">
-      <input
-        type="email"
-        id="email"
-        placeholder="Enter your email"
-        required
-      />
-      <button type="submit">Join Early Access</button>
-    </form>
+  <!-- WAITLIST FORM -->
+  <form id="waitlistForm" class="waitlist-form">
+    <input
+      type="email"
+      id="email"
+      placeholder="Enter your email"
+      required
+      aria-label="Email address"
+    />
+    <button type="submit">Join Early Access</button>
+  </form>
 
-    <p id="status" style="min-height:20px;"></p>
+  <p class="post-cta">
+    We’ll notify you when Qbit opens for early access.
+  </p>
 
-    <!-- Bubble App CTA -->
-    <div class="cta-group">
-      <button class="secondary" onclick="alert('Qbit app coming soon')">
-        Open Qbit App (Soon)
-      </button>
-    </div>
+  <p class="micro-trust">
+    No spam • Early users get priority access
+  </p>
 
-    <ul class="features">
-      <li>🔍 Transparent AI search with decision-ready summaries</li>
-      <li>📄 Simplifies documents, audio, and complex topics</li>
-      <li>📌 Pin answers and organize project decks</li>
-      <li>📊 Generate Excel, PPT, and Word instantly</li>
-      <li>🌏 Built for Indian users and languages</li>
-    </ul>
-  </div>
+  <p id="status" class="status-text"></p>
+
+  <!-- SECONDARY CTA -->
+  <a class="secondary-cta" href="#">
+    Open Qbit App (Coming Soon)
+  </a>
 </header>
 
+<!-- WHAT IT DOES -->
+<section class="features">
+  <h2>What Qbit Helps You Do</h2>
+  <ul>
+    <li>🔍 Transparent AI search with decision-ready summaries</li>
+    <li>📄 Simplifies documents, audio, and complex topics</li>
+    <li>📌 Pin answers and organize them into project decks</li>
+    <li>📊 Generate Excel, PPT, and Word instantly</li>
+    <li>🌏 Built for Indian users and languages</li>
+  </ul>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+  <h2>How Qbit Works</h2>
+  <ol>
+    <li>Ask a question or upload information</li>
+    <li>Get clear, unbiased explanations</li>
+    <li>Save, reuse, and act with confidence</li>
+  </ol>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="audience">
+  <h2>Who Qbit Is For</h2>
+  <p>
+    Students, professionals, job seekers, founders, and researchers who want
+    clarity — not endless chat or confusing answers.
+  </p>
+</section>
+
+<!-- SOCIAL PROOF (SAFE) -->
+<section class="social-proof">
+  <p>
+    Built for everyday decisions, academic work, and professional research.
+  </p>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  © 2025 Qbit ·
-  <a href="/privacy.html">Privacy</a> ·
-  <a href="/investors.html">Investors</a>
+  <p>© 2025 Qbit</p>
+  <div class="footer-links">
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/investors.html">Investors</a>
+  </div>
 </footer>
 
+<!-- WAITLIST SCRIPT -->
 <script>
   const form = document.getElementById("waitlistForm");
-  const status = document.getElementById("status");
+  const statusText = document.getElementById("status");
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
+    statusText.textContent = "Saving your spot…pLease wait";
     const email = document.getElementById("email").value;
-    status.textContent = "Submitting...";
 
-    const data = new FormData();
-    data.append("email", email);
+    const formData = new FormData();
+    formData.append("email", email);
 
-    try {
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbwAzlcs82UPSUNkix5YipDjJD4BWbrkawXVnNITghKeyxhwiRztjMomY9uTFxhsWA9d/exec",
-        { method: "POST", body: data }
-      );
-
-      const text = await res.text();
-
-      if (text.includes("OK")) {
+    fetch("https://script.google.com/macros/s/AKfycbz34YCBRfNCUE4-NuZV8kI7IcRDImqAd1iQ9M0_qPAaYd78c670JZlNYWg-PWXc40c/exec", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.text())
+    .then(text => {
+      if (text.includes("SUCCESS")) {
         window.location.href = "/success.html";
+      } else if (text.includes("DUPLICATE")) {
+        statusText.textContent = "You're already on the waitlist 🙂";
       } else {
-        status.textContent = "Something went wrong. Try again.";
+        statusText.textContent = "Something went wrong. Please try again.";
       }
-    } catch {
-      status.textContent = "Network error.";
-    }
+    })
+    .catch(() => {
+      statusText.textContent = "Network error. Please try again.";
+    });
   });
 </script>
 
