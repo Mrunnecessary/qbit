@@ -1,14 +1,166 @@
-<form id="waitlistForm">
-  <input
-    type="email"
-    id="email"
-    placeholder="Enter your email"
-    required
-  />
-  <button type="submit">Join Early Access</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Qbit – AI that thinks with you</title>
 
-<p id="status" style="color:#ccc;margin-top:10px;"></p>
+  <!-- SEO -->
+  <meta name="description" content="Qbit is a transparent AI assistant that helps you understand, decide, and reuse information." />
+  <meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI" />
+
+  <!-- Basic styling (self-contained, safe) -->
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      color: #e5e7eb;
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      margin-bottom: 35px;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    input[type="email"] {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: none;
+      min-width: 240px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #38bdf8;
+      color: #020617;
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .features {
+      margin-top: 40px;
+      text-align: left;
+    }
+
+    .features li {
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    a {
+      color: #38bdf8;
+      text-decoration: none;
+      margin: 0 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <h1>Qbit</h1>
+    <div class="tagline">AI that thinks with you</div>
+
+    <div class="subtitle">
+      A transparent AI assistant and research workspace to help you
+      <strong>understand, decide, and reuse information</strong>.
+    </div>
+
+    <!-- WAITLIST FORM -->
+    <form id="waitlistForm">
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter your email"
+        required
+      />
+      <button type="submit">Join Early Access</button>
+    </form>
+
+    <p id="status" style="min-height:20px;"></p>
+
+    <!-- Bubble App CTA -->
+    <div class="cta-group">
+      <button class="secondary" onclick="alert('Qbit app coming soon')">
+        Open Qbit App (Soon)
+      </button>
+    </div>
+
+    <ul class="features">
+      <li>🔍 Transparent AI search with decision-ready summaries</li>
+      <li>📄 Simplifies documents, audio, and complex topics</li>
+      <li>📌 Pin answers and organize project decks</li>
+      <li>📊 Generate Excel, PPT, and Word instantly</li>
+      <li>🌏 Built for Indian users and languages</li>
+    </ul>
+  </div>
+</header>
+
+<footer>
+  © 2025 Qbit ·
+  <a href="/privacy.html">Privacy</a> ·
+  <a href="/investors.html">Investors</a>
+</footer>
 
 <script>
   const form = document.getElementById("waitlistForm");
@@ -20,13 +172,13 @@
     const email = document.getElementById("email").value;
     status.textContent = "Submitting...";
 
-    const formData = new FormData();
-    formData.append("email", email);
+    const data = new FormData();
+    data.append("email", email);
 
     try {
       const res = await fetch(
         "https://script.google.com/macros/s/AKfycbwAzlcs82UPSUNkix5YipDjJD4BWbrkawXVnNITghKeyxhwiRztjMomY9uTFxhsWA9d/exec",
-        { method: "POST", body: formData }
+        { method: "POST", body: data }
       );
 
       const text = await res.text();
@@ -34,10 +186,13 @@
       if (text.includes("OK")) {
         window.location.href = "/success.html";
       } else {
-        status.textContent = "Submission failed. Try again.";
+        status.textContent = "Something went wrong. Try again.";
       }
     } catch {
       status.textContent = "Network error.";
     }
   });
 </script>
+
+</body>
+</html>
