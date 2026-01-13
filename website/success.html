@@ -1,87 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>You're In – Qbit</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<title>You’re In – Qbit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #020617, #0f172a);
-      color: #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 14px;
-      padding: 40px 30px;
-      max-width: 420px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      animation: fadeUp 0.8s ease forwards;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    p {
-      opacity: 0.9;
-      margin-bottom: 25px;
-    }
-
-    a {
-      display: inline-block;
-      padding: 12px 22px;
-      background: #38bdf8;
-      color: #020617;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    .note {
-      font-size: 0.85rem;
-      opacity: 0.7;
-      margin-top: 20px;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(135deg, #020617, #0f172a);
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+.card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 40px 28px;
+  max-width: 420px;
+}
+a {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 22px;
+  background: #38bdf8;
+  color: #020617;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+</style>
 </head>
 
 <body>
+<div class="card">
+  <h1>🎉 You’re on the waitlist</h1>
+  <p>
+    Early users like you help shape Qbit.
+    Got 60 seconds?
+  </p>
 
-  <div class="card">
-    <h1>🎉 You're on the waitlist</h1>
-    <p>
-      Thanks for joining <strong>Qbit</strong>.<br>
-      We’ll notify you as soon as early access opens.
-    </p>
+  <a href="https://forms.gle/Zr9CKqDCbcMAcyos6" target="_blank">
+    Share quick feedback →
+  </a>
 
-    <a href="/">Back to Qbit</a>
-
-    <div class="note">
-      AI that thinks with you
-    </div>
-  </div>
-
+  <p style="margin-top:16px; font-size:0.85rem; opacity:0.7;">
+    No spam. Just clarity.
+  </p>
+</div>
 </body>
 </html>

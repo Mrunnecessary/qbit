@@ -1,196 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Qbit – AI that thinks with you</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Qbit – AI that thinks with you</title>
 
-  <!-- SEO -->
-  <meta name="description" content="Qbit is a transparent AI assistant and research workspace that helps you understand, decide, and reuse information with clarity." />
-  <meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI, Indian languages AI" />
+<!-- SEO -->
+<meta name="description" content="Qbit is a transparent AI assistant helping you understand, decide, and reuse information with clarity." />
+<meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI, Indian AI" />
 
-  <link rel="stylesheet" href="style.css"/>
+<!-- Google Analytics (replace G-XXXX later) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXX');
+</script>
 
-  <!-- Inline enhancement for status message -->
-  <style>
-    .status-text {
-      margin-top: 16px;
-      font-size: 1.05rem;        /* 👈 enlarged */
-      font-weight: 500;
-      color: #cbd5f5;
-      text-align: center;
-      min-height: 24px;
-      transition: all 0.3s ease;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e5e7eb;
+}
 
-    .status-success {
-      color: #34d399;
-    }
+.hero {
+  min-height: 100vh;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-    .status-warning {
-      color: #fbbf24;
-    }
+h1 { font-size: 2.4rem; margin-bottom: 8px; }
+.tagline { opacity: 0.9; margin-bottom: 14px; }
 
-    .status-error {
-      color: #f87171;
-    }
+.subtitle {
+  max-width: 420px;
+  font-size: 1.05rem;
+  margin-bottom: 22px;
+}
 
-    button[disabled] {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-  </style>
+form {
+  width: 100%;
+  max-width: 320px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-top: 14px;
+  font-size: 1.05rem;
+  min-height: 24px;
+}
+
+.secondary {
+  margin-top: 18px;
+  background: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+}
+
+.micro {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* Popup */
+.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-box {
+  background: #020617;
+  padding: 28px;
+  border-radius: 12px;
+  max-width: 320px;
+  text-align: center;
+}
+
+.popup-box button {
+  margin-top: 14px;
+}
+</style>
 </head>
 
 <body>
 
-<!-- HERO -->
 <header class="hero">
   <h1>Qbit</h1>
   <p class="tagline">AI that thinks with you</p>
 
   <p class="subtitle">
-    A transparent AI assistant and research workspace designed to help you
-    <strong>understand, decide, and reuse information</strong> — without noise or bias.
+    A transparent AI assistant designed to help you
+    <strong>understand, decide, and reuse information</strong>.
   </p>
 
   <!-- WAITLIST FORM -->
-  <form id="waitlistForm" class="waitlist-form">
+  <form id="waitlistForm">
     <input
       type="email"
       id="email"
       placeholder="Enter your email"
       required
-      aria-label="Email address"
+      pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+      title="Please enter a valid email address"
     />
     <button type="submit">Join Early Access</button>
   </form>
 
-  
-  <!-- STATUS MESSAGE -->
-  <p id="status" class="status-text"></p>
+  <div id="status" class="status"></div>
 
-  <!-- Bubble App CTA -->
-  <div class="cta-group">
-    <button class="secondary" disabled>
-      Open Qbit App (Coming Soon)
-    </button>
-<p class="post-cta">
-    We’ll notify you when Qbit opens for early access.
-  </p>
+  <button class="secondary" onclick="openPopup()">
+    Open Qbit App (Coming Soon)
+  </button>
 
-  <p class="micro-trust">
+  <div class="micro">
     No spam • Early users get priority access
-  </p>
-
-  
-</div>
+  </div>
 </header>
 
-<!-- FEATURES -->
-<section class="features">
-  <h2>What Qbit Helps You Do</h2>
-  <ul>
-    <li>🔍 Transparent AI search with decision-ready summaries</li>
-    <li>📄 Simplifies documents, audio, and complex topics</li>
-    <li>📌 Pin answers and organize them into project decks</li>
-    <li>📊 Generate Excel, PPT, and Word instantly</li>
-    <li>🌏 Built for Indian users and languages</li>
-  </ul>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how-it-works">
-  <h2>How Qbit Works</h2>
-  <ol>
-    <li>Ask a question or upload information</li>
-    <li>Get clear, unbiased explanations</li>
-    <li>Save, reuse, and act with confidence</li>
-  </ol>
-</section>
-
-<!-- AUDIENCE -->
-<section class="audience">
-  <h2>Who Qbit Is For</h2>
-  <p>
-    Students, professionals, job seekers, founders, and researchers who want
-    clarity — not endless chat or confusing answers.
-  </p>
-</section>
-
-<!-- SOCIAL PROOF -->
-<section class="social-proof">
-  <h2>Why People Are Excited About Qbit</h2>
-
-  <p class="social-subtext">
-    Built for everyday decisions, academic work, and professional research —
-    by people who value clarity over noise.
-  </p>
-
-  <div class="trust-points">
-    <span>✔ Privacy-first design</span>
-    <span>✔ No ads or hidden bias</span>
-    <span>✔ Early access community forming now</span>
+<!-- POPUP -->
+<div id="popup" class="popup">
+  <div class="popup-box">
+    <h3>🚀 A New AI Era</h3>
+    <p>
+      We’re building a new AI era in India —  
+      focused on clarity, trust, and real decisions.
+      Coming Soon....
+    </p>
+    <button onclick="closePopup()">Got it</button>
   </div>
-</section>
+</div>
 
-<!-- FOOTER -->
-<footer>
-  <p>© 2025 Qbit</p>
-  <div class="footer-links">
-    <a href="/privacy.html">Privacy Policy</a>
-    <a href="/investors.html">Investors</a>
-  </div>
-</footer>
-
-<!-- WAITLIST SCRIPT -->
 <script>
-  const form = document.getElementById("waitlistForm");
-  const statusText = document.getElementById("status");
-  const submitButton = form.querySelector("button");
+const form = document.getElementById("waitlistForm");
+const statusText = document.getElementById("status");
+const button = form.querySelector("button");
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+form.addEventListener("submit", function(e){
+  e.preventDefault();
 
-    submitButton.disabled = true;
-    submitButton.textContent = "Please wait…";
+  button.disabled = true;
+  statusText.textContent = "Saving your spot… please wait";
 
-    statusText.className = "status-text";
-    statusText.textContent = "Saving your spot in the waitlist… please wait";
+  const email = document.getElementById("email").value;
+  const data = new FormData();
+  data.append("email", email);
 
-    const email = document.getElementById("email").value;
-    const formData = new FormData();
-    formData.append("email", email);
+  gtag('event', 'waitlist_submit');
 
-    fetch("https://script.google.com/macros/s/AKfycbz34YCBRfNCUE4-NuZV8kI7IcRDImqAd1iQ9M0_qPAaYd78c670JZlNYWg-PWXc40c/exec", {
-      method: "POST",
-      body: formData
-    })
-    .then(res => res.text())
-    .then(text => {
-      if (text.includes("SUCCESS")) {
-        window.location.href = "/success.html";
-      } 
-      else if (text.includes("DUPLICATE")) {
-        statusText.textContent = "You're already present on the waitlist 🙂";
-        statusText.classList.add("status-warning");
-        submitButton.disabled = false;
-        submitButton.textContent = "Join Early Access";
-      } 
-      else {
-        statusText.textContent = "Something went wrong. Please try again.";
-        statusText.classList.add("status-error");
-        submitButton.disabled = false;
-        submitButton.textContent = "Join Early Access";
-      }
-    })
-    .catch(() => {
-      statusText.textContent = "Network error. Please try again.";
-      statusText.classList.add("status-error");
-      submitButton.disabled = false;
-      submitButton.textContent = "Join Early Access";
-    });
+  fetch("https://script.google.com/macros/s/AKfycbybegh5EqHVXbCMci2uGt-QyS-qhuovHL54-JszCG_wpp_0Pdz8VR9CXKtLufbmrZrD/exec", {
+    method: "POST",
+    body: data
+  })
+  .then(res => res.text())
+  .then(text => {
+    if (text.includes("SUCCESS")) {
+      gtag('event', 'waitlist_success');
+      window.location.href = "/success.html";
+    } else if (text.includes("DUPLICATE")) {
+      statusText.textContent = "You're already on the waitlist 🙂";
+      button.disabled = false;
+    } else if (text.includes("INVALID_EMAIL")) {
+      statusText.textContent = "Please enter a valid email address.";
+      button.disabled = false;
+    } else {
+      statusText.textContent = "Something went wrong. Try again.";
+      button.disabled = false;
+    }
+  })
+  .catch(() => {
+    statusText.textContent = "Network error. Try again.";
+    button.disabled = false;
   });
+});
+
+function openPopup() {
+  document.getElementById("popup").style.display = "flex";
+}
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
 </script>
 
 </body>
