@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>Qbit – AI that thinks with you</title>
 
 <!-- SEO -->
-<meta name="description" content="Qbit is a transparent AI assistant helping you understand, decide, and reuse information with clarity." />
+<meta name="description" content="Qbit is a transparent AI assistant that helps you understand, decide, and reuse information clearly and without bias." />
 <meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI, Indian AI" />
 
 <!-- Google Analytics (replace G-XXXX later) -->
@@ -19,16 +20,18 @@
 </script>
 
 <style>
+/* -------- BASE -------- */
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: radial-gradient(circle at top, #0f172a, #020617);
   color: #e5e7eb;
 }
 
+/* -------- HERO -------- */
 .hero {
-  min-height: 100vh;
-  padding: 32px 20px;
+  min-height: 90vh;
+  padding: 14px 20px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,15 +39,23 @@ body {
   text-align: center;
 }
 
-h1 { font-size: 2.4rem; margin-bottom: 8px; }
-.tagline { opacity: 0.9; margin-bottom: 14px; }
+.hero h1 {
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.tagline {
+  margin-top: 6px;
+  opacity: 0.85;
+}
 
 .subtitle {
   max-width: 420px;
   font-size: 1.05rem;
-  margin-bottom: 22px;
+  margin: 18px 0 22px;
 }
 
+/* -------- FORM -------- */
 form {
   width: 100%;
   max-width: 320px;
@@ -70,31 +81,120 @@ button {
   cursor: pointer;
 }
 
-button[disabled] {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.status {
-  margin-top: 14px;
-  font-size: 1.05rem;
-  min-height: 24px;
-}
-
-.secondary {
-  margin-top: 18px;
+/* Smaller secondary button */
+button.secondary {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 0.9rem;
   background: transparent;
   color: #38bdf8;
   border: 1px solid #38bdf8;
+  margin-top: 14px;
+}
+
+/* Status text (enlarged) */
+.status {
+  margin-top: 14px;
+  min-height: 30px;
+  font-size: 1.15rem;
+  font-weight: 500;
 }
 
 .micro {
-  margin-top: 10px;
+  margin-top: 8px;
   font-size: 0.85rem;
   opacity: 0.7;
 }
 
-/* Popup */
+/* -------- SCROLL INDICATOR -------- */
+.scroll-indicator {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.scroll-indicator .arrow {
+  margin-top: 4px;
+  font-size: 1.2rem;
+  animation: bounce 1.6s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
+/* -------- SECTIONS -------- */
+.section {
+  max-width: 800px;
+  margin: 36px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 1.9rem;
+  margin-bottom: 14px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  margin: 10px 0;
+}
+
+.steps {
+  max-width: 500px;
+  margin: auto;
+  text-align: left;
+  padding-left: 20px;
+}
+
+/* -------- COMING SOON -------- */
+.coming-soon {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 26px 20px;
+  text-align: center;
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+}
+
+.coming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.coming-item {
+  padding: 16px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+/* -------- FOOTER -------- */
+footer {
+  padding: 10px 20px 14px;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+footer a {
+  color: #38bdf8;
+  margin: 0 8px;
+  text-decoration: none;
+}
+
+/* -------- POPUP -------- */
 .popup {
   display: none;
   position: fixed;
@@ -111,15 +211,12 @@ button[disabled] {
   max-width: 320px;
   text-align: center;
 }
-
-.popup-box button {
-  margin-top: 14px;
-}
 </style>
 </head>
 
 <body>
 
+<!-- HERO -->
 <header class="hero">
   <h1>Qbit</h1>
   <p class="tagline">AI that thinks with you</p>
@@ -131,14 +228,7 @@ button[disabled] {
 
   <!-- WAITLIST FORM -->
   <form id="waitlistForm">
-    <input
-      type="email"
-      id="email"
-      placeholder="Enter your email"
-      required
-      pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
-      title="Please enter a valid email address"
-    />
+    <input type="email" id="email" placeholder="Enter your email" required />
     <button type="submit">Join Early Access</button>
   </form>
 
@@ -151,70 +241,108 @@ button[disabled] {
   <div class="micro">
     No spam • Early users get priority access
   </div>
+
+  <!-- SCROLL INDICATOR -->
+  <div class="scroll-indicator">
+    <span>Scroll to explore</span>
+    <div class="arrow">↓</div>
+  </div>
 </header>
+
+<!-- WHAT -->
+<section class="section">
+  <h2>What Qbit Helps You Do</h2>
+  <ul class="list">
+    <li>🔍 Transparent, unbiased AI answers</li>
+    <li>📄 Understand documents & complex topics</li>
+    <li>📌 Save and reuse knowledge</li>
+    <li>📊 Generate Excel, PPT & Word</li>
+    <li>🌏 Built for Indian users</li>
+  </ul>
+</section>
+
+<!-- HOW -->
+<section class="section">
+  <h2>How Qbit Works</h2>
+  <ol class="steps">
+    <li>Ask a question or upload content</li>
+    <li>Get clear, decision-ready explanations</li>
+    <li>Save, reuse, and act confidently</li>
+  </ol>
+</section>
+
+<!-- COMING SOON -->
+<section class="coming-soon">
+  <h2>Coming Soon</h2>
+  <div class="coming-grid">
+    <div class="coming-item">📎 PDF & audio understanding</div>
+    <div class="coming-item">🧠 Decision reasoning paths</div>
+    <div class="coming-item">📱 Mobile app experience</div>
+    <div class="coming-item">📌 Knowledge decks</div>
+    <div class="coming-item">🌐 Indian languages</div>
+    <div class="coming-item">🔐 Privacy-first AI</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  © 2025 Qbit ·
+  <a href="/privacy.html">Privacy Policy</a> ·
+  <a href="/investors.html">Investors</a>
+</footer>
 
 <!-- POPUP -->
 <div id="popup" class="popup">
   <div class="popup-box">
     <h3>🚀 A New AI Era</h3>
-    <p>
-      We’re building a new AI era in India —  
-      focused on clarity, trust, and real decisions.
-      Coming Soon....
-    </p>
+    <p>We will see a new AI era in India soon — focused on clarity and trust.</p>
     <button onclick="closePopup()">Got it</button>
   </div>
 </div>
 
 <script>
-const form = document.getElementById("waitlistForm");
-const statusText = document.getElementById("status");
-const button = form.querySelector("button");
-
-form.addEventListener("submit", function(e){
-  e.preventDefault();
-
-  button.disabled = true;
-  statusText.textContent = "Saving your spot… please wait";
-
-  const email = document.getElementById("email").value;
-  const data = new FormData();
-  data.append("email", email);
-
-  gtag('event', 'waitlist_submit');
-
-  fetch("https://script.google.com/macros/s/AKfycbybegh5EqHVXbCMci2uGt-QyS-qhuovHL54-JszCG_wpp_0Pdz8VR9CXKtLufbmrZrD/exec", {
-    method: "POST",
-    body: data
-  })
-  .then(res => res.text())
-  .then(text => {
-    if (text.includes("SUCCESS")) {
-      gtag('event', 'waitlist_success');
-      window.location.href = "/success.html";
-    } else if (text.includes("DUPLICATE")) {
-      statusText.textContent = "You're already on the waitlist 🙂";
-      button.disabled = false;
-    } else if (text.includes("INVALID_EMAIL")) {
-      statusText.textContent = "Please enter a valid email address.";
-      button.disabled = false;
-    } else {
-      statusText.textContent = "Something went wrong. Try again.";
-      button.disabled = false;
-    }
-  })
-  .catch(() => {
-    statusText.textContent = "Network error. Try again.";
-    button.disabled = false;
-  });
-});
-
+/* POPUP */
 function openPopup() {
   document.getElementById("popup").style.display = "flex";
 }
 function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
+
+/* WAITLIST SUBMISSION */
+document.getElementById("waitlistForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const status = document.getElementById("status");
+  status.textContent = "Saving your spot… please wait";
+
+  const email = document.getElementById("email").value;
+  const formData = new FormData();
+  formData.append("email", email);
+
+  fetch(
+    "https://script.google.com/macros/s/AKfycbzc_gtb9JDicperhoQPGPIBwV4qfRN-_I2T72Xh8o8DEAvJQEBbAxlXWotcX-BXh3MY/exec",  // 🔴 <—— PUT YOUR APP SCRIPT URL HERE
+    {
+      method: "POST",
+      body: formData
+    }
+  )
+  .then(res => res.text())
+  .then(text => {
+    if (text.includes("SUCCESS")) {
+      window.location.href = "/success.html";
+    } else if (text.includes("DUPLICATE")) {
+      status.textContent = "You’re already on the waitlist 🙂";
+    } else if (text.includes("INVALID_EMAIL")) {
+      status.textContent = "Please enter a valid email address";
+    } else {
+      status.textContent = "Something went wrong. Try again.";
+    }
+  })
+  .catch(() => {
+    status.textContent = "Network error. Please try again.";
+  });
+});
 </script>
 
 </body>
