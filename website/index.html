@@ -20,52 +20,182 @@
 </script>
 
 <style>
+/* -------- BASE -------- */
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: radial-gradient(circle at top, #0f172a, #020617);
   color: #e5e7eb;
 }
+
+/* -------- HERO -------- */
 .hero {
   min-height: 90vh;
-  padding: 14px 20px;
+  padding: 14px 20px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-.hero h1 { font-size: 2.4rem; margin: 0; }
-.tagline { margin-top: 6px; opacity: 0.85; }
-.subtitle { max-width: 420px; margin: 18px 0 22px; }
-form { width: 100%; max-width: 320px; }
-input {
+
+.hero h1 {
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.tagline {
+  margin-top: 6px;
+  opacity: 0.85;
+}
+
+.subtitle {
+  max-width: 420px;
+  font-size: 1.05rem;
+  margin: 18px 0 22px;
+}
+
+/* -------- FORM -------- */
+form {
   width: 100%;
-  padding: 14px;
+  max-width: 320px;
+}
+
+/* FORCE SAME SIZE */
+.waitlist-input,
+.waitlist-button {
+  width: 100%;
+  height: 52px;
+  box-sizing: border-box;
   border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* INPUT */
+.waitlist-input {
+  padding: 0 14px;
   border: none;
 }
-button {
-  width: 100%;
+
+/* PRIMARY BUTTON */
+.waitlist-button {
   margin-top: 12px;
-  padding: 14px;
+  padding: 0 14px;
   background: #38bdf8;
   border: none;
-  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
+  line-height: 1.2;
 }
+
+/* SECONDARY BUTTON */
+button.secondary {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  background: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  margin-top: 14px;
+  border-radius: 8px;
+}
+
+/* STATUS */
 .status {
   margin-top: 14px;
   min-height: 30px;
   font-size: 1.15rem;
+  font-weight: 500;
 }
-button.secondary {
-  margin-top: 14px;
-  background: transparent;
+
+.micro {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* -------- SCROLL INDICATOR -------- */
+.scroll-indicator {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.scroll-indicator .arrow {
+  margin-top: 4px;
+  font-size: 1.2rem;
+  animation: bounce 1.6s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
+/* -------- SECTIONS -------- */
+.section {
+  max-width: 800px;
+  margin: 36px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 1.9rem;
+  margin-bottom: 14px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  margin: 10px 0;
+}
+
+/* -------- COMING SOON -------- */
+.coming-soon {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 26px 20px;
+  text-align: center;
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+}
+
+.coming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.coming-item {
+  padding: 16px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+/* -------- FOOTER -------- */
+footer {
+  padding: 10px 20px 14px;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+footer a {
   color: #38bdf8;
-  border: 1px solid #38bdf8;
+  margin: 0 8px;
+  text-decoration: none;
 }
+
+/* -------- POPUP -------- */
 .popup {
   display: none;
   position: fixed;
@@ -74,16 +204,20 @@ button.secondary {
   justify-content: center;
   align-items: center;
 }
+
 .popup-box {
   background: #020617;
   padding: 28px;
   border-radius: 12px;
+  max-width: 320px;
+  text-align: center;
 }
 </style>
 </head>
 
 <body>
 
+<!-- HERO -->
 <header class="hero">
   <h1>Qbit</h1>
   <p class="tagline">AI that thinks with you</p>
@@ -93,26 +227,91 @@ button.secondary {
     <strong>understand, decide, and reuse information</strong>.
   </p>
 
+  <!-- WAITLIST FORM -->
   <form id="waitlistForm">
-    <input type="email" id="email" placeholder="Enter your email" required />
-    <button type="submit">Join Early Access</button>
+    <input
+      type="email"
+      id="email"
+      class="waitlist-input"
+      placeholder="Enter your email"
+      required
+    />
+
+    <button
+      type="submit"
+      class="waitlist-button"
+    >
+      Join Early Access (early users may receive rewards)
+    </button>
   </form>
 
   <div id="status" class="status"></div>
 
-  <button class="secondary" onclick="openPopup()">Open Qbit App (Coming Soon)</button>
+  <button class="secondary" onclick="openPopup()">
+    Open Qbit App (Coming Soon)
+  </button>
+
+  <div class="micro">
+    No spam • Early users get priority access
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Scroll to explore</span>
+    <div class="arrow">↓</div>
+  </div>
 </header>
 
+<!-- WHAT -->
+<section class="section">
+  <h2>What Qbit Helps You Do</h2>
+  <ul class="list">
+    <li>🔍 Transparent, unbiased AI answers</li>
+    <li>📄 Understand documents & complex topics</li>
+    <li>📌 Save and reuse knowledge</li>
+    <li>📊 Generate Excel, PPT & Word</li>
+    <li>🌏 Built for Indian users</li>
+  </ul>
+</section>
+
+<!-- HOW -->
+<section class="section">
+  <h2>How Qbit Works</h2>
+  <ul class="list">
+    <li>Ask a question or upload content</li>
+    <li>Get clear, decision-ready explanations</li>
+    <li>Save, reuse, and act confidently</li>
+  </ul>
+</section>
+
+<!-- COMING SOON -->
+<section class="coming-soon">
+  <h2>Coming Soon</h2>
+  <div class="coming-grid">
+    <div class="coming-item">📎 PDF & audio understanding</div>
+    <div class="coming-item">🧠 Decision reasoning paths</div>
+    <div class="coming-item">📱 Mobile app experience</div>
+    <div class="coming-item">📌 Knowledge decks</div>
+    <div class="coming-item">🌐 Indian languages</div>
+    <div class="coming-item">🔐 Privacy-first AI</div>
+  </div>
+</section>
+
+<footer>
+  © 2025 Qbit ·
+  <a href="/privacy.html">Privacy Policy</a> ·
+  <a href="/investors.html">Investors</a>
+</footer>
+
+<!-- POPUP -->
 <div id="popup" class="popup">
   <div class="popup-box">
     <h3>🚀 A New AI Era</h3>
-    <p>Clarity, reasoning, trust.</p>
+    <p>We will see a new AI era in India soon — focused on clarity and trust.</p>
     <button onclick="closePopup()">Got it</button>
   </div>
 </div>
 
 <script>
-/* -------- INTEREST TRACKING -------- */
 function openPopup() {
   gtag('event', 'open_app_clicked', { event_category: 'interest' });
   document.getElementById("popup").style.display = "flex";
@@ -121,37 +320,20 @@ function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
 
-/* -------- INTENT TRACKING -------- */
-document.getElementById("email").addEventListener("focus", () => {
-  gtag('event', 'email_input_focus', { event_category: 'intent' });
-});
-
-/* -------- SCROLL TRACKING -------- */
-let scrolled = false;
-window.addEventListener("scroll", () => {
-  if (!scrolled && window.scrollY > window.innerHeight * 0.7) {
-    scrolled = true;
-    gtag('event', 'scroll_70', { event_category: 'engagement' });
-  }
-});
-
-/* -------- WAITLIST SUBMIT -------- */
 document.getElementById("waitlistForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const status = document.getElementById("status");
   status.textContent = "Saving your spot… please wait";
 
-  const email = document.getElementById("email").value;
-
-  gtag('event', 'waitlist_submit', { event_category: 'engagement' });
-
   const formData = new FormData();
-  formData.append("email", email);
+  formData.append("email", email.value);
   formData.append("source", document.referrer || "direct");
   formData.append("device", /mobile/i.test(navigator.userAgent) ? "mobile" : "desktop");
 
-  fetch("https://script.google.com/macros/s/AKfycbzDmEHGRzW9eGqFEsQU_jwO_nQKRSlXN3CTVovNsosLPF8wEi0FU9hZE1yemMo0d2-H/exec", {
+  gtag('event', 'waitlist_submit', { event_category: 'engagement' });
+
+  fetch("https://script.google.com/macros/s/AKfycbxnk_D9-FlY71X_Wc3iF1RD4cEL3tc2PWYY7RT6DftwxHpuSPpfOlD1JCIz_8KEN8RN/exec", {
     method: "POST",
     body: formData
   })
@@ -160,7 +342,7 @@ document.getElementById("waitlistForm").addEventListener("submit", function(e) {
     if (text.includes("SUCCESS")) {
       window.location.href = "/success.html";
     } else if (text.includes("DUPLICATE")) {
-      gtag('event', 'waitlist_duplicate', { event_category: 'engagement' });
+      gtag('event','waitlist_duplicate');
       status.textContent = "You’re already on the waitlist 🙂";
     } else if (text.includes("INVALID_EMAIL")) {
       status.textContent = "Please enter a valid email address";
@@ -168,7 +350,9 @@ document.getElementById("waitlistForm").addEventListener("submit", function(e) {
       status.textContent = "Something went wrong. Try again.";
     }
   })
-  .catch(() => status.textContent = "Network error. Please try again.");
+  .catch(() => {
+    status.textContent = "Network error. Please try again.";
+  });
 });
 </script>
 
