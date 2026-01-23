@@ -1,106 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>You’re In – Qbit</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>You’re In – Qbit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at top, #0f172a, #020617);
-      color: #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-    }
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-24B2PVFE1Q', { anonymize_ip: true });
+</script>
 
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 14px;
-      padding: 36px 28px;
-      max-width: 420px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-      animation: fadeUp 0.7s ease forwards;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    p {
-      opacity: 0.9;
-      margin-bottom: 22px;
-      font-size: 1rem;
-    }
-
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    a.button {
-      display: inline-block;
-      padding: 12px 22px;
-      background: #38bdf8;
-      color: #020617;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-
-    a.secondary {
-      background: transparent;
-      color: #38bdf8;
-      border: 1px solid #38bdf8;
-    }
-
-    .note {
-      font-size: 0.85rem;
-      opacity: 0.7;
-      margin-top: 18px;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(28px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 36px;
+  text-align: center;
+}
+a.button {
+  display: inline-block;
+  padding: 12px 22px;
+  background: #38bdf8;
+  color: #020617;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 14px;
+}
+a.secondary {
+  background: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h1>🎉 You’re on the waitlist!</h1>
-    <p>
-      Thanks for joining <strong>Qbit</strong>.<br>
-      We’ll notify you as soon as early access opens.
-    </p>
+<script>
+  gtag('event', 'waitlist_success', { event_category: 'conversion' });
+</script>
 
-    <div class="actions">
-      <a href="/" class="button">Back to Home</a>
-      <a href="https://forms.gle/Zr9CKqDCbcMAcyos6" class="button secondary">
-        Share Feedback (Optional)
-      </a>
-    </div>
+<div class="card">
+  <h1>🎉 You’re on the waitlist!</h1>
+  <p>We’ve sent you a welcome email.</p>
 
-    <div class="note">
-      AI that thinks with you
-    </div>
-  </div>
+  <a href="/" class="button">Back to Home</a><br/>
+  <a href="https://forms.gle/Zr9CKqDCbcMAcyos6" class="button secondary">
+    Share Feedback (Optional)
+  </a>
+</div>
 
 </body>
 </html>
