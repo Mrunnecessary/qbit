@@ -66,7 +66,6 @@ form {
   max-width: 320px;
 }
 
-/* FORCE SAME SIZE */
 .waitlist-input,
 .waitlist-button {
   width: 100%;
@@ -76,13 +75,11 @@ form {
   font-size: 1rem;
 }
 
-/* INPUT */
 .waitlist-input {
   padding: 0 14px;
   border: none;
 }
 
-/* PRIMARY BUTTON */
 .waitlist-button {
   margin-top: 12px;
   padding: 0 14px;
@@ -90,7 +87,6 @@ form {
   border: none;
   font-weight: 600;
   cursor: pointer;
-  line-height: 1.2;
 }
 
 /* SECONDARY BUTTON */
@@ -162,6 +158,20 @@ button.secondary {
   margin: 10px 0;
 }
 
+/* -------- FOCUS NOTE -------- */
+.focus-note {
+  text-align: center;
+  margin: 40px auto 20px;
+  padding: 0 20px;
+}
+
+.focus-note p {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
 /* -------- COMING SOON -------- */
 .coming-soon {
   max-width: 900px;
@@ -226,47 +236,26 @@ footer a {
 <header class="hero">
   <h1>Qbit</h1>
 
-<p class="tagline">AI that shows its thinking</p>
+  <p class="tagline">AI that shows its thinking</p>
 
-<p class="subtitle">
-  Most AI tools give answers.
-  <br/>
-  <strong>Qbit helps you understand how those answers are formed</strong>
-  — assumptions, reasoning, uncertainty, and alternatives.
-</p>
+  <p class="subtitle">
+    Most AI tools give answers.<br/>
+    <strong>Qbit helps you understand how those answers are formed</strong>
+    — assumptions, reasoning, uncertainty, and alternatives.
+  </p>
 
-<p class="micro">
-  Not for speed. Built for trust.
-</p>
+  <p class="micro">Not for speed. Built for trust.</p>
 
-
-  <!-- WAITLIST FORM -->
   <form id="waitlistForm">
-    <input
-      type="email"
-      id="email"
-      class="waitlist-input"
-      placeholder="Enter your email"
-      required
-    />
-
-    <button
-      type="submit"
-      class="waitlist-button"
-    >
-      Join Early Access
-    </button>
+    <input type="email" id="email" class="waitlist-input" placeholder="Enter your email" required />
+    <button type="submit" class="waitlist-button">Join Early Access</button>
   </form>
 
   <div id="status" class="status"></div>
 
-  <button class="secondary" onclick="openPopup()">
-    Open Qbit App (Coming Soon)
-  </button>
+  <button class="secondary" onclick="openPopup()">Open Qbit App (Coming Soon)</button>
 
-  <div class="micro">
-    No spam • Early users get priority access and rewards
-  </div>
+  <div class="micro">No spam • Early users get priority access and rewards</div>
 
   <div class="scroll-indicator">
     <span>Scroll to explore</span>
@@ -275,18 +264,17 @@ footer a {
 </header>
 
 <section class="section">
-  <p style="max-width:600px; margin:auto; font-size:1.05rem; opacity:0.9;">
-    Qbit is not another AI that guesses an answer.  
-    It’s a reasoning-first system that makes assumptions explicit, highlights uncertainty, and surfaces multiple valid perspectives — so you can decide with confidence.
+  <p style="max-width:600px;margin:auto;font-size:1.05rem;opacity:0.9;">
+    Qbit is not another AI that guesses an answer.
+    It’s a reasoning-first system that makes assumptions explicit, highlights uncertainty,
+    and surfaces multiple valid perspectives — so you can decide with confidence.
   </p>
 </section>
 
-
-<!-- WHAT -->
 <section class="section">
   <h2>What Qbit Helps You Do</h2>
   <ul class="list">
-    <li>🔍 Understand complex topics with clarity </li>
+    <li>🔍 Understand complex topics with clarity</li>
     <li>📄 Compare different viewpoints before deciding</li>
     <li>📌 Preserve reasoning for future reuse</li>
     <li>📊 Uncover hidden assumptions in arguments</li>
@@ -294,7 +282,6 @@ footer a {
   </ul>
 </section>
 
-<!-- HOW -->
 <section class="section">
   <h2>How Qbit Works</h2>
   <ul class="list">
@@ -305,12 +292,14 @@ footer a {
   </ul>
 </section>
 
-<p style="opacity:0.8;">
-Our focus continues to be on **clarity-first reasoning**, not feature noise. Here’s what we’re building next:
-</p>
+<section class="focus-note">
+  <p>
+    Our focus continues to be on <strong>clarity-first reasoning</strong>,
+    not feature noise.<br/>
+    Here’s what we’re building next.
+  </p>
+</section>
 
-
-<!-- COMING SOON -->
 <section class="coming-soon">
   <h2>Coming Soon</h2>
   <div class="coming-grid">
@@ -326,11 +315,10 @@ Our focus continues to be on **clarity-first reasoning**, not feature noise. Her
 <footer>
   © 2025 Qbit ·
   <a href="/privacy.html">Privacy Policy</a> ·
-  <a href="/investors.html">Investors</a>
+  <a href="/investors.html">Investors</a> ·
   <a href="/faq.html">FAQ</a>
 </footer>
 
-<!-- POPUP -->
 <div id="popup" class="popup">
   <div class="popup-box">
     <h3>🚀 A New AI Era</h3>
@@ -350,14 +338,11 @@ function closePopup() {
 
 document.getElementById("waitlistForm").addEventListener("submit", function(e) {
   e.preventDefault();
-
   const status = document.getElementById("status");
   status.textContent = "Saving your spot… please wait";
 
   const formData = new FormData();
   formData.append("email", email.value);
-  formData.append("source", document.referrer || "direct");
-  formData.append("device", /mobile/i.test(navigator.userAgent) ? "mobile" : "desktop");
 
   gtag('event', 'waitlist_submit', { event_category: 'engagement' });
 
@@ -367,20 +352,12 @@ document.getElementById("waitlistForm").addEventListener("submit", function(e) {
   })
   .then(res => res.text())
   .then(text => {
-    if (text.includes("SUCCESS")) {
-      window.location.href = "/success.html";
-    } else if (text.includes("DUPLICATE")) {
-      gtag('event','waitlist_duplicate');
-      status.textContent = "You’re already on the waitlist 🙂";
-    } else if (text.includes("INVALID_EMAIL")) {
-      status.textContent = "Please enter a valid email address";
-    } else {
-      status.textContent = "Something went wrong. Try again.";
-    }
+    if (text.includes("SUCCESS")) window.location.href = "/success.html";
+    else if (text.includes("DUPLICATE")) status.textContent = "You’re already on the waitlist 🙂";
+    else if (text.includes("INVALID_EMAIL")) status.textContent = "Please enter a valid email address";
+    else status.textContent = "Something went wrong. Try again.";
   })
-  .catch(() => {
-    status.textContent = "Network error. Please try again.";
-  });
+  .catch(() => status.textContent = "Network error. Please try again.");
 });
 </script>
 
