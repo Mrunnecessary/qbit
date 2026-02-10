@@ -5,65 +5,77 @@
 <title>You’re In – Qbit</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-24B2PVFE1Q', { anonymize_ip: true });
-</script>
-
 <style>
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: radial-gradient(circle at top, #0f172a, #020617);
   color: #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
+  text-align: center;
+  padding: 20px;
 }
+
 .card {
   background: rgba(255,255,255,0.05);
   border-radius: 14px;
-  padding: 36px;
-  text-align: center;
+  padding: 34px 26px;
+  max-width: 420px;
 }
-a.button {
-  display: inline-block;
-  padding: 12px 22px;
-  background: #38bdf8;
-  color: #020617;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: 600;
-  margin-top: 14px;
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 12px;
 }
-a.secondary {
-  background: transparent;
-  color: #38bdf8;
-  border: 1px solid #38bdf8;
+
+p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 14px;
+}
+
+.note {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<script>
-  gtag('event', 'waitlist_success', { event_category: 'conversion' });
-</script>
-
 <div class="card">
-  <h1>🎉 You’re on the waitlist!</h1>
-  <p>We’ve sent you a welcome email.</p>
+  <h1>You’re on the waitlist</h1>
 
-  <a href="/" class="button">Back to Home</a><br/>
-  <a href="https://forms.gle/Zr9CKqDCbcMAcyos6" class="button secondary">
-    Share Feedback (Optional)
-  </a>
+  <p>
+    Thanks for joining <strong>Qbit</strong>.
+  </p>
+
+  <p>
+    We’re building Qbit carefully — to help people
+    <strong>understand options, risks, and trade-offs</strong>
+    before making important decisions.
+  </p>
+
+  <p>
+    This is not another chatbot.<br/>
+    It’s a thinking system — designed for trust.
+  </p>
+
+  <p class="note">
+    We’ll email you when early access opens.<br/>
+    You’ll be among the first to try it.
+  </p>
 </div>
+
+<script>
+if(window.gtag){
+  gtag('event','waitlist_success',{event_category:'conversion'});
+}
+</script>
 
 </body>
 </html>
