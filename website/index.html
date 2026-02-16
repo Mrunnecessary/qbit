@@ -352,43 +352,124 @@ footer a {
 </div>
 
 <script>
-/* GA – Hero scroll understanding */
-let heroTracked = false;
-window.addEventListener("scroll", () => {
-  const scrolled = (window.scrollY + window.innerHeight) / document.body.scrollHeight;
-  if (!heroTracked && scrolled > 0.5) {
-    heroTracked = true;
-    gtag('event','hero_understood',{event_category:'engagement'});
+
+/* =====================================
+   1️⃣ RETURNING USER TRACKING
+===================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const firstVisit = localStorage.getItem("qbit_first_visit");
+
+  if (firstVisit) {
+    gtag('event','returning_user',{
+      event_category:'retention'
+    });
+  } else {
+    localStorage.setItem("qbit_first_visit", new Date().toISOString());
   }
+
 });
 
-/* GA – Language interest */
-if (navigator.language && !navigator.language.toLowerCase().startsWith('en')) {
+
+/* =====================================
+   2️⃣ HERO UNDERSTOOD (50% scroll)
+===================================== */
+
+let heroTracked = false;
+
+window.addEventListener("scroll", () => {
+
+  const scrolled = (window.scrollY + window.innerHeight) / document.body.scrollHeight;
+
+  if (!heroTracked && scrolled > 0.5) {
+    heroTracked = true;
+
+    gtag('event','hero_understood',{
+      event_category:'engagement'
+    });
+  }
+
+});
+
+
+/* =====================================
+   3️⃣ DEEP SCROLL (75%)
+===================================== */
+
+let deepScrollTracked = false;
+
+window.addEventListener("scroll", () => {
+
+  if (deepScrollTracked) return;
+
+  const scrollPercent =
+    (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+
+  if (scrollPercent > 75) {
+    deepScrollTracked = true;
+
+    gtag('event','scroll_75_percent',{
+      event_category:'engagement'
+    });
+  }
+
+});
+
+
+/* =====================================
+   4️⃣ LANGUAGE INSIGHT
+===================================== */
+
+if (navigator.language &&
+   !navigator.language.toLowerCase().startsWith('en')) {
+
   gtag('event','india_language_interest',{
     event_category:'insight',
     event_label:navigator.language
   });
+
 }
 
-/* Popup */
+
+/* =====================================
+   5️⃣ POPUP TRACKING
+===================================== */
+
 function openPopup() {
-  gtag('event','decision_intent',{event_category:'intent',event_label:'open_app'});
+
+  gtag('event','open_app_clicked',{
+    event_category:'intent'
+  });
+
   document.getElementById("popup").style.display = "flex";
 }
+
 function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
 
-/* Waitlist */
-document.getElementById("waitlistForm").addEventListener("submit", function(e){
+
+/* =====================================
+   6️⃣ WAITLIST TRACKING
+===================================== */
+
+document.getElementById("waitlistForm")
+.addEventListener("submit", function(e){
+
   e.preventDefault();
+
   const status = document.getElementById("status");
+  const emailInput = document.getElementById("email");
+
   status.textContent = "Saving your spot… please wait";
 
   const formData = new FormData();
-  formData.append("email", email.value);
+  formData.append("email", emailInput.value);
 
-  gtag('event','decision_intent',{event_category:'intent',event_label:'waitlist_submit'});
+  gtag('event','waitlist_submit',{
+    event_category:'intent'
+  });
 
   fetch("https://script.google.com/macros/s/AKfycbxnk_D9-FlY71X_Wc3iF1RD4cEL3tc2PWYY7RT6DftwxHpuSPpfOlD1JCIz_8KEN8RN/exec", {
     method: "POST",
@@ -396,14 +477,68 @@ document.getElementById("waitlistForm").addEventListener("submit", function(e){
   })
   .then(res => res.text())
   .then(text => {
-    if (text.includes("SUCCESS")) window.location.href="/success.html";
-    else if (text.includes("DUPLICATE")) status.textContent="You’re already on the waitlist 🙂";
-    else if (text.includes("INVALID_EMAIL")) status.textContent="Please enter a valid email address";
-    else status.textContent="Something went wrong. Try again.";
+
+    if (text.includes("SUCCESS")) {
+
+      gtag('event','waitlist_success',{
+        event_category:'conversion'
+      });
+
+      window.location.href="/success.html";
+
+    } else if (text.includes("DUPLICATE")) {
+
+      gtag('event','waitlist_duplicate',{
+        event_category:'engagement'
+      });
+
+      status.textContent="You’re already on the waitlist 🙂";
+
+    } else if (text.includes("INVALID_EMAIL")) {
+
+      gtag('event','invalid_email',{
+        event_category:'error'
+      });
+
+      status.textContent="Please enter a valid email address";
+
+    } else {
+
+      status.textContent="Something went wrong. Try again.";
+    }
+
   })
-  .catch(() => status.textContent="Network error. Please try again.");
+  .catch(() => {
+    status.textContent="Network error. Please try again.";
+  });
+
 });
+
+
+/* =====================================
+   7️⃣ PLACEHOLDER FOR FUTURE EVENTS
+===================================== */
+
+function trackSearch() {
+  gtag('event','search_submitted',{
+    event_category:'engagement'
+  });
+}
+
+function trackExpand() {
+  gtag('event','result_expanded',{
+    event_category:'engagement'
+  });
+}
+
+function trackCompare() {
+  gtag('event','compare_clicked',{
+    event_category:'decision_depth'
+  });
+}
+
 </script>
+
 
 </body>
 </html>
