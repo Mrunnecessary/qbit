@@ -1,544 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <!-- FAVICON -->
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Qbit – AI that shows its thinking</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qbit | Think Smarter. Decide Better.</title>
+<meta name="description" content="Qbit is an AI-powered decision intelligence platform helping users make smarter personal, professional, and business decisions.">
 
-<!-- SEO -->
-<meta name="description" content="Qbit is a transparent AI assistant that helps you understand, decide, and reuse information clearly and without bias." />
-<meta name="keywords" content="AI assistant, transparent AI, research AI, productivity AI, Indian AI" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-24B2PVFE1Q', { anonymize_ip: true });
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-24B2PVFE1Q');
 </script>
 
 <style>
-/* -------- BASE -------- */
 body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: #e5e7eb;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #ffffff;
 }
-
-/* -------- HERO -------- */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+}
+.btn-primary {
+    background: #2563eb;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+}
 .hero {
-  min-height: 90vh;
-  padding: 14px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+    padding: 90px 0;
+    text-align: center;
 }
-
 .hero h1 {
-  font-size: 2.4rem;
-  margin: 0;
+    font-size: 46px;
+    margin-bottom: 20px;
 }
-
-.tagline {
-  margin-top: 6px;
-  opacity: 0.85;
+.hero p {
+    font-size: 18px;
+    color: #cbd5e1;
+    max-width: 750px;
+    margin: auto;
 }
-
-.subtitle {
-  max-width: 420px;
-  font-size: 1.05rem;
-  margin: 18px 0 22px;
-}
-
-/* -------- FORM -------- */
-form {
-  width: 100%;
-  max-width: 320px;
-}
-
-.waitlist-input,
-.waitlist-button {
-  width: 100%;
-  height: 52px;
-  box-sizing: border-box;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.waitlist-input {
-  padding: 0 14px;
-  border: none;
-}
-
-.waitlist-button {
-  margin-top: 12px;
-  padding: 0 14px;
-  background: #38bdf8;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* SECONDARY BUTTON */
-button.secondary {
-  width: auto;
-  padding: 8px 14px;
-  font-size: 0.9rem;
-  background: transparent;
-  color: #38bdf8;
-  border: 1px solid #38bdf8;
-  margin-top: 14px;
-  border-radius: 8px;
-}
-
-/* STATUS */
-.status {
-  margin-top: 14px;
-  min-height: 30px;
-  font-size: 1.15rem;
-  font-weight: 500;
-}
-
-.micro {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  opacity: 0.7;
-}
-
-/* -------- SCROLL INDICATOR -------- */
-.scroll-indicator {
-  margin-top: 22px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 0.85rem;
-  opacity: 0.6;
-}
-
-.scroll-indicator .arrow {
-  margin-top: 4px;
-  font-size: 1.2rem;
-  animation: bounce 1.6s infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); opacity: 0.6; }
-  50% { transform: translateY(6px); opacity: 1; }
-}
-
-/* -------- SECTIONS -------- */
 .section {
-  max-width: 800px;
-  margin: 36px auto;
-  padding: 0 20px;
-  text-align: center;
+    margin-top: 80px;
 }
-
-.section h2 {
-  font-size: 1.9rem;
-  margin-bottom: 14px;
+.card {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
 }
-
-.list {
-  list-style: none;
-  padding: 0;
-}
-
-.list li {
-  margin: 10px 0;
-}
-
-/* -------- FOCUS NOTE -------- */
-.focus-note {
-  text-align: center;
-  margin: 40px auto 20px;
-  padding: 0 20px;
-}
-
-.focus-note p {
-  max-width: 720px;
-  margin: 0 auto;
-  font-size: 1rem;
-  opacity: 0.85;
-}
-
-/* -------- COMING SOON -------- */
-.coming-soon {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 26px 20px;
-  text-align: center;
-  background: rgba(255,255,255,0.04);
-  border-radius: 14px;
-}
-
-.coming-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.coming-item {
-  padding: 16px;
-  background: rgba(255,255,255,0.03);
-  border-radius: 10px;
-  font-size: 0.95rem;
-}
-
-/* -------- FOOTER -------- */
 footer {
-  padding: 10px 20px 14px;
-  text-align: center;
-  font-size: 0.85rem;
-  opacity: 0.7;
+    text-align: center;
+    margin-top: 80px;
+    padding: 20px;
+    color: #94a3b8;
+    font-size: 14px;
 }
-
-footer a {
-  color: #38bdf8;
-  margin: 0 8px;
-  text-decoration: none;
-}
-
-/* -------- POPUP -------- */
-.popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-}
-
-.popup-box {
-  background: #020617;
-  padding: 28px;
-  border-radius: 12px;
-  max-width: 320px;
-  text-align: center;
-}
+a { color: #60a5fa; }
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
-<header class="hero">
-  <h1>Qbit</h1>
+<div class="container">
 
-  <p class="tagline">AI that shows its thinking</p>
-
-  <p class="subtitle">
-    Most AI tools give answers.<br/>
-    <strong>Qbit helps you understand how those answers are formed</strong>
-    — assumptions, reasoning, uncertainty, and alternatives.
-  </p>
-
-  <p class="micro">Built for trust and clarity</p>
-
-  <form id="waitlistForm">
-    <input type="email" id="email" class="waitlist-input" placeholder="Enter your email" required />
-    <button type="submit" class="waitlist-button">Join Early Access</button>
-  </form>
-
-  <div id="status" class="status"></div>
-
-  <button class="secondary" onclick="openPopup()">Open Qbit App (Coming Soon)</button>
-
-  <div class="micro">No spam • Early users get priority access and rewards</div>
-
-  <div class="scroll-indicator">
-    <span>Scroll to explore</span>
-    <div class="arrow">↓</div>
-  </div>
+<header>
+    <div class="logo">Qbit</div>
+    <a href="#signup" class="btn-primary" onclick="trackEvent('header_cta_click')">Try Qbit</a>
 </header>
 
-<!-- INTRO -->
+<section class="hero">
+    <h1>Think Smarter. Decide Better.</h1>
+    <p>
+        Qbit is your AI-powered decision companion. 
+        From career moves to business strategies — get structured insights, risk analysis, and smarter clarity.
+    </p>
+    <br>
+    <a href="#signup" class="btn-primary" onclick="trackEvent('hero_try_click')">Get Early Access</a>
+</section>
+
+<section id="signup" class="section">
+    <h2>Join the Waitlist</h2>
+    <p style="color:#cbd5e1;">Currently 20 early users onboard. Be among the first 100 shaping Qbit.</p>
+    <br>
+    <a href="#" class="btn-primary" onclick="trackEvent('signup_request_click')">Request Access</a>
+</section>
+
 <section class="section">
-  <p style="max-width:600px;margin:auto;font-size:1.05rem;opacity:0.9;">
-    Qbit is not another AI that guesses an answer.
-    It’s a reasoning-first system that makes assumptions explicit,
-    highlights uncertainty, and surfaces multiple valid perspectives —
-    so you can decide with confidence.
-  </p>
+    <h2>FAQ</h2>
+    <div class="card">
+        <strong>What is Qbit?</strong>
+        <p>Qbit is an AI-powered decision intelligence platform that provides structured analysis instead of generic answers.</p>
+    </div>
+    <div class="card">
+        <strong>Who is it for?</strong>
+        <p>Students, creators, professionals, small businesses, and enterprises seeking better decisions.</p>
+    </div>
+    <div class="card">
+        <strong>Is my data safe?</strong>
+        <p>Yes. We follow privacy-first architecture. No sensitive data is shared externally.</p>
+    </div>
 </section>
 
-<!-- WHAT -->
 <section class="section">
-  <h2>What Qbit Helps You Do</h2>
-  <ul class="list">
-    <li>🔍 Understand complex topics with clarity</li>
-    <li>📄 Compare different viewpoints before deciding</li>
-    <li>📌 Preserve reasoning for future reuse</li>
-    <li>📊 Uncover hidden assumptions in arguments</li>
-    <li>🌏 Structured thinking that leads to better decisions</li>
-  </ul>
+    <h2>Privacy</h2>
+    <div class="card">
+        <p>
+        Qbit uses analytics to improve user experience. We do not sell or share personal or business-sensitive data.
+        All collected data is used solely for platform improvement and performance optimization.
+        </p>
+    </div>
 </section>
 
-<!-- HOW -->
 <section class="section">
-  <h2>How Qbit Works</h2>
-  <ul class="list">
-    <li>Enter your topic or upload content</li>
-    <li>Qbit breaks down assumptions and unknowns</li>
-    <li>View multiple perspectives and explanations</li>
-    <li>Save thinking blocks for reuse and refinement</li>
-  </ul>
+    <h2>Contact</h2>
+    <div class="card">
+        <p>Email: support@qbit.ai</p>
+        <p>For partnerships & beta access: founder@qbit.ai</p>
+    </div>
 </section>
 
-<!-- FOCUS -->
-<section class="focus-note">
-  <p>
-    Our focus continues to be on <strong>clarity-first reasoning</strong>,
-    not feature noise.<br/>
-    Here’s what we’re building next.
-  </p>
-</section>
-
-<!-- COMING SOON -->
-<section class="coming-soon">
-  <h2>Coming Soon</h2>
-  <div class="coming-grid">
-    <div class="coming-item">📎 PDF & audio understanding</div>
-    <div class="coming-item">🧠 Decision reasoning paths</div>
-    <div class="coming-item">📱 Mobile app experience</div>
-    <div class="coming-item">📌 Knowledge decks</div>
-    <div class="coming-item">🌐 Indian languages</div>
-    <div class="coming-item">🔐 Privacy-first AI</div>
-  </div>
-</section>
-
-<!-- CONTACT -->
 <section class="section">
-  <h2>Contact</h2>
-  <p style="max-width:600px;margin:auto;opacity:0.9;">
-    Have a question, feedback, or just want to share a thought?
-    We read every message.
-  </p>
-
-  <p style="margin-top:16px;">
-    <strong>Email:</strong>
-    <a href="mailto:hello@tryqbit.com" style="color:#38bdf8;">
-      hello@tryqbit.com
-    </a>
-  </p>
+    <h2>Investor Information</h2>
+    <div class="card">
+        <p>
+        Qbit is currently in early validation stage with 20 users on waitlist. 
+        We are focused on retention-first product development before formal fundraising.
+        </p>
+        <p>For early discussions: investor@qbit.ai</p>
+    </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  © 2025 Qbit ·
-  <a href="/privacy.html">Privacy Policy</a> ·
-  <a href="/investors.html">Investors</a> ·
-  <a href="/faq.html">FAQ</a>
+    © 2026 Qbit. AI Decision Intelligence Platform.<br>
+    <small>Analytics used to improve experience. No sensitive data shared.</small>
 </footer>
 
-<!-- POPUP -->
-<div id="popup" class="popup">
-  <div class="popup-box">
-    <h3>🚀 A New AI Era</h3>
-    <p>We will see a new AI era in India soon — focused on clarity and trust.</p>
-    <button onclick="closePopup()">Got it</button>
-  </div>
 </div>
 
 <script>
-
-/* =====================================
-   1️⃣ RETURNING USER TRACKING
-===================================== */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-  const firstVisit = localStorage.getItem("qbit_first_visit");
-
-  if (firstVisit) {
-    gtag('event','returning_user',{
-      event_category:'retention'
-    });
-  } else {
-    localStorage.setItem("qbit_first_visit", new Date().toISOString());
-  }
-
-});
-
-
-/* =====================================
-   2️⃣ HERO UNDERSTOOD (50% scroll)
-===================================== */
-
-let heroTracked = false;
-
-window.addEventListener("scroll", () => {
-
-  const scrolled = (window.scrollY + window.innerHeight) / document.body.scrollHeight;
-
-  if (!heroTracked && scrolled > 0.5) {
-    heroTracked = true;
-
-    gtag('event','hero_understood',{
-      event_category:'engagement'
-    });
-  }
-
-});
-
-
-/* =====================================
-   3️⃣ DEEP SCROLL (75%)
-===================================== */
-
-let deepScrollTracked = false;
-
-window.addEventListener("scroll", () => {
-
-  if (deepScrollTracked) return;
-
-  const scrollPercent =
-    (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-
-  if (scrollPercent > 75) {
-    deepScrollTracked = true;
-
-    gtag('event','scroll_75_percent',{
-      event_category:'engagement'
-    });
-  }
-
-});
-
-
-/* =====================================
-   4️⃣ LANGUAGE INSIGHT
-===================================== */
-
-if (navigator.language &&
-   !navigator.language.toLowerCase().startsWith('en')) {
-
-  gtag('event','india_language_interest',{
-    event_category:'insight',
-    event_label:navigator.language
-  });
-
-}
-
-
-/* =====================================
-   5️⃣ POPUP TRACKING
-===================================== */
-
-function openPopup() {
-
-  gtag('event','open_app_clicked',{
-    event_category:'intent'
-  });
-
-  document.getElementById("popup").style.display = "flex";
-}
-
-function closePopup() {
-  document.getElementById("popup").style.display = "none";
-}
-
-
-/* =====================================
-   6️⃣ WAITLIST TRACKING
-===================================== */
-
-document.getElementById("waitlistForm")
-.addEventListener("submit", function(e){
-
-  e.preventDefault();
-
-  const status = document.getElementById("status");
-  const emailInput = document.getElementById("email");
-
-  status.textContent = "Saving your spot… please wait";
-
-  const formData = new FormData();
-  formData.append("email", emailInput.value);
-
-  gtag('event','waitlist_submit',{
-    event_category:'intent'
-  });
-
-  fetch("https://script.google.com/macros/s/AKfycbxnk_D9-FlY71X_Wc3iF1RD4cEL3tc2PWYY7RT6DftwxHpuSPpfOlD1JCIz_8KEN8RN/exec", {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.text())
-  .then(text => {
-
-    if (text.includes("SUCCESS")) {
-
-      gtag('event','waitlist_success',{
-        event_category:'conversion'
-      });
-
-      window.location.href="/success.html";
-
-    } else if (text.includes("DUPLICATE")) {
-
-      gtag('event','waitlist_duplicate',{
-        event_category:'engagement'
-      });
-
-      status.textContent="You’re already on the waitlist 🙂";
-
-    } else if (text.includes("INVALID_EMAIL")) {
-
-      gtag('event','invalid_email',{
-        event_category:'error'
-      });
-
-      status.textContent="Please enter a valid email address";
-
-    } else {
-
-      status.textContent="Something went wrong. Try again.";
+function trackEvent(eventName, eventData = {}) {
+    if (typeof gtag === "function") {
+        gtag('event', eventName, eventData);
     }
-
-  })
-  .catch(() => {
-    status.textContent="Network error. Please try again.";
-  });
-
-});
-
-
-/* =====================================
-   7️⃣ PLACEHOLDER FOR FUTURE EVENTS
-===================================== */
-
-function trackSearch() {
-  gtag('event','search_submitted',{
-    event_category:'engagement'
-  });
 }
-
-function trackExpand() {
-  gtag('event','result_expanded',{
-    event_category:'engagement'
-  });
-}
-
-function trackCompare() {
-  gtag('event','compare_clicked',{
-    event_category:'decision_depth'
-  });
-}
-
 </script>
-
 
 </body>
 </html>
