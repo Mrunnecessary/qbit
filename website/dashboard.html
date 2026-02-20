@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Qbit Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{margin:0;font-family:Inter,sans-serif;background:#0f172a;color:#fff;}
+.container{display:flex;height:100vh;}
+.sidebar{width:220px;background:#1e293b;padding:20px;}
+.main{flex:1;padding:40px;}
+textarea{width:100%;height:120px;padding:10px;border-radius:6px;border:none;}
+button{margin-top:10px;padding:10px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;}
+.output{margin-top:20px;background:#1e293b;padding:20px;border-radius:8px;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+<h3>Qbit</h3>
+<p><a href="index.html" style="color:#60a5fa;">Home</a></p>
+<p>New Analysis</p>
+<p>History</p>
+<p>Settings</p>
+</div>
+
+<div class="main">
+<h2>New Decision Analysis</h2>
+
+<textarea placeholder="Describe your decision or question..."></textarea>
+<br>
+<button onclick="runAnalysis()">Analyze</button>
+
+<div class="output" id="outputBox" style="display:none;">
+<h3>Structured Insight</h3>
+<p><strong>Assumptions:</strong> ...</p>
+<p><strong>Uncertainty:</strong> ...</p>
+<p><strong>Trade-offs:</strong> ...</p>
+<p><strong>Recommendation:</strong> ...</p>
+</div>
+
+</div>
+
+</div>
+
+<script>
+function runAnalysis(){
+document.getElementById('outputBox').style.display="block";
+}
+</script>
+
+</body>
+</html>
