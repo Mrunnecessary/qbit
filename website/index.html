@@ -28,10 +28,11 @@ body{margin:0;font-family:Inter,sans-serif;background:#0f172a;color:#fff;}
 header{display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:24px;font-weight:800;}
 nav a{color:#94a3b8;margin-left:20px;text-decoration:none;}
-.btn{background:#2563eb;padding:12px 24px;border-radius:8px;color:#fff;font-weight:600;text-decoration:none;display:inline-block;}
+.btn{background:#2563eb;padding:12px 24px;border-radius:8px;color:#fff;font-weight:600;text-decoration:none;}
 .hero{padding:100px 0;text-align:center;}
 .section{margin-top:80px;}
 .card{background:#1e293b;padding:25px;border-radius:12px;margin-bottom:20px;}
+input{padding:10px;border-radius:6px;border:none;width:260px;}
 footer{text-align:center;margin-top:100px;padding:20px;color:#94a3b8;font-size:14px;}
 </style>
 </head>
@@ -53,16 +54,61 @@ footer{text-align:center;margin-top:100px;padding:20px;color:#94a3b8;font-size:1
 <h1>Think Clearly. Decide Confidently.</h1>
 <p>
 Qbit is a Decision Intelligence platform that makes AI reasoning transparent,
-structured, and actionable. Built for thoughtful decisions.
+structured, and actionable — powered by hybrid Cloud + Edge AI architecture.
 </p>
-<br>
-<a href="#waitlist" class="btn">Join Early Access</a>
-</section>
 
-<section id="waitlist" class="section">
-<h2>Early Access</h2>
-<p>20 early users already joined. Limited beta access.</p>
+<br>
 
 <form onsubmit="joinWaitlist(event)">
-<input type="email" id="email" placeholder="Enter your email" required
-style="padding:10px;wid
+<input type="email" id="email" placeholder="Enter your email" required>
+<button type="submit" class="btn">Join Early Access</button>
+</form>
+
+<p id="statusMsg" style="margin-top:10px;"></p>
+</section>
+
+<section class="section">
+<h2>Core Capabilities</h2>
+
+<div class="card">
+<h3>Structured Compare Engine</h3>
+<p>See assumptions, trade-offs, known vs unknown separation, and risk indicators clearly.</p>
+</div>
+
+<div class="card">
+<h3>Confidence & Uncertainty Indicator</h3>
+<p>Understand how reliable an answer is before acting on it.</p>
+</div>
+
+<div class="card">
+<h3>Indian Contextual Reasoning</h3>
+<p>Localized understanding for real-world decisions in emerging markets.</p>
+</div>
+
+<div class="card">
+<h3>Hybrid Edge + Cloud AI</h3>
+<p>Sensitive reasoning can be processed closer to the user while leveraging powerful cloud intelligence.</p>
+</div>
+
+</section>
+
+<footer>
+20 early users currently on waitlist. Built for clarity over noise.<br>
+Contact: <a href="mailto:hello@tryqbit.com" style="color:#60a5fa;">hello@tryqbit.com</a>
+</footer>
+
+</div>
+
+<script>
+function joinWaitlist(e){
+e.preventDefault();
+const email=document.getElementById("email").value;
+document.getElementById("statusMsg").innerText="Thanks! You’re on the early list.";
+if(typeof gtag==="function"){
+gtag('event','waitlist_join',{email_domain:email.split("@")[1]});
+}
+}
+</script>
+
+</body>
+</html>

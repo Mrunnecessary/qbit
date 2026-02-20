@@ -23,9 +23,9 @@ button{margin-top:10px;padding:10px 20px;background:#2563eb;color:#fff;border:no
 <div class="sidebar">
 <h3>Qbit</h3>
 <p><a href="index.html" style="color:#60a5fa;">Home</a></p>
-<p>New Analysis</p>
-<p>History</p>
-<p>Settings</p>
+<p><a href="dashboard.html">New Analysis</a></p>
+<p><a href="#">History</a></p>
+<p><a href="#">Settings</a></p>
 </div>
 
 <div class="main">
@@ -48,10 +48,34 @@ button{margin-top:10px;padding:10px 20px;background:#2563eb;color:#fff;border:no
 </div>
 
 <script>
-function runAnalysis(){
-document.getElementById('outputBox').style.display="block";
+async function runAnalysis(){
+
+const input=document.querySelector("textarea").value;
+const outputBox=document.getElementById("outputBox");
+
+outputBox.style.display="block";
+outputBox.innerHTML="Analyzing...";
+
+try{
+const response=await fetch("http://localhost:5000/analyze",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({prompt:input})
+});
+
+const data=await response.json();
+
+outputBox.innerHTML=`
+<h3>Structured Insight</h3>
+<p>${data.result}</p>
+`;
+
+}catch(error){
+outputBox.innerHTML="Error connecting to AI.";
+}
 }
 </script>
+
 
 </body>
 </html>
