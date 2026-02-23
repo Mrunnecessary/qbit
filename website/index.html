@@ -4,36 +4,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Qbit | Decision Intelligence Platform</title>
-<meta name="description" content="Qbit is a decision intelligence platform that makes AI reasoning transparent, structured, and actionable.">
 
-<!-- FAVICON -->
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-24B2PVFE1Q');
-</script>
-
 <style>
-body{margin:0;font-family:Inter,sans-serif;background:#0f172a;color:#fff;}
-.container{max-width:1100px;margin:auto;padding:20px;}
-header{display:flex;justify-content:space-between;align-items:center;}
-.logo{font-size:24px;font-weight:800;}
-nav a{color:#94a3b8;margin-left:20px;text-decoration:none;}
-.btn{background:#2563eb;padding:12px 24px;border-radius:8px;color:#fff;font-weight:600;text-decoration:none;}
-.hero{padding:100px 0;text-align:center;}
-.section{margin-top:80px;}
-.card{background:#1e293b;padding:25px;border-radius:12px;margin-bottom:20px;}
-input{padding:10px;border-radius:6px;border:none;width:260px;}
-footer{text-align:center;margin-top:100px;padding:20px;color:#94a3b8;font-size:14px;}
+body{
+  margin:0;
+  font-family:Inter,sans-serif;
+  background:#0f172a;
+  color:#fff;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+}
+
+nav{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+nav a{
+  color:#94a3b8;
+  text-decoration:none;
+}
+
+.btn{
+  background:#2563eb;
+  padding:10px 18px;
+  border-radius:6px;
+  color:#fff;
+  text-decoration:none;
+}
+
+.hero{
+  text-align:center;
+  padding:60px 0;
+}
+
+.section{
+  margin-top:60px;
+}
+
+.card{
+  background:#1e293b;
+  padding:20px;
+  border-radius:8px;
+  margin-bottom:20px;
+}
+
+footer{
+  margin-top:80px;
+  text-align:center;
+  padding:30px 10px;
+  font-size:14px;
+  color:#94a3b8;
+}
+
+input{
+  padding:10px;
+  border-radius:6px;
+  border:none;
+  width:220px;
+}
+
+@media(max-width:768px){
+  nav{
+    margin-top:10px;
+  }
+  .hero{
+    padding:40px 0;
+  }
+}
 </style>
 </head>
 
@@ -46,69 +107,45 @@ footer{text-align:center;margin-top:100px;padding:20px;color:#94a3b8;font-size:1
 <a href="faq.html">FAQ</a>
 <a href="privacy.html">Privacy</a>
 <a href="investors.html">Investor</a>
-<a href="dashboard.html" class="btn">Enter Dashboard</a>
+<a href="dashboard.html" class="btn">Dashboard</a>
 </nav>
 </header>
 
 <section class="hero">
 <h1>Think Clearly. Decide Confidently.</h1>
-<p>
-Qbit is a Decision Intelligence platform that makes AI reasoning transparent,
-structured, and actionable — powered by hybrid Cloud + Edge AI architecture.
-</p>
+<p>Structured AI reasoning with transparent assumptions, trade-offs, and confidence scoring.</p>
 
-<br>
-
-<form onsubmit="joinWaitlist(event)">
-<input type="email" id="email" placeholder="Enter your email" required>
-<button type="submit" class="btn">Join Early Access</button>
+<form style="margin-top:20px;">
+<input type="email" placeholder="Enter email">
+<button class="btn">Join Early Access</button>
 </form>
-
-<p id="statusMsg" style="margin-top:10px;"></p>
 </section>
 
 <section class="section">
-<h2>Core Capabilities</h2>
+<h2>Core Features</h2>
 
 <div class="card">
 <h3>Structured Compare Engine</h3>
-<p>See assumptions, trade-offs, known vs unknown separation, and risk indicators clearly.</p>
+<p>Known vs Unknown separation and risk clarity.</p>
 </div>
 
 <div class="card">
-<h3>Confidence & Uncertainty Indicator</h3>
-<p>Understand how reliable an answer is before acting on it.</p>
+<h3>Confidence Indicator</h3>
+<p>Understand reliability before action.</p>
 </div>
 
 <div class="card">
-<h3>Indian Contextual Reasoning</h3>
-<p>Localized understanding for real-world decisions in emerging markets.</p>
-</div>
-
-<div class="card">
-<h3>Hybrid Edge + Cloud AI</h3>
-<p>Sensitive reasoning can be processed closer to the user while leveraging powerful cloud intelligence.</p>
+<h3>Edge + Cloud Hybrid Vision</h3>
+<p>Future-ready privacy-first AI architecture.</p>
 </div>
 
 </section>
 
 <footer>
-20 early users currently on waitlist. Built for clarity over noise.<br>
-Contact: <a href="mailto:hello@tryqbit.com" style="color:#60a5fa;">hello@tryqbit.com</a>
+© 2026 Qbit. Built for clarity over noise.<br>
+Contact: hello@tryqbit.com
 </footer>
 
 </div>
-
-<script>
-function joinWaitlist(e){
-e.preventDefault();
-const email=document.getElementById("email").value;
-document.getElementById("statusMsg").innerText="Thanks! You’re on the early list.";
-if(typeof gtag==="function"){
-gtag('event','waitlist_join',{email_domain:email.split("@")[1]});
-}
-}
-</script>
-
 </body>
 </html>

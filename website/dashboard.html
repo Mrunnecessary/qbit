@@ -7,12 +7,77 @@
 
 <style>
 body{margin:0;font-family:Inter,sans-serif;background:#0f172a;color:#fff;}
-.container{display:flex;height:100vh;}
-.sidebar{width:220px;background:#1e293b;padding:20px;}
-.main{flex:1;padding:40px;}
-textarea{width:100%;height:120px;padding:10px;border-radius:6px;border:none;}
-button{margin-top:10px;padding:10px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;}
-.output{margin-top:20px;background:#1e293b;padding:20px;border-radius:8px;}
+.container{display:flex;height:100vh;overflow:hidden;}
+
+.sidebar{
+  width:220px;
+  background:#1e293b;
+  padding:20px;
+  transition:0.3s;
+}
+
+.sidebar a{
+  display:block;
+  color:#60a5fa;
+  margin-bottom:10px;
+  text-decoration:none;
+}
+
+.main{
+  flex:1;
+  padding:20px;
+  overflow-y:auto;
+}
+
+textarea{
+  width:100%;
+  height:120px;
+  padding:10px;
+  border-radius:6px;
+  border:none;
+}
+
+button{
+  margin-top:10px;
+  padding:10px 20px;
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+}
+
+.output{
+  margin-top:20px;
+  background:#1e293b;
+  padding:20px;
+  border-radius:8px;
+  white-space:pre-wrap;
+}
+
+.menu-btn{
+  display:none;
+  background:#2563eb;
+  padding:8px 12px;
+  border:none;
+  color:#fff;
+  border-radius:6px;
+  margin-bottom:10px;
+}
+
+@media(max-width:768px){
+  .sidebar{
+    position:absolute;
+    left:-240px;
+    height:100%;
+    z-index:1000;
+  }
+  .sidebar.active{
+    left:0;
+  }
+  .menu-btn{
+    display:block;
+  }
+}
 </style>
 </head>
 
@@ -20,62 +85,34 @@ button{margin-top:10px;padding:10px 20px;background:#2563eb;color:#fff;border:no
 
 <div class="container">
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
 <h3>Qbit</h3>
-<p><a href="index.html" style="color:#60a5fa;">Home</a></p>
-<p><a href="dashboard.html">New Analysis</a></p>
-<p><a href="#">History</a></p>
-<p><a href="#">Settings</a></p>
+<a href="index.html">Home</a>
+<a href="#">New Analysis</a>
+<a href="#">Projects</a>
+<a href="#">Settings</a>
 </div>
 
 <div class="main">
+<button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
+
 <h2>New Decision Analysis</h2>
 
-<textarea placeholder="Describe your decision or question..."></textarea>
+<textarea id="userInput" placeholder="Describe your decision..."></textarea>
 <br>
 <button onclick="runAnalysis()">Analyze</button>
 
-<div class="output" id="outputBox" style="display:none;">
-<h3>Structured Insight</h3>
-<p><strong>Assumptions:</strong> ...</p>
-<p><strong>Uncertainty:</strong> ...</p>
-<p><strong>Trade-offs:</strong> ...</p>
-<p><strong>Recommendation:</strong> ...</p>
-</div>
+<div class="output" id="outputBox" style="display:none;"></div>
 
 </div>
 
 </div>
 
 <script>
-async function runAnalysis(){
-
-const input=document.querySelector("textarea").value;
-const outputBox=document.getElementById("outputBox");
-
-outputBox.style.display="block";
-outputBox.innerHTML="Analyzing...";
-
-try{
-const response=await fetch("http://localhost:5000/analyze",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({prompt:input})
-});
-
-const data=await response.json();
-
-outputBox.innerHTML=`
-<h3>Structured Insight</h3>
-<p>${data.result}</p>
-`;
-
-}catch(error){
-outputBox.innerHTML="Error connecting to AI.";
-}
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("active");
 }
 </script>
-
 
 </body>
 </html>
