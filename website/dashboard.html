@@ -23,26 +23,35 @@ padding:20px;
 }
 
 h2{
-margin-top:0;
+margin-bottom:5px;
+}
+
+.subtitle{
+opacity:0.8;
+margin-bottom:20px;
 }
 
 textarea{
 width:100%;
 height:140px;
-padding:10px;
+padding:12px;
 border-radius:6px;
 border:none;
-margin-top:10px;
+font-size:14px;
 }
 
 button{
-margin-top:15px;
-padding:10px 18px;
-background:#2563eb;
+margin-top:10px;
+padding:10px 16px;
 border:none;
-color:white;
 border-radius:6px;
 cursor:pointer;
+font-size:14px;
+}
+
+.primary{
+background:#2563eb;
+color:white;
 }
 
 .output{
@@ -51,17 +60,7 @@ background:#1e293b;
 padding:20px;
 border-radius:8px;
 white-space:pre-wrap;
-}
-
-table{
-width:100%;
-margin-top:20px;
-border-collapse:collapse;
-}
-
-td,th{
-border:1px solid #374151;
-padding:8px;
+line-height:1.6;
 }
 
 .share{
@@ -69,13 +68,6 @@ margin-top:20px;
 display:flex;
 gap:10px;
 flex-wrap:wrap;
-}
-
-.stat{
-background:#111827;
-padding:15px;
-border-radius:8px;
-margin-bottom:20px;
 }
 
 </style>
@@ -88,59 +80,22 @@ margin-bottom:20px;
 
 <h2>Career Readiness Analyzer</h2>
 
-<div class="stat">
+<p class="subtitle">
+Describe what you do daily at work. Qbit will detect your hidden skills.
+</p>
 
-<b>100+ professionals already tested their hidden skills</b>
+<textarea id="userInput" placeholder="Example: I create telecom KPI reports in Excel and prepare weekly dashboards for management."></textarea>
 
-</div>
-
-<p>Describe what you do daily at work.</p>
-
-<textarea id="userInput" placeholder="Example: I prepare telecom KPI reports in Excel, monitor network performance and create weekly dashboards"></textarea>
-
-<button onclick="runAnalysis()">Analyze My Skills</button>
+<button class="primary" onclick="runAnalysis()">Analyze My Skills</button>
 
 <div id="outputBox" class="output" style="display:none"></div>
 
-<div id="roadmap"></div>
-
 <div class="share">
 
-<button onclick="shareScore()" style="background:#10b981">
-Copy Score
-</button>
-
-<button onclick="shareWhatsapp()" style="background:#25D366">
-Share on WhatsApp
-</button>
-
-</div>
-
-<div style="margin-top:40px">
-
-<h3>Premium Career Roadmap</h3>
-
-<ul>
-
-<li>Step-by-step career transition plan</li>
-
-<li>Best courses for your skill gaps</li>
-
-<li>Project roadmap</li>
-
-<li>Resume template</li>
-
-<li>Interview preparation</li>
-
-</ul>
-
-<button onclick="unlockRoadmap()" style="background:#f59e0b">
-
-Unlock Complete Career Roadmap (₹299)
-
-</button>
-
-<p style="opacity:0.7">Coming soon</p>
+<button onclick="shareScore()">Copy Score</button>
+<button onclick="shareWhatsapp()">WhatsApp</button>
+<button onclick="shareLinkedIn()">LinkedIn</button>
+<button onclick="shareFacebook()">Facebook</button>
 
 </div>
 
@@ -148,7 +103,7 @@ Unlock Complete Career Roadmap (₹299)
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbzSAoreIIoPc1-83W9t492wrBy2yhFa6qv2yfTAzuKoobjMZqd2FZLa7_VQUOIl463W/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbzXtaihz9hnJiDj1uaw6hFiEnNqm_8QUXMPZKehyVuYNZu60f6NQEEx8PgTtDUR3G8/exec";
 
 let currentScore=0;
 let currentRole="";
@@ -158,11 +113,8 @@ function runAnalysis(){
 let text=document.getElementById("userInput").value;
 
 if(text.length<10){
-
-alert("Please describe your work.");
-
+alert("Please describe your work activities.");
 return;
-
 }
 
 fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({text:text})))
@@ -172,22 +124,21 @@ fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({text:text
 .then(data=>{
 
 currentScore=data.score;
-
 currentRole=data.role;
 
 let output=`
 
-Hidden Skill Report
-
 Career Alignment Score
 ${data.score}% ready for ${data.role}
 
-Based on your current work experience.
-
 ${data.percentile}
 
-Detected Skills
+Why Qbit thinks this
+
+Your work includes:
 ${data.skills.join(", ")}
+
+These skills are commonly used in ${data.role} roles.
 
 Skill Gaps
 ${data.gaps.join(", ")}
@@ -195,86 +146,56 @@ ${data.gaps.join(", ")}
 Learning Roadmap
 ${data.roadmap}
 
+Recommended Free Resources
+
+SQL Course
+https://www.freecodecamp.org/learn/relational-database/
+
+Python Course
+https://www.kaggle.com/learn/python
+
+Statistics
+https://www.khanacademy.org/math/statistics-probability
+
+Improve Your Score
+
+Improve your score from ${data.score}% → ${Math.min(data.score+15,100)}% by learning:
+
+${data.gaps.slice(0,2).join(", ")}
+
+Recheck your score after completing one roadmap step.
+
 `;
 
-let box=document.getElementById("outputBox");
-
-box.innerText=output;
-
-box.style.display="block";
-
-generateRoadmap(data.gaps);
+document.getElementById("outputBox").innerText=output;
+document.getElementById("outputBox").style.display="block";
 
 });
 
 }
 
-function generateRoadmap(gaps){
-
-let html=`
-<h3>Free Learning Resources</h3>
-
-<table>
-
-<tr>
-<th>Skill</th>
-<th>Course</th>
-</tr>
-
-<tr>
-<td>${gaps[0] || ""}</td>
-<td><a href="https://www.freecodecamp.org/learn/relational-database/" target="_blank">SQL Course</a></td>
-</tr>
-
-<tr>
-<td>${gaps[1] || ""}</td>
-<td><a href="https://www.kaggle.com/learn/python" target="_blank">Python Course</a></td>
-</tr>
-
-<tr>
-<td>${gaps[2] || ""}</td>
-<td><a href="https://www.khanacademy.org/math/statistics-probability" target="_blank">Statistics</a></td>
-</tr>
-
-</table>
-`;
-
-document.getElementById("roadmap").innerHTML=html;
-
-}
-
 function shareScore(){
-
-const text=`I'm ${currentScore}% ready for ${currentRole} according to Qbit.
-
-Check your career readiness:
-https://tryqbit.com`;
-
-navigator.clipboard.writeText(text);
-
-alert("Score copied! Share it.");
-
+navigator.clipboard.writeText(
+"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
+);
+alert("Score copied!");
 }
 
 function shareWhatsapp(){
-
-const text=`I'm ${currentScore}% ready for ${currentRole} according to Qbit.
-
-Check your score:
-https://tryqbit.com`;
-
-window.open("https://wa.me/?text="+encodeURIComponent(text));
-
+window.open("https://wa.me/?text="+encodeURIComponent(
+"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
+));
 }
 
-function unlockRoadmap(){
+function shareLinkedIn(){
+window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
+}
 
-alert("Premium roadmap launching soon. Contact hello@tryqbit.com");
-
+function shareFacebook(){
+window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
 }
 
 </script>
 
 </body>
-
 </html>
