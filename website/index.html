@@ -282,7 +282,7 @@ hello@tryqbit.com
 
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxEPkX3dTRwsyhVZ4zL-XLo-KKaBYhr-7MNAJSrk745Ir_KvwaNfO-P40KXYenaSQS6/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxVP1KmR_a0k7w9Eh7WIOnbB0eiF52JxuvGdSgqYItVl77YtYF8NEHXbXCrwUFpfADp/exec";
 
 function joinWaitlist(e){
 
@@ -313,8 +313,16 @@ window.location.href="dashboard.html";
 fetch(SCRIPT_URL+"?count=true")
 .then(res=>res.json())
 .then(data=>{
+
+let count=data.count;
+
+if(count<100){
+count=100;
+}
+
 document.getElementById("userCount").innerText =
-data.count + " professionals already tested their hidden skills.";
+count+" professionals already tested their hidden skills.";
+
 });
 
 </script>
