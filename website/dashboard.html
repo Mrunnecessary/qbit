@@ -1,153 +1,280 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<title>Qbit Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Qbit Dashboard</title>
+
 <style>
-body{margin:0;font-family:Inter,sans-serif;background:#0f172a;color:#fff;}
-.container{display:flex;height:100vh;overflow:hidden;}
 
-.sidebar{
-  width:220px;
-  background:#1e293b;
-  padding:20px;
-  transition:0.3s;
+body{
+margin:0;
+font-family:system-ui;
+background:#0f172a;
+color:white;
 }
 
-.sidebar a{
-  display:block;
-  color:#60a5fa;
-  margin-bottom:10px;
-  text-decoration:none;
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
 }
 
-.main{
-  flex:1;
-  padding:20px;
-  overflow-y:auto;
+h2{
+margin-top:0;
 }
 
 textarea{
-  width:100%;
-  height:120px;
-  padding:10px;
-  border-radius:6px;
-  border:none;
+width:100%;
+height:140px;
+padding:10px;
+border-radius:6px;
+border:none;
+margin-top:10px;
 }
 
 button{
-  margin-top:10px;
-  padding:10px 20px;
-  background:#2563eb;
-  color:#fff;
-  border:none;
-  border-radius:6px;
+margin-top:15px;
+padding:10px 18px;
+background:#2563eb;
+border:none;
+color:white;
+border-radius:6px;
+cursor:pointer;
 }
 
 .output{
-  margin-top:20px;
-  background:#1e293b;
-  padding:20px;
-  border-radius:8px;
-  white-space:pre-wrap;
+margin-top:20px;
+background:#1e293b;
+padding:20px;
+border-radius:8px;
+white-space:pre-wrap;
 }
 
-.menu-btn{
-  display:none;
-  background:#2563eb;
-  padding:8px 12px;
-  border:none;
-  color:#fff;
-  border-radius:6px;
-  margin-bottom:10px;
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
 }
 
-@media(max-width:768px){
-  .sidebar{
-    position:absolute;
-    left:-240px;
-    height:100%;
-    z-index:1000;
-  }
-  .sidebar.active{
-    left:0;
-  }
-  .menu-btn{
-    display:block;
-  }
+td,th{
+border:1px solid #374151;
+padding:8px;
 }
 
-#overlay{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.5);
-  display:none;
+.share{
+margin-top:20px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
 }
 
-#overlay.active{
-  display:block;
+.stat{
+background:#111827;
+padding:15px;
+border-radius:8px;
+margin-bottom:20px;
 }
 
-.sidebar .close-btn{
-  display:none;
-}
-
-@media(max-width:768px){
-  .sidebar .close-btn{
-    display:block;
-    margin-bottom:20px;
-    cursor:pointer;
-  }
-}
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<div class="sidebar" id="sidebar">
-<h3>Qbit</h3>
-<a href="index.html">Home</a>
-<a href="#">New Analysis</a>
-<a href="#">Projects</a>
-<a href="#">Settings</a>
-<div class="close-btn" onclick="closeMenu()">✕ Close</div>
+<h2>Career Readiness Analyzer</h2>
+
+<div class="stat">
+
+<b>100+ professionals already tested their hidden skills</b>
+
 </div>
 
-<div id="overlay" onclick="closeMenu()"></div>
+<p>Describe what you do daily at work.</p>
 
-<div class="main">
-<button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
+<textarea id="userInput" placeholder="Example: I prepare telecom KPI reports in Excel, monitor network performance and create weekly dashboards"></textarea>
 
-<h2>New Decision Analysis</h2>
+<button onclick="runAnalysis()">Analyze My Skills</button>
 
-<textarea id="userInput" placeholder="Describe your decision..."></textarea>
-<br>
-<button onclick="runAnalysis()">Analyze</button>
+<div id="outputBox" class="output" style="display:none"></div>
 
-<div class="output" id="outputBox" style="display:none;"></div>
+<div id="roadmap"></div>
+
+<div class="share">
+
+<button onclick="shareScore()" style="background:#10b981">
+Copy Score
+</button>
+
+<button onclick="shareWhatsapp()" style="background:#25D366">
+Share on WhatsApp
+</button>
+
+</div>
+
+<div style="margin-top:40px">
+
+<h3>Premium Career Roadmap</h3>
+
+<ul>
+
+<li>Step-by-step career transition plan</li>
+
+<li>Best courses for your skill gaps</li>
+
+<li>Project roadmap</li>
+
+<li>Resume template</li>
+
+<li>Interview preparation</li>
+
+</ul>
+
+<button onclick="unlockRoadmap()" style="background:#f59e0b">
+
+Unlock Complete Career Roadmap (₹299)
+
+</button>
+
+<p style="opacity:0.7">Coming soon</p>
 
 </div>
 
 </div>
 
 <script>
-function toggleMenu(){
-  document.getElementById("sidebar").classList.toggle("active");
-  document.getElementById("overlay").classList.toggle("active");
+
+const API_URL="https://script.google.com/macros/s/AKfycbzSAoreIIoPc1-83W9t492wrBy2yhFa6qv2yfTAzuKoobjMZqd2FZLa7_VQUOIl463W/exec";
+
+let currentScore=0;
+let currentRole="";
+
+function runAnalysis(){
+
+let text=document.getElementById("userInput").value;
+
+if(text.length<10){
+
+alert("Please describe your work.");
+
+return;
+
 }
 
-function closeMenu(){
-  document.getElementById("sidebar").classList.remove("active");
-  document.getElementById("overlay").classList.remove("active");
+fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({text:text})))
+
+.then(res=>res.json())
+
+.then(data=>{
+
+currentScore=data.score;
+
+currentRole=data.role;
+
+let output=`
+
+Hidden Skill Report
+
+Career Alignment Score
+${data.score}% ready for ${data.role}
+
+Based on your current work experience.
+
+${data.percentile}
+
+Detected Skills
+${data.skills.join(", ")}
+
+Skill Gaps
+${data.gaps.join(", ")}
+
+Learning Roadmap
+${data.roadmap}
+
+`;
+
+let box=document.getElementById("outputBox");
+
+box.innerText=output;
+
+box.style.display="block";
+
+generateRoadmap(data.gaps);
+
+});
+
 }
+
+function generateRoadmap(gaps){
+
+let html=`
+<h3>Free Learning Resources</h3>
+
+<table>
+
+<tr>
+<th>Skill</th>
+<th>Course</th>
+</tr>
+
+<tr>
+<td>${gaps[0] || ""}</td>
+<td><a href="https://www.freecodecamp.org/learn/relational-database/" target="_blank">SQL Course</a></td>
+</tr>
+
+<tr>
+<td>${gaps[1] || ""}</td>
+<td><a href="https://www.kaggle.com/learn/python" target="_blank">Python Course</a></td>
+</tr>
+
+<tr>
+<td>${gaps[2] || ""}</td>
+<td><a href="https://www.khanacademy.org/math/statistics-probability" target="_blank">Statistics</a></td>
+</tr>
+
+</table>
+`;
+
+document.getElementById("roadmap").innerHTML=html;
+
+}
+
+function shareScore(){
+
+const text=`I'm ${currentScore}% ready for ${currentRole} according to Qbit.
+
+Check your career readiness:
+https://tryqbit.com`;
+
+navigator.clipboard.writeText(text);
+
+alert("Score copied! Share it.");
+
+}
+
+function shareWhatsapp(){
+
+const text=`I'm ${currentScore}% ready for ${currentRole} according to Qbit.
+
+Check your score:
+https://tryqbit.com`;
+
+window.open("https://wa.me/?text="+encodeURIComponent(text));
+
+}
+
+function unlockRoadmap(){
+
+alert("Premium roadmap launching soon. Contact hello@tryqbit.com");
+
+}
+
 </script>
 
 </body>
+
 </html>

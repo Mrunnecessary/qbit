@@ -1,151 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qbit | Decision Intelligence Platform</title>
 
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<title>Qbit | Discover Your Hidden Skills</title>
+
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-24B2PVFE1Q');
+</script>
+
 <style>
+
 body{
-  margin:0;
-  font-family:Inter,sans-serif;
-  background:#0f172a;
-  color:#fff;
+margin:0;
+font-family:Inter,sans-serif;
+background:#0f172a;
+color:white;
 }
 
 .container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
+max-width:1100px;
+margin:auto;
+padding:20px;
 }
 
 header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
 }
 
 .logo{
-  font-size:22px;
-  font-weight:800;
+font-size:22px;
+font-weight:800;
 }
 
 nav{
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
+display:flex;
+gap:15px;
+flex-wrap:wrap;
 }
 
 nav a{
-  color:#94a3b8;
-  text-decoration:none;
+color:#94a3b8;
+text-decoration:none;
 }
 
 .btn{
-  background:#2563eb;
-  padding:10px 18px;
-  border-radius:6px;
-  color:#fff;
-  text-decoration:none;
+background:#2563eb;
+padding:10px 18px;
+border-radius:6px;
+color:white;
+border:none;
+cursor:pointer;
 }
 
 .hero{
-  text-align:center;
-  padding:60px 0;
+text-align:center;
+padding:70px 0;
 }
 
 .section{
-  margin-top:60px;
+margin-top:60px;
 }
 
 .card{
-  background:#1e293b;
-  padding:20px;
-  border-radius:8px;
-  margin-bottom:20px;
+background:#1e293b;
+padding:20px;
+border-radius:8px;
+margin-bottom:20px;
+}
+
+.example{
+background:#111827;
+padding:20px;
+border-radius:8px;
+}
+
+.testimonial{
+background:#111827;
+padding:20px;
+border-radius:8px;
+margin-bottom:15px;
 }
 
 footer{
-  margin-top:80px;
-  text-align:center;
-  padding:30px 10px;
-  font-size:14px;
-  color:#94a3b8;
+margin-top:80px;
+text-align:center;
+padding:30px 10px;
+font-size:14px;
+color:#94a3b8;
 }
 
 input{
-  padding:10px;
-  border-radius:6px;
-  border:none;
-  width:220px;
+padding:10px;
+border-radius:6px;
+border:none;
+width:220px;
+margin-right:8px;
+}
+
+.tagline{
+opacity:0.8;
+margin-top:10px;
+}
+
+.socialproof{
+margin-top:10px;
+opacity:0.7;
+font-size:14px;
 }
 
 @media(max-width:768px){
-  nav{
-    margin-top:10px;
-  }
-  .hero{
-    padding:40px 0;
-  }
+
+.hero{padding:40px 0}
+
+input{
+width:180px;
+margin-bottom:10px;
 }
+
+}
+
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <header>
+
 <div class="logo">Qbit</div>
+
 <nav>
 <a href="faq.html">FAQ</a>
 <a href="privacy.html">Privacy</a>
 <a href="investors.html">Investor</a>
 <a href="dashboard.html" class="btn">Dashboard</a>
 </nav>
+
 </header>
 
 <section class="hero">
-<h1>Think Clearly. Decide Confidently.</h1>
-<p>Structured AI reasoning with transparent assumptions, trade-offs, and confidence scoring.</p>
 
-<form style="margin-top:20px;">
-<input type="email" placeholder="Enter email">
-<button class="btn">Join Early Access</button>
+<h1>How Ready Are You for a Tech Career?</h1>
+
+<p>
+Paste what you do daily at work.<br>
+Discover your <b>Career Readiness Score in 30 seconds</b>.
+</p>
+
+<p class="tagline">
+Used by professionals exploring Data Analyst, Backend and Cloud careers.
+</p>
+
+<p class="socialproof">
+100+ professionals already tested their hidden skills.
+</p>
+
+<form onsubmit="joinWaitlist(event)" style="margin-top:20px;">
+
+<input id="email" type="email" placeholder="Enter email" required>
+
+<button class="btn">Get My Career Score</button>
+
 </form>
+
 </section>
 
 <section class="section">
-<h2>Core Features</h2>
+
+<h2>Example Skill Report</h2>
+
+<div class="example">
+
+<p><b>Career Alignment Score</b><br>
+58% ready for Data Analyst</p>
+
+<p><b>Detected Skills</b><br>
+Excel, KPI Monitoring, Reporting</p>
+
+<p><b>Skill Gaps</b><br>
+SQL, Python, Statistics</p>
+
+<p><b>Learning Roadmap</b><br>
+Start learning SQL joins and Python data analysis.</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>How Qbit Works</h2>
 
 <div class="card">
-<h3>Structured Compare Engine</h3>
-<p>Known vs Unknown separation and risk clarity.</p>
+<h3>1️⃣ Describe Your Work</h3>
+<p>Explain your daily work activities.</p>
 </div>
 
 <div class="card">
-<h3>Confidence Indicator</h3>
-<p>Understand reliability before action.</p>
+<h3>2️⃣ Hidden Skills Detection</h3>
+<p>Qbit extracts transferable skills.</p>
 </div>
 
 <div class="card">
-<h3>Edge + Cloud Hybrid Vision</h3>
-<p>Future-ready privacy-first AI architecture.</p>
+<h3>3️⃣ Career Alignment Score</h3>
+<p>See how close you are to tech roles.</p>
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>Upcoming Features</h2>
+
+<div class="card">College comparison for career ROI</div>
+<div class="card">Study abroad advisor</div>
+<div class="card">Government exam preparation engine</div>
+<div class="card">AI job discovery engine</div>
+<div class="card">Real-time salary prediction</div>
+<div class="card">Startup decision advisor</div>
+<div class="card">Automated career improvement tracking</div>
+<div class="card">Coding project lab with recruiter portfolio</div>
+<div class="card">Recruiter talent discovery using skill alignment</div>
+
+</section>
+
+<section class="section">
+
+<h2>Early Feedback</h2>
+
+<div class="testimonial">
+“Helped me realize I already had many skills needed for data analysis.”
+</div>
+
+<div class="testimonial">
+“Finally a tool that shows what skills I actually have.”
 </div>
 
 </section>
 
 <footer>
-© 2026 Qbit. Built for clarity over noise.<br>
-Contact: hello@tryqbit.com
+
+© 2026 Qbit<br>
+hello@tryqbit.com
+
 </footer>
 
 </div>
+
+<script>
+
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzSAoreIIoPc1-83W9t492wrBy2yhFa6qv2yfTAzuKoobjMZqd2FZLa7_VQUOIl463W/exec";
+
+function joinWaitlist(e){
+
+e.preventDefault();
+
+const email=document.getElementById("email").value;
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:new URLSearchParams({
+email:email,
+source:"landing",
+device:navigator.userAgent
+})
+})
+.then(res=>res.text())
+.then(data=>{
+
+gtag('event','waitlist_signup');
+
+window.location.href="dashboard.html";
+
+});
+
+}
+
+</script>
+
 </body>
 </html>
