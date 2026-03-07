@@ -13,6 +13,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
 
 <script>
@@ -41,6 +42,7 @@ header{
 display:flex;
 justify-content:space-between;
 align-items:center;
+flex-wrap:wrap;
 }
 
 .logo{
@@ -51,6 +53,7 @@ font-weight:800;
 nav{
 display:flex;
 gap:15px;
+flex-wrap:wrap;
 }
 
 nav a{
@@ -72,13 +75,6 @@ text-align:center;
 padding:70px 0;
 }
 
-.preview{
-background:#111827;
-padding:20px;
-border-radius:8px;
-margin-top:30px;
-}
-
 .section{
 margin-top:60px;
 }
@@ -88,6 +84,20 @@ background:#1e293b;
 padding:20px;
 border-radius:8px;
 margin-bottom:20px;
+}
+
+.example{
+background:#111827;
+padding:20px;
+border-radius:8px;
+margin-top:30px;
+}
+
+.testimonial{
+background:#111827;
+padding:20px;
+border-radius:8px;
+margin-bottom:15px;
 }
 
 footer{
@@ -104,6 +114,22 @@ border-radius:6px;
 border:none;
 width:220px;
 margin-right:8px;
+}
+
+.socialproof{
+margin-top:10px;
+opacity:0.8;
+}
+
+@media(max-width:768px){
+
+.hero{padding:40px 0}
+
+input{
+width:180px;
+margin-bottom:10px;
+}
+
 }
 
 </style>
@@ -131,7 +157,8 @@ margin-right:8px;
 <h1>How Ready Are You for a Career Switch?</h1>
 
 <p>
-Paste what you do daily at work and discover your <b>Career Readiness Score in 30 seconds.</b>
+Paste what you do daily at work and discover your  
+<b>Career Readiness Score in 30 seconds.</b>
 </p>
 
 <p>No resume required. Just describe your daily work.</p>
@@ -144,39 +171,104 @@ Paste what you do daily at work and discover your <b>Career Readiness Score in 3
 
 </form>
 
-<div class="preview">
+<p class="socialproof" id="userCount">
+Loading career explorers...
+</p>
 
-Example Result
+</section>
 
-58% ready for Data Analyst
 
-Detected Skills
-Excel, KPI Monitoring, Reporting
+<section class="section">
 
-Skill Gaps
-SQL, Python, Statistics
+<h2>Example Career Readiness Report</h2>
+
+<div class="example">
+
+<p><b>Career Alignment Score</b><br>
+58% ready for Data Analyst</p>
+
+<p><b>Detected Skills</b><br>
+Excel, KPI Monitoring, Reporting</p>
+
+<p><b>Skill Gaps</b><br>
+SQL, Python, Statistics</p>
+
+<p><b>Learning Roadmap</b><br>
+Start learning SQL joins and Python data analysis.</p>
 
 </div>
 
 </section>
+
 
 <section class="section">
 
 <h2>How Qbit Works</h2>
 
 <div class="card">
-Describe Your Work
+<h3>1️⃣ Describe Your Work</h3>
+<p>
+Write what you do daily in your job or studies.
+</p>
 </div>
 
 <div class="card">
-Hidden Skills Detection
+<h3>2️⃣ Hidden Skills Detection</h3>
+<p>
+Qbit extracts transferable skills using AI.
+</p>
 </div>
 
 <div class="card">
-Career Alignment Score
+<h3>3️⃣ Career Alignment Score</h3>
+<p>
+See how close you are to your desired roles.
+</p>
+</div>
+
+<div class="card">
+<h3>4️⃣ Learning Roadmap</h3>
+<p>
+Get a clear path to improve your career readiness.
+</p>
 </div>
 
 </section>
+
+
+<section class="section">
+
+<h2>Upcoming Features</h2>
+
+<div class="card">AI Job Discovery Engine</div>
+
+<div class="card">Government Exam Preparation Engine</div>
+
+<div class="card">Salary Prediction Based on Skills</div>
+
+<div class="card">Automated Career Improvement Tracking</div>
+
+<div class="card">Coding Project Lab With Recruiter Portfolio</div>
+
+<div class="card">Recruiter Talent Discovery Platform</div>
+
+</section>
+
+
+<section class="section">
+
+<h2>Early Feedback</h2>
+
+<div class="testimonial">
+“Helped me realize I already had many skills needed for data analysis.”
+</div>
+
+<div class="testimonial">
+“Finally a tool that shows what skills I actually have.”
+</div>
+
+</section>
+
 
 <footer>
 
@@ -186,6 +278,7 @@ hello@tryqbit.com
 </footer>
 
 </div>
+
 
 <script>
 
@@ -215,6 +308,14 @@ window.location.href="dashboard.html";
 });
 
 }
+
+
+fetch(SCRIPT_URL+"?count=true")
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("userCount").innerText =
+data.count + " professionals already tested their hidden skills.";
+});
 
 </script>
 
