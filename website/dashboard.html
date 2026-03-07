@@ -22,15 +22,6 @@ margin:auto;
 padding:20px;
 }
 
-h2{
-margin-bottom:5px;
-}
-
-.subtitle{
-opacity:0.8;
-margin-bottom:20px;
-}
-
 textarea{
 width:100%;
 height:140px;
@@ -42,11 +33,11 @@ font-size:14px;
 
 button{
 margin-top:10px;
-padding:10px 16px;
+padding:12px 18px;
 border:none;
 border-radius:6px;
 cursor:pointer;
-font-size:14px;
+font-size:15px;
 }
 
 .primary{
@@ -59,7 +50,6 @@ margin-top:20px;
 background:#1e293b;
 padding:20px;
 border-radius:8px;
-white-space:pre-wrap;
 line-height:1.6;
 }
 
@@ -68,6 +58,35 @@ margin-top:20px;
 display:flex;
 gap:10px;
 flex-wrap:wrap;
+}
+
+/* LOADER */
+
+.loader{
+display:none;
+margin-top:20px;
+text-align:center;
+}
+
+.spinner{
+width:40px;
+height:40px;
+border:4px solid #334155;
+border-top:4px solid #2563eb;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+.progress{
+margin-top:10px;
+font-size:14px;
+opacity:0.8;
 }
 
 </style>
@@ -80,13 +99,33 @@ flex-wrap:wrap;
 
 <h2>Career Readiness Analyzer</h2>
 
-<p class="subtitle">
-Describe what you do daily at work. Qbit will detect your hidden skills.
+<p>
+Describe your daily tasks (3–5 sentences works best).  
+Qbit will detect your hidden skills.
 </p>
 
-<textarea id="userInput" placeholder="Example: I create telecom KPI reports in Excel and prepare weekly dashboards for management."></textarea>
+<textarea id="userInput" placeholder="Example:
+
+• I create telecom KPI reports in Excel and send weekly dashboards.
+
+• I test applications, report bugs and track issues in Jira.
+
+• I manage AWS servers and monitor system performance.
+"></textarea>
 
 <button class="primary" onclick="runAnalysis()">Analyze My Skills</button>
+
+<p style="opacity:0.7;font-size:13px;">Takes ~30 seconds</p>
+
+<div class="loader" id="loader">
+
+<div class="spinner"></div>
+
+<div class="progress" id="progressText">
+Analyzing your work tasks...
+</div>
+
+</div>
 
 <div id="outputBox" class="output" style="display:none"></div>
 
@@ -117,6 +156,11 @@ alert("Please describe your work activities.");
 return;
 }
 
+document.getElementById("loader").style.display="block";
+document.getElementById("outputBox").style.display="none";
+
+simulateProgress();
+
 fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({text:text})))
 
 .then(res=>res.json())
@@ -128,71 +172,109 @@ currentRole=data.role;
 
 let output=`
 
-Career Alignment Score
+📊 Career Alignment Score
 ${data.score}% ready for ${data.role}
 
 ${data.percentile}
 
-Why Qbit thinks this
+🧠 Why Qbit thinks this
 
 Your work includes:
 ${data.skills.join(", ")}
 
 These skills are commonly used in ${data.role} roles.
 
-Skill Gaps
+⚠ Skill Gaps
 ${data.gaps.join(", ")}
 
-Learning Roadmap
+📚 Learning Roadmap
 ${data.roadmap}
 
-Recommended Free Resources
+🎓 Recommended Free Resources
 
-SQL Course
+SQL Course  
 https://www.freecodecamp.org/learn/relational-database/
 
-Python Course
+Python Course  
 https://www.kaggle.com/learn/python
 
-Statistics
+Statistics  
 https://www.khanacademy.org/math/statistics-probability
 
-Improve Your Score
+🚀 Improve Your Score
 
-Improve your score from ${data.score}% → ${Math.min(data.score+15,100)}% by learning:
+Improve your score from ${data.score}% → ${Math.min(data.score+15,100)}%
 
+Focus on learning:
 ${data.gaps.slice(0,2).join(", ")}
 
 Recheck your score after completing one roadmap step.
 
 `;
 
+document.getElementById("loader").style.display="none";
+
 document.getElementById("outputBox").innerText=output;
+
 document.getElementById("outputBox").style.display="block";
 
 });
 
 }
 
+function simulateProgress(){
+
+const messages=[
+"Analyzing your work tasks...",
+"Detecting hidden skills...",
+"Comparing career roles...",
+"Calculating readiness score..."
+];
+
+let i=0;
+
+const interval=setInterval(()=>{
+
+document.getElementById("progressText").innerText=messages[i];
+
+i++;
+
+if(i>=messages.length){
+clearInterval(interval);
+}
+
+},1200);
+
+}
+
 function shareScore(){
+
 navigator.clipboard.writeText(
 "I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
 );
+
 alert("Score copied!");
+
 }
 
 function shareWhatsapp(){
+
 window.open("https://wa.me/?text="+encodeURIComponent(
 "I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
 ));
+
 }
 
 function shareLinkedIn(){
+
 window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
+
 }
 
 function shareFacebook(){
+
 window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
+
 }
 
 </script>
