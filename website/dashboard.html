@@ -24,6 +24,8 @@ margin:auto;
 padding:25px;
 }
 
+/* GRID FORM */
+
 .formGrid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -98,7 +100,7 @@ opacity:0.8;
 font-size:14px;
 }
 
-/* OUTPUT */
+/* RESULT */
 
 .output{
 margin-top:25px;
@@ -107,6 +109,16 @@ padding:20px;
 border-radius:8px;
 white-space:pre-wrap;
 line-height:1.6;
+}
+
+/* ROADMAP */
+
+#roadmapBox{
+display:none;
+margin-top:25px;
+background:#111827;
+padding:20px;
+border-radius:8px;
 }
 
 /* SHARE */
@@ -134,6 +146,15 @@ margin-top:20px;
 background:white;
 border-radius:8px;
 display:none;
+}
+
+/* FOOTER */
+
+footer{
+margin-top:60px;
+text-align:center;
+opacity:0.6;
+font-size:13px;
 }
 
 </style>
@@ -192,6 +213,7 @@ display:none;
 
 </div>
 
+
 <label>Describe Daily Work *</label>
 
 <textarea id="userInput" placeholder="Example:
@@ -224,6 +246,33 @@ Analyzing your work tasks...
 <div id="outputBox" class="output" style="display:none"></div>
 
 
+<div id="roadmapBox">
+
+<h3>📘 Personalized Career Roadmap</h3>
+
+<p>
+Get a detailed step-by-step roadmap based on your current skills.
+</p>
+
+<ul>
+<li>Skill gap breakdown</li>
+<li>Learning roadmap</li>
+<li>Course recommendations</li>
+<li>Project ideas</li>
+<li>Expected salary progression</li>
+</ul>
+
+<p style="font-weight:bold">
+Personalized PDF Guide — ₹99
+</p>
+
+<button onclick="requestRoadmap()" class="primary">
+Request Personalized Guide
+</button>
+
+</div>
+
+
 <canvas id="shareCard" width="600" height="350"></canvas>
 
 
@@ -247,14 +296,22 @@ Analyzing your work tasks...
 
 </div>
 
+<footer>
+
+© 2026 Qbit — Career Intelligence Platform  
+hello@tryqbit.com
+
+</footer>
+
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbwmLIJy3AV8kE-k26rd8H8GmVZyf9__zBR5tHzT-5vpXj7ql6Q5ue5Nunvb_fG4QyFS/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbzHQ4zAVsZdlxWNA2EhLmsnPJHNa6pTcuPilU3wIyW5vsyr_BT3b3qvXA1Baut4dLxA/exec";
 
 let currentScore=0;
 let currentRole="";
+let currentPercentile="";
+let shareText="";
 
-/* LOADER ANIMATION */
 
 function simulateProgress(){
 
@@ -282,9 +339,7 @@ clearInterval(interval);
 }
 
 
-/* ANALYSIS */
-
-async function runAnalysis(){
+function runAnalysis(){
 
 let text=document.getElementById("userInput").value;
 
@@ -306,7 +361,6 @@ salary:document.getElementById("salary").value,
 targetSalary:document.getElementById("targetSalary").value,
 targetRole:document.getElementById("targetRole").value,
 timeline:document.getElementById("timeline").value,
-
 source:"dashboard",
 device:navigator.userAgent
 
@@ -322,6 +376,14 @@ document.getElementById("loader").style.display="none";
 
 currentScore=data.score;
 currentRole=data.role;
+currentPercentile=data.percentile;
+
+shareText=`I am ${data.score}% ready for ${data.role} according to Qbit.
+
+${data.percentile}
+
+Check your career readiness score:
+https://tryqbit.com`;
 
 let output=`
 
@@ -344,6 +406,8 @@ ${data.roadmap}
 document.getElementById("outputBox").innerText=output;
 document.getElementById("outputBox").style.display="block";
 
+document.getElementById("roadmapBox").style.display="block";
+
 generateCard(data);
 
 document.getElementById("shareBlock").style.display="block";
@@ -352,8 +416,6 @@ document.getElementById("shareBlock").style.display="block";
 
 }
 
-
-/* SCORE CARD */
 
 function generateCard(data){
 
@@ -374,12 +436,12 @@ ctx.font="20px Arial";
 ctx.fillText(data.score+"% Ready for "+data.role,20,100);
 
 ctx.font="16px Arial";
+ctx.fillText(data.percentile,20,160);
+
 ctx.fillText("tryqbit.com",20,300);
 
 }
 
-
-/* SHARE */
 
 function downloadCard(){
 
@@ -395,23 +457,31 @@ link.click();
 
 }
 
+
 function shareLinkedIn(){
 
 window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
 
 }
 
+
 function shareWhatsapp(){
 
-window.open("https://wa.me/?text="+encodeURIComponent(
-"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
-));
+window.open("https://wa.me/?text="+encodeURIComponent(shareText));
 
 }
 
+
 function shareFacebook(){
 
-window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
+window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+encodeURIComponent(shareText));
+
+}
+
+
+function requestRoadmap(){
+
+window.location.href="mailto:hello@tryqbit.com?subject=Qbit Personalized Career Roadmap";
 
 }
 
