@@ -115,8 +115,16 @@ margin-right:8px;
 }
 
 @media(max-width:768px){
-.hero{padding:40px 0}
-input{width:180px;margin-bottom:10px;}
+
+.hero{
+padding:40px 0
+}
+
+input{
+width:180px;
+margin-bottom:10px;
+}
+
 }
 
 </style>
@@ -148,37 +156,57 @@ No resume required. Just describe your daily work.<br>
 Discover your <b>Career Readiness Score in 30 seconds</b>.
 </p>
 
-<form onsubmit="joinWaitlist(event)" style="margin-top:20px;">
+<form onsubmit="joinWaitlist(event); return false;" style="margin-top:20px;">
 
 <input id="email" type="email" placeholder="Enter email" required>
 
-<button class="btn">Get My Career Score</button>
+<button class="btn" id="submitBtn">Get My Career Score</button>
 
 </form>
 
 <p style="opacity:0.8;margin-top:10px;font-size:14px;">
-100+ professionals already tested their hidden skills.
+Join 100+ professionals discovering their hidden career skills.
 </p>
 
 </section>
 
 <section class="section">
 
-<h2>Example Skill Report</h2>
+<h2>Example Career Score</h2>
 
 <div class="example">
 
-<p><b>Career Alignment Score</b><br>
-58% ready for Data Analyst</p>
+<p style="font-size:22px;font-weight:700;">
+58% Ready for Data Analyst
+</p>
 
-<p><b>Detected Skills</b><br>
-Excel, KPI Monitoring, Reporting</p>
+<p style="opacity:0.9;">
+Based on work tasks similar to:
+</p>
 
-<p><b>Skill Gaps</b><br>
-SQL, Python, Statistics</p>
+<ul>
+<li>Excel reporting</li>
+<li>KPI monitoring</li>
+<li>Weekly dashboards</li>
+</ul>
 
-<p><b>Learning Roadmap</b><br>
-Start learning SQL joins and Python data analysis.</p>
+<p><b>Skill Gaps</b></p>
+
+<ul>
+<li>SQL</li>
+<li>Python</li>
+<li>Statistics</li>
+</ul>
+
+<p><b>Learning Roadmap</b></p>
+
+<p>
+Start with SQL joins → Python data analysis → build a simple reporting dashboard.
+</p>
+
+<p style="opacity:0.7;">
+This user was ahead of 63% of beginners switching careers.
+</p>
 
 </div>
 
@@ -246,13 +274,20 @@ hello@tryqbit.com
 
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzLdbgqL12ebllcBKrHXDfCWKzWi9Za37z8C9o_cFkg6x9-rjRnJqhjrA9jTSsFmJsa/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbymfvNnFnYDTk77XSl8gneLNzsYhck2ltmxiqX9CLhhBav3We3lDWbGi-YIab6tRnQ0/exec";
 
 function joinWaitlist(e){
 
 e.preventDefault();
 
 const email=document.getElementById("email").value;
+
+if(!email.includes("@")){
+alert("Please enter a valid email");
+return;
+}
+
+document.getElementById("submitBtn").innerText="Loading...";
 
 fetch(SCRIPT_URL,{
 method:"POST",
