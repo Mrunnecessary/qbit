@@ -7,6 +7,8 @@
 
 <title>Qbit Career Analyzer</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
 <style>
 
 body{
@@ -22,19 +24,18 @@ margin:auto;
 padding:25px;
 }
 
-h2{
-margin-bottom:20px;
-}
+/* GRID FORM */
 
 .formGrid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:18px;
+gap:20px;
 margin-bottom:25px;
 }
 
 .formItem label{
 font-size:13px;
+opacity:0.85;
 display:block;
 margin-bottom:6px;
 }
@@ -45,15 +46,26 @@ width:100%;
 padding:9px;
 border-radius:6px;
 border:none;
+font-size:13px;
 }
+
+/* TEXTAREA */
 
 textarea{
 width:100%;
-height:130px;
+height:140px;
 padding:12px;
 border-radius:6px;
 border:none;
+margin-top:10px;
+font-size:14px;
 }
+
+textarea::placeholder{
+opacity:0.5;
+}
+
+/* BUTTON */
 
 button{
 margin-top:20px;
@@ -68,9 +80,11 @@ background:#2563eb;
 color:white;
 }
 
+/* LOADER */
+
 .loader{
 display:none;
-margin-top:20px;
+margin-top:25px;
 text-align:center;
 }
 
@@ -89,6 +103,14 @@ margin:auto;
 100%{transform:rotate(360deg);}
 }
 
+.progress{
+margin-top:10px;
+opacity:0.8;
+font-size:14px;
+}
+
+/* OUTPUT */
+
 .output{
 margin-top:25px;
 background:#1e293b;
@@ -98,25 +120,24 @@ white-space:pre-wrap;
 line-height:1.6;
 }
 
-#roadmapBox{
-display:none;
-margin-top:25px;
-background:#111827;
-padding:20px;
-border-radius:8px;
-}
+/* SHARE */
 
 .shareBlock{
-display:none;
 margin-top:25px;
+background:#0b1220;
+border:1px solid #1f2937;
+padding:20px;
+border-radius:8px;
 text-align:center;
+display:none;
 }
 
 .share{
+margin-top:12px;
 display:flex;
 gap:10px;
-justify-content:center;
 flex-wrap:wrap;
+justify-content:center;
 }
 
 canvas{
@@ -126,14 +147,17 @@ border-radius:8px;
 display:none;
 }
 
-footer{
-margin-top:60px;
+/* FOOTER */
+
+.footer{
+margin-top:50px;
 text-align:center;
-opacity:0.6;
 font-size:13px;
+opacity:0.7;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -146,7 +170,7 @@ font-size:13px;
 
 <div class="formItem">
 <label>Name *</label>
-<input id="name" required placeholder="Your name">
+<input id="name" required>
 </div>
 
 <div class="formItem">
@@ -187,57 +211,50 @@ font-size:13px;
 
 <label>Describe Daily Work *</label>
 
-<textarea id="userInput">
+<textarea id="userInput" placeholder="Example:
 
-Example tasks:
+• I create Excel reports and dashboards to track telecom KPI performance
 
-• I create Excel reports and monitor KPI dashboards
-• I analyze operational data and prepare weekly reports
-• I coordinate with field engineers and track issues
-• I maintain spreadsheets for performance monitoring
+• I analyse network data and send weekly reports to management
 
-Replace this text with your daily work tasks.
+• I monitor service outages and coordinate with field engineers
 
-</textarea>
+• I track issues in Jira and prepare operational summaries
+"></textarea>
+
+<p style="font-size:13px;opacity:0.7">
+Or upload resume (PDF)
+</p>
+
+<input type="file" id="resumeFile" accept="application/pdf">
 
 <button class="primary" onclick="runAnalysis()">Discover My Career Score</button>
 
+<!-- LOADER -->
+
 <div class="loader" id="loader">
+
 <div class="spinner"></div>
-<p id="progressText">Analyzing your work tasks...</p>
+
+<div class="progress" id="progressText">
+Analyzing your work tasks...
 </div>
+
+</div>
+
+<!-- OUTPUT -->
 
 <div id="outputBox" class="output" style="display:none"></div>
 
-<div id="roadmapBox">
-
-<h3>📘 Personalized Career Roadmap</h3>
-
-<p>
-Get a detailed roadmap based on your current skills.
-</p>
-
-<ul>
-<li>Skill gap breakdown</li>
-<li>Learning roadmap</li>
-<li>Course recommendations</li>
-<li>Project ideas</li>
-<li>Salary progression</li>
-</ul>
-
-<p style="font-weight:bold">Personalized PDF Guide — ₹99</p>
-
-<button onclick="requestRoadmap()" class="primary">
-Request Personalized Guide
-</button>
-
-</div>
+<!-- SCORE CARD -->
 
 <canvas id="shareCard" width="600" height="350"></canvas>
 
+<!-- SHARE -->
+
 <div id="shareBlock" class="shareBlock">
 
-<h3>Share your career score</h3>
+<h3>Share your score and compare with others</h3>
 
 <div class="share">
 
@@ -253,25 +270,26 @@ Request Personalized Guide
 
 </div>
 
+<div class="footer">
+© 2026 Qbit • hello@tryqbit.com
 </div>
 
-<footer>
-
-© 2026 Qbit — Career Intelligence Platform  
-hello@tryqbit.com
-
-</footer>
+</div>
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbzEQydPQ3ZO5xqoeIby6XmnkCjU8gZUyNs-5oP9ONp3MPVrRiQChYaGxUYVe8vPbK8S/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbyA8jZTYpYKTGnCk5rH2pm8r9mRZPWnA3Q_-Iv-A4WcJ2rp50-CaOqiZ5gTsS_AlJ2u/exec";
 
-let shareText="";
+let currentScore=0;
+let currentRole="";
+let userName="";
+
+/* LOADER */
 
 function simulateProgress(){
 
 const messages=[
-"Analyzing work tasks...",
+"Analyzing your work tasks...",
 "Detecting transferable skills...",
 "Comparing career roles...",
 "Calculating readiness score..."
@@ -293,12 +311,14 @@ clearInterval(interval);
 
 }
 
+/* RUN ANALYSIS */
+
 function runAnalysis(){
 
-let name=document.getElementById("name").value;
+userName=document.getElementById("name").value;
 
-if(!name || name.trim().length<2){
-alert("Please enter your name.");
+if(!userName){
+alert("Please enter your name");
 return;
 }
 
@@ -315,14 +335,16 @@ simulateProgress();
 
 let payload={
 
-name:name,
+name:userName,
 text:text,
 role:document.getElementById("role").value,
 exp:document.getElementById("exp").value,
 salary:document.getElementById("salary").value,
 targetRole:document.getElementById("targetRole").value,
 timeline:document.getElementById("timeline").value,
-source:"dashboard"
+
+source:"dashboard",
+device:navigator.userAgent
 
 };
 
@@ -334,9 +356,13 @@ fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
 document.getElementById("loader").style.display="none";
 
+currentScore=data.score;
+currentRole=data.role;
+
 let output=`
 
-Career Alignment Score
+${userName}'s Career Alignment Score
+
 ${data.score}% ready for ${data.role}
 
 ${data.percentile}
@@ -355,15 +381,6 @@ ${data.roadmap}
 document.getElementById("outputBox").innerText=output;
 document.getElementById("outputBox").style.display="block";
 
-document.getElementById("roadmapBox").style.display="block";
-
-shareText=`I am ${data.score}% ready for ${data.role} according to Qbit.
-
-${data.percentile}
-
-Check your score:
-https://tryqbit.com`;
-
 generateCard(data);
 
 document.getElementById("shareBlock").style.display="block";
@@ -372,14 +389,14 @@ document.getElementById("shareBlock").style.display="block";
 
 }
 
+/* SCORE CARD */
+
 function generateCard(data){
 
 const canvas=document.getElementById("shareCard");
 const ctx=canvas.getContext("2d");
 
 canvas.style.display="block";
-
-const name=document.getElementById("name").value || "User";
 
 ctx.fillStyle="#fff";
 ctx.fillRect(0,0,600,350);
@@ -390,13 +407,14 @@ ctx.font="26px Arial";
 ctx.fillText("Qbit Career Readiness",20,50);
 
 ctx.font="20px Arial";
-ctx.fillText(name+"'s Career Score",20,100);
+ctx.fillText(userName+": "+data.score+"% Ready for "+data.role,20,100);
 
-ctx.fillText(data.score+"% Ready for "+data.role,20,140);
-
+ctx.font="16px Arial";
 ctx.fillText("tryqbit.com",20,300);
 
 }
+
+/* SHARE */
 
 function downloadCard(){
 
@@ -413,22 +431,22 @@ link.click();
 }
 
 function shareLinkedIn(){
+
 window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
+
 }
 
 function shareWhatsapp(){
-window.open("https://wa.me/?text="+encodeURIComponent(shareText));
+
+window.open("https://wa.me/?text="+encodeURIComponent(
+userName+" is "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
+));
+
 }
 
 function shareFacebook(){
-window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+encodeURIComponent(shareText));
-}
 
-function requestRoadmap(){
-
-alert("Thanks! We will contact you about the personalized roadmap.");
-
-window.open("mailto:hello@tryqbit.com?subject=Qbit Personalized Career Roadmap");
+window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
 
 }
 
