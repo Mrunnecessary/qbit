@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Qbit Dashboard</title>
+<title>Qbit Skill Analyzer</title>
 
 <style>
 
@@ -31,16 +31,8 @@ border:none;
 font-size:14px;
 }
 
-input,select{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:6px;
-border:none;
-}
-
 button{
-margin-top:15px;
+margin-top:10px;
 padding:12px 18px;
 border:none;
 border-radius:6px;
@@ -69,31 +61,50 @@ gap:10px;
 flex-wrap:wrap;
 }
 
-.loader{
-display:none;
+canvas{
 margin-top:20px;
+background:white;
+border-radius:8px;
+}
+
+/* percentile badge */
+
+.badge{
+margin-top:10px;
+background:#111827;
+padding:10px;
+border-radius:6px;
+font-weight:600;
+}
+
+/* popup */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.popupBox{
+background:#1e293b;
+padding:30px;
+border-radius:10px;
+max-width:400px;
 text-align:center;
 }
 
-.spinner{
-width:40px;
-height:40px;
-border:4px solid #334155;
-border-top:4px solid #2563eb;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:auto;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-.progress{
+.popup input{
+width:100%;
+padding:10px;
 margin-top:10px;
-font-size:14px;
-opacity:0.8;
+border-radius:6px;
+border:none;
 }
 
 </style>
@@ -110,47 +121,47 @@ opacity:0.8;
 Describe your daily work tasks (3–5 sentences).
 </p>
 
-<label>Experience</label>
-<input id="exp" placeholder="Example: 3 years">
-
-<label>Target Role</label>
-<input id="targetRole" placeholder="Example: Data Analyst">
-
-<label>Timeline</label>
-<select id="timeline">
-<option value="3 months">3 months</option>
-<option value="6 months">6 months</option>
-<option value="1 year">1 year</option>
-</select>
-
-<textarea id="userInput" placeholder="Example:
-
-• I create telecom KPI reports in Excel.
-• I analyze performance data and prepare dashboards.
-"></textarea>
+<textarea id="userInput"></textarea>
 
 <button class="primary" onclick="runAnalysis()">Analyze My Skills</button>
 
-<p style="opacity:0.7;font-size:13px;">Takes ~30 seconds</p>
-
-<div class="loader" id="loader">
-
-<div class="spinner"></div>
-
-<div class="progress" id="progressText">
-Analyzing your work tasks...
-</div>
-
-</div>
-
 <div id="outputBox" class="output" style="display:none"></div>
+
+<div id="percentileBadge" class="badge" style="display:none"></div>
+
+<canvas id="shareCard" width="600" height="350" style="display:none"></canvas>
 
 <div class="share">
 
-<button onclick="shareScore()">Copy Score</button>
-<button onclick="shareWhatsapp()">WhatsApp</button>
-<button onclick="shareLinkedIn()">LinkedIn</button>
-<button onclick="shareFacebook()">Facebook</button>
+<p style="width:100%;opacity:0.8">
+Share your score on LinkedIn to compare with others.
+</p>
+
+<button onclick="downloadCard()">Download Score Card</button>
+
+<button onclick="shareLinkedIn()">Share LinkedIn</button>
+
+<button onclick="shareWhatsapp()">Share WhatsApp</button>
+
+</div>
+
+</div>
+
+<!-- EMAIL POPUP -->
+
+<div class="popup" id="emailPopup">
+
+<div class="popupBox">
+
+<h3>Save Your Career Report</h3>
+
+<p>
+Enter your email to track improvement and receive your roadmap.
+</p>
+
+<input type="email" id="userEmail" placeholder="Enter email">
+
+<button class="primary" onclick="saveEmail()">Save Report</button>
 
 </div>
 
@@ -158,59 +169,46 @@ Analyzing your work tasks...
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbxbfpLp2R1HlDLlUoweB3bl6TOCs-ZP6126OnVOt1BWpXfsaA2A-YxSckW8x3G3c1WQ/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbzLdbgqL12ebllcBKrHXDfCWKzWi9Za37z8C9o_cFkg6x9-rjRnJqhjrA9jTSsFmJsa/exec";
 
 let currentScore=0;
 let currentRole="";
+let percentileText="";
 
 function runAnalysis(){
 
 let text=document.getElementById("userInput").value;
 
-let exp=document.getElementById("exp").value;
-let targetRole=document.getElementById("targetRole").value;
-let timeline=document.getElementById("timeline").value;
-
 if(text.length<10){
-alert("Please describe your work activities.");
+alert("Please describe your work tasks.");
 return;
 }
 
-document.getElementById("loader").style.display="block";
-document.getElementById("outputBox").style.display="none";
+fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({text:text})))
 
-simulateProgress();
-
-fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({
-text:text,
-exp:exp,
-targetRole:targetRole,
-timeline:timeline
-})))
-
-.then(res=>{
-if(!res.ok){
-throw new Error("Server error");
-}
-return res.json();
-})
+.then(res=>res.json())
 
 .then(data=>{
 
 currentScore=data.score;
 currentRole=data.role;
+percentileText=data.percentile;
+
+/* result */
 
 let output=`
 
 📊 Career Alignment Score
 ${data.score}% ready for ${data.role}
 
-${data.percentile}
+Based on your work description and detected transferable skills.
 
 🧠 Why Qbit thinks this
 
 Your work includes:
 ${data.skills.join(", ")}
+
+These skills commonly appear in ${data.role} roles.
 
 ⚠ Skill Gaps
 ${data.gaps.join(", ")}
@@ -218,73 +216,108 @@ ${data.gaps.join(", ")}
 📚 Learning Roadmap
 ${data.roadmap}
 
-🚀 Improve Your Score
-
-Improve from ${data.score}% → ${Math.min(data.score+15,100)}%
-
-Focus on:
-${data.gaps.slice(0,2).join(", ")}
+Improve your score from ${data.score}% → ${Math.min(data.score+15,100)}
+by learning ${data.gaps.slice(0,2).join(", ")}
 
 `;
 
-document.getElementById("loader").style.display="none";
-
 document.getElementById("outputBox").innerText=output;
-
 document.getElementById("outputBox").style.display="block";
 
-})
+/* percentile badge */
 
-.catch(err=>{
-document.getElementById("loader").style.display="none";
-alert("AI analysis failed.");
+document.getElementById("percentileBadge").innerText="🏆 "+percentileText;
+document.getElementById("percentileBadge").style.display="block";
+
+generateCard(data);
+
+/* popup after few seconds */
+
+setTimeout(()=>{
+document.getElementById("emailPopup").style.display="flex";
+},3000);
+
 });
 
 }
 
-function simulateProgress(){
+function generateCard(data){
 
-const messages=[
-"Analyzing tasks...",
-"Detecting skills...",
-"Matching careers..."
-];
+const canvas=document.getElementById("shareCard");
+const ctx=canvas.getContext("2d");
 
-let i=0;
+canvas.style.display="block";
 
-const interval=setInterval(()=>{
+ctx.fillStyle="#ffffff";
+ctx.fillRect(0,0,600,350);
 
-document.getElementById("progressText").innerText=messages[i];
+ctx.fillStyle="#000";
 
-i++;
+ctx.font="26px Arial";
+ctx.fillText("Qbit Career Readiness",20,50);
 
-if(i>=messages.length){
-clearInterval(interval);
+ctx.font="20px Arial";
+ctx.fillText(data.score+"% Ready for "+data.role,20,100);
+
+ctx.font="16px Arial";
+
+ctx.fillText("Top percentile:",20,140);
+ctx.fillText(percentileText,20,170);
+
+ctx.fillText("Skills: "+data.skills.slice(0,3).join(", "),20,220);
+
+ctx.fillText("Skill Gaps: "+data.gaps.slice(0,3).join(", "),20,250);
+
+ctx.fillText("tryqbit.com",20,310);
+
 }
 
-},1200);
+function downloadCard(){
 
-}
+let canvas=document.getElementById("shareCard");
 
-function shareScore(){
-navigator.clipboard.writeText(
-"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
-);
-alert("Score copied!");
-}
+let link=document.createElement('a');
 
-function shareWhatsapp(){
-window.open("https://wa.me/?text="+encodeURIComponent(
-"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
-));
+link.download="qbit-career-score.png";
+
+link.href=canvas.toDataURL();
+
+link.click();
+
 }
 
 function shareLinkedIn(){
+
 window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
+
 }
 
-function shareFacebook(){
-window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
+function shareWhatsapp(){
+
+window.open("https://wa.me/?text="+encodeURIComponent(
+"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit. "+percentileText+" https://tryqbit.com"
+));
+
+}
+
+function saveEmail(){
+
+let email=document.getElementById("userEmail").value;
+
+fetch(API_URL,{
+method:"POST",
+body:new URLSearchParams({
+email:email,
+source:"dashboard",
+device:navigator.userAgent
+})
+})
+
+.then(()=>{
+alert("Report saved!");
+document.getElementById("emailPopup").style.display="none";
+});
+
 }
 
 </script>
