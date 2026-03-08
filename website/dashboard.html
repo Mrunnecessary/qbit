@@ -24,21 +24,11 @@ margin:auto;
 padding:25px;
 }
 
-h2{
-margin-bottom:25px;
-}
-
-/* GRID FORM */
-
 .formGrid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:18px;
 margin-bottom:25px;
-}
-
-.formItem{
-margin-bottom:5px;
 }
 
 .formItem label{
@@ -66,14 +56,8 @@ border:none;
 margin-top:10px;
 }
 
-.uploadBox{
-margin-top:12px;
-font-size:13px;
-opacity:0.8;
-}
-
 button{
-margin-top:22px;
+margin-top:20px;
 padding:12px 18px;
 border:none;
 border-radius:6px;
@@ -85,6 +69,37 @@ background:#2563eb;
 color:white;
 }
 
+/* LOADER */
+
+.loader{
+display:none;
+margin-top:25px;
+text-align:center;
+}
+
+.spinner{
+width:40px;
+height:40px;
+border:4px solid #334155;
+border-top:4px solid #2563eb;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+.progress{
+margin-top:10px;
+opacity:0.8;
+font-size:14px;
+}
+
+/* OUTPUT */
+
 .output{
 margin-top:25px;
 background:#1e293b;
@@ -94,15 +109,7 @@ white-space:pre-wrap;
 line-height:1.6;
 }
 
-.badge{
-margin-top:15px;
-background:#111827;
-padding:10px;
-border-radius:6px;
-font-weight:600;
-}
-
-/* SHARE BLOCK */
+/* SHARE */
 
 .shareBlock{
 margin-top:25px;
@@ -111,16 +118,7 @@ border:1px solid #1f2937;
 padding:20px;
 border-radius:8px;
 text-align:center;
-}
-
-.shareBlock h3{
-margin-top:0;
-}
-
-canvas{
-margin-top:20px;
-background:white;
-border-radius:8px;
+display:none;
 }
 
 .share{
@@ -131,46 +129,14 @@ flex-wrap:wrap;
 justify-content:center;
 }
 
-/* POPUP */
-
-.popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.7);
+canvas{
+margin-top:20px;
+background:white;
+border-radius:8px;
 display:none;
-align-items:center;
-justify-content:center;
-}
-
-.popupBox{
-background:#1e293b;
-padding:30px;
-border-radius:10px;
-max-width:400px;
-text-align:center;
-}
-
-.popup input{
-margin-top:10px;
-padding:8px;
-width:100%;
-border:none;
-border-radius:6px;
-}
-
-@media(max-width:768px){
-
-.formGrid{
-grid-template-columns:1fr 1fr;
-}
-
 }
 
 </style>
-
 </head>
 
 <body>
@@ -188,7 +154,7 @@ grid-template-columns:1fr 1fr;
 
 <div class="formItem">
 <label>Experience</label>
-<input id="exp" type="number">
+<input id="exp">
 </div>
 
 <div class="formItem">
@@ -226,39 +192,44 @@ grid-template-columns:1fr 1fr;
 
 </div>
 
-
 <label>Describe Daily Work *</label>
 
 <textarea id="userInput" placeholder="Example:
 
-• I create telecom KPI reports in Excel
-• I monitor network performance
-• I analyze data and send weekly dashboards
-• I track bugs and update Jira tickets
+• I monitor telecom KPI reports in Excel
+• I manage field engineers
+• I analyze network performance
 "></textarea>
 
+<p style="font-size:13px;opacity:0.7">
+Or Upload Resume (PDF)
+</p>
 
-<div class="uploadBox">
-Or Upload Resume (PDF):
 <input type="file" id="resumeFile" accept="application/pdf">
-</div>
-
 
 <button class="primary" onclick="runAnalysis()">Discover My Career Score</button>
 
 
+<div class="loader" id="loader">
+
+<div class="spinner"></div>
+
+<div class="progress" id="progressText">
+Analyzing your work tasks...
+</div>
+
+</div>
+
+
 <div id="outputBox" class="output" style="display:none"></div>
 
-<div id="percentileBadge" class="badge" style="display:none"></div>
 
-<canvas id="shareCard" width="600" height="350" style="display:none"></canvas>
+<canvas id="shareCard" width="600" height="350"></canvas>
 
 
-<div id="shareBlock" class="shareBlock" style="display:none">
+<div id="shareBlock" class="shareBlock">
 
 <h3>🚀 Share your score and compare with others</h3>
-
-<p>Post your result and see how others compare.</p>
 
 <div class="share">
 
@@ -276,101 +247,59 @@ Or Upload Resume (PDF):
 
 </div>
 
-
-<div class="popup" id="emailPopup">
-
-<div class="popupBox">
-
-<h3>Save Your Career Report</h3>
-
-<p>Enter your email to track improvement.</p>
-
-<input type="email" id="userEmail">
-
-<button class="primary" onclick="saveEmail()">Save</button>
-
-</div>
-
-</div>
-
-
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbymfvNnFnYDTk77XSl8gneLNzsYhck2ltmxiqX9CLhhBav3We3lDWbGi-YIab6tRnQ0/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbxx9f7-DeHyXbOIstt5PSPF4WENJKCCFeI9eehS72ZlrOXrxItDddlH166bmvGVA4Q_/exec";
 
 let currentScore=0;
 let currentRole="";
-let percentileText="";
 
-async function extractTextFromPDF(file){
+/* LOADER ANIMATION */
 
-const reader=new FileReader();
+function simulateProgress(){
 
-return new Promise(resolve=>{
+const messages=[
+"Analyzing your work tasks...",
+"Detecting transferable skills...",
+"Comparing career roles...",
+"Calculating readiness score..."
+];
 
-reader.onload=async function(){
+let i=0;
 
-const typedarray=new Uint8Array(this.result);
+const interval=setInterval(()=>{
 
-const pdf=await pdfjsLib.getDocument(typedarray).promise;
+document.getElementById("progressText").innerText=messages[i];
 
-let text="";
+i++;
 
-for(let i=1;i<=pdf.numPages;i++){
+if(i>=messages.length){
+clearInterval(interval);
+}
 
-const page=await pdf.getPage(i);
-const content=await page.getTextContent();
-
-content.items.forEach(item=>{
-text+=item.str+" ";
-});
+},1200);
 
 }
 
-resolve(text);
 
-};
-
-reader.readAsArrayBuffer(file);
-
-});
-
-}
-
-function expandKeywords(text){
-
-text=text.toLowerCase()
-.replace("report","reporting")
-.replace("dashboard","data visualization")
-.replace("analysis","analytics")
-.replace("monitor","monitoring")
-.replace("manage","management");
-
-return text;
-
-}
+/* ANALYSIS */
 
 async function runAnalysis(){
 
-let description=document.getElementById("userInput").value;
+let text=document.getElementById("userInput").value;
 
-const resume=document.getElementById("resumeFile").files[0];
-
-if(resume){
-description=await extractTextFromPDF(resume);
-}
-
-if(description.length<10){
-alert("Please describe work or upload resume");
+if(text.length<10){
+alert("Please describe your work tasks.");
 return;
 }
 
-description=expandKeywords(description);
+document.getElementById("loader").style.display="block";
+
+simulateProgress();
 
 let payload={
 
-text:description,
-
+text:text,
 role:document.getElementById("role").value,
 exp:document.getElementById("exp").value,
 salary:document.getElementById("salary").value,
@@ -389,13 +318,14 @@ fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
 .then(data=>{
 
+document.getElementById("loader").style.display="none";
+
 currentScore=data.score;
 currentRole=data.role;
-percentileText=data.percentile;
 
 let output=`
 
-📊 Career Alignment Score
+Career Alignment Score
 ${data.score}% ready for ${data.role}
 
 ${data.percentile}
@@ -414,20 +344,16 @@ ${data.roadmap}
 document.getElementById("outputBox").innerText=output;
 document.getElementById("outputBox").style.display="block";
 
-document.getElementById("percentileBadge").innerText="🏆 "+percentileText;
-document.getElementById("percentileBadge").style.display="block";
-
 generateCard(data);
 
 document.getElementById("shareBlock").style.display="block";
 
-setTimeout(()=>{
-document.getElementById("emailPopup").style.display="flex";
-},3000);
-
 });
 
 }
+
+
+/* SCORE CARD */
 
 function generateCard(data){
 
@@ -448,11 +374,12 @@ ctx.font="20px Arial";
 ctx.fillText(data.score+"% Ready for "+data.role,20,100);
 
 ctx.font="16px Arial";
-ctx.fillText(percentileText,20,150);
-
 ctx.fillText("tryqbit.com",20,300);
 
 }
+
+
+/* SHARE */
 
 function downloadCard(){
 
@@ -461,7 +388,9 @@ let canvas=document.getElementById("shareCard");
 let link=document.createElement("a");
 
 link.download="qbit-score.png";
+
 link.href=canvas.toDataURL();
+
 link.click();
 
 }
@@ -475,7 +404,7 @@ window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit
 function shareWhatsapp(){
 
 window.open("https://wa.me/?text="+encodeURIComponent(
-"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit "+percentileText+" https://tryqbit.com"
+"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
 ));
 
 }
@@ -483,26 +412,6 @@ window.open("https://wa.me/?text="+encodeURIComponent(
 function shareFacebook(){
 
 window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
-
-}
-
-function saveEmail(){
-
-let email=document.getElementById("userEmail").value;
-
-fetch(API_URL,{
-method:"POST",
-body:new URLSearchParams({
-email:email,
-source:"dashboard",
-device:navigator.userAgent
-})
-})
-
-.then(()=>{
-alert("Saved");
-document.getElementById("emailPopup").style.display="none";
-});
 
 }
 
