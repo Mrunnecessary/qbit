@@ -13,7 +13,6 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
 
 <script>
@@ -90,7 +89,6 @@ margin-bottom:20px;
 background:#111827;
 padding:20px;
 border-radius:8px;
-margin-top:30px;
 }
 
 .testimonial{
@@ -116,20 +114,12 @@ width:220px;
 margin-right:8px;
 }
 
-.socialproof{
-margin-top:10px;
-opacity:0.8;
-}
-
 @media(max-width:768px){
-
 .hero{padding:40px 0}
-
 input{
 width:180px;
 margin-bottom:10px;
 }
-
 }
 
 </style>
@@ -157,11 +147,9 @@ margin-bottom:10px;
 <h1>How Ready Are You for a Career Switch?</h1>
 
 <p>
-Paste what you do daily at work and discover your  
-<b>Career Readiness Score in 30 seconds.</b>
+No resume required. Just describe your daily work.<br>
+Discover your <b>Career Readiness Score in 30 seconds</b>.
 </p>
-
-<p>No resume required. Just describe your daily work.</p>
 
 <form onsubmit="joinWaitlist(event)" style="margin-top:20px;">
 
@@ -171,16 +159,15 @@ Paste what you do daily at work and discover your
 
 </form>
 
-<p class="socialproof" id="userCount">
-Loading career explorers...
+<p style="opacity:0.8;margin-top:10px;font-size:14px;">
+100+ professionals already tested their hidden skills.
 </p>
 
 </section>
 
-
 <section class="section">
 
-<h2>Example Career Readiness Report</h2>
+<h2>Example Skill Report</h2>
 
 <div class="example">
 
@@ -200,60 +187,42 @@ Start learning SQL joins and Python data analysis.</p>
 
 </section>
 
-
 <section class="section">
 
 <h2>How Qbit Works</h2>
 
 <div class="card">
 <h3>1️⃣ Describe Your Work</h3>
-<p>
-Write what you do daily in your job or studies.
-</p>
+<p>Explain your daily work activities.</p>
 </div>
 
 <div class="card">
 <h3>2️⃣ Hidden Skills Detection</h3>
-<p>
-Qbit extracts transferable skills using AI.
-</p>
+<p>Qbit extracts transferable skills.</p>
 </div>
 
 <div class="card">
 <h3>3️⃣ Career Alignment Score</h3>
-<p>
-See how close you are to your desired roles.
-</p>
-</div>
-
-<div class="card">
-<h3>4️⃣ Learning Roadmap</h3>
-<p>
-Get a clear path to improve your career readiness.
-</p>
+<p>See how close you are to your desired roles.</p>
 </div>
 
 </section>
-
 
 <section class="section">
 
 <h2>Upcoming Features</h2>
 
-<div class="card">AI Job Discovery Engine</div>
-
-<div class="card">Government Exam Preparation Engine</div>
-
-<div class="card">Salary Prediction Based on Skills</div>
-
-<div class="card">Automated Career Improvement Tracking</div>
-
-<div class="card">Coding Project Lab With Recruiter Portfolio</div>
-
-<div class="card">Recruiter Talent Discovery Platform</div>
+<div class="card">Weekly career readiness tracking</div>
+<div class="card">AI job discovery engine</div>
+<div class="card">Government exam preparation engine</div>
+<div class="card">Real-time salary prediction</div>
+<div class="card">College comparison for career ROI</div>
+<div class="card">Study abroad advisor</div>
+<div class="card">Startup decision advisor</div>
+<div class="card">Coding project lab with recruiter portfolio</div>
+<div class="card">Recruiter talent discovery using skill alignment</div>
 
 </section>
-
 
 <section class="section">
 
@@ -269,7 +238,6 @@ Get a clear path to improve your career readiness.
 
 </section>
 
-
 <footer>
 
 © 2026 Qbit<br>
@@ -279,10 +247,9 @@ hello@tryqbit.com
 
 </div>
 
-
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxVP1KmR_a0k7w9Eh7WIOnbB0eiF52JxuvGdSgqYItVl77YtYF8NEHXbXCrwUFpfADp/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxbfpLp2R1HlDLlUoweB3bl6TOCs-ZP6126OnVOt1BWpXfsaA2A-YxSckW8x3G3c1WQ/exec";
 
 function joinWaitlist(e){
 
@@ -308,22 +275,6 @@ window.location.href="dashboard.html";
 });
 
 }
-
-
-fetch(SCRIPT_URL+"?count=true")
-.then(res=>res.json())
-.then(data=>{
-
-let count=data.count;
-
-if(count<100){
-count=100;
-}
-
-document.getElementById("userCount").innerText =
-count+" professionals already tested their hidden skills.";
-
-});
 
 </script>
 

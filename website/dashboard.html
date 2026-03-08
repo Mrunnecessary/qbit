@@ -31,8 +31,16 @@ border:none;
 font-size:14px;
 }
 
-button{
+input,select{
+width:100%;
+padding:10px;
 margin-top:10px;
+border-radius:6px;
+border:none;
+}
+
+button{
+margin-top:15px;
 padding:12px 18px;
 border:none;
 border-radius:6px;
@@ -51,6 +59,7 @@ background:#1e293b;
 padding:20px;
 border-radius:8px;
 line-height:1.6;
+white-space:pre-wrap;
 }
 
 .share{
@@ -59,8 +68,6 @@ display:flex;
 gap:10px;
 flex-wrap:wrap;
 }
-
-/* LOADER */
 
 .loader{
 display:none;
@@ -100,17 +107,26 @@ opacity:0.8;
 <h2>Career Readiness Analyzer</h2>
 
 <p>
-Describe your daily tasks (3–5 sentences works best).  
-Qbit will detect your hidden skills.
+Describe your daily work tasks (3–5 sentences).
 </p>
+
+<label>Experience</label>
+<input id="exp" placeholder="Example: 3 years">
+
+<label>Target Role</label>
+<input id="targetRole" placeholder="Example: Data Analyst">
+
+<label>Timeline</label>
+<select id="timeline">
+<option value="3 months">3 months</option>
+<option value="6 months">6 months</option>
+<option value="1 year">1 year</option>
+</select>
 
 <textarea id="userInput" placeholder="Example:
 
-• I create telecom KPI reports in Excel and send weekly dashboards.
-
-• I test applications, report bugs and track issues in Jira.
-
-• I manage AWS servers and monitor system performance.
+• I create telecom KPI reports in Excel.
+• I analyze performance data and prepare dashboards.
 "></textarea>
 
 <button class="primary" onclick="runAnalysis()">Analyze My Skills</button>
@@ -142,7 +158,7 @@ Analyzing your work tasks...
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbxVP1KmR_a0k7w9Eh7WIOnbB0eiF52JxuvGdSgqYItVl77YtYF8NEHXbXCrwUFpfADp/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbxbfpLp2R1HlDLlUoweB3bl6TOCs-ZP6126OnVOt1BWpXfsaA2A-YxSckW8x3G3c1WQ/exec";
 
 let currentScore=0;
 let currentRole="";
@@ -150,6 +166,10 @@ let currentRole="";
 function runAnalysis(){
 
 let text=document.getElementById("userInput").value;
+
+let exp=document.getElementById("exp").value;
+let targetRole=document.getElementById("targetRole").value;
+let timeline=document.getElementById("timeline").value;
 
 if(text.length<10){
 alert("Please describe your work activities.");
@@ -161,9 +181,19 @@ document.getElementById("outputBox").style.display="none";
 
 simulateProgress();
 
-fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({text:text})))
+fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify({
+text:text,
+exp:exp,
+targetRole:targetRole,
+timeline:timeline
+})))
 
-.then(res=>res.json())
+.then(res=>{
+if(!res.ok){
+throw new Error("Server error");
+}
+return res.json();
+})
 
 .then(data=>{
 
@@ -182,33 +212,18 @@ ${data.percentile}
 Your work includes:
 ${data.skills.join(", ")}
 
-These skills are commonly used in ${data.role} roles.
-
 ⚠ Skill Gaps
 ${data.gaps.join(", ")}
 
 📚 Learning Roadmap
 ${data.roadmap}
 
-🎓 Recommended Free Resources
-
-SQL Course  
-https://www.freecodecamp.org/learn/relational-database/
-
-Python Course  
-https://www.kaggle.com/learn/python
-
-Statistics  
-https://www.khanacademy.org/math/statistics-probability
-
 🚀 Improve Your Score
 
-Improve your score from ${data.score}% → ${Math.min(data.score+15,100)}%
+Improve from ${data.score}% → ${Math.min(data.score+15,100)}%
 
-Focus on learning:
+Focus on:
 ${data.gaps.slice(0,2).join(", ")}
-
-Recheck your score after completing one roadmap step.
 
 `;
 
@@ -218,6 +233,11 @@ document.getElementById("outputBox").innerText=output;
 
 document.getElementById("outputBox").style.display="block";
 
+})
+
+.catch(err=>{
+document.getElementById("loader").style.display="none";
+alert("AI analysis failed.");
 });
 
 }
@@ -225,10 +245,9 @@ document.getElementById("outputBox").style.display="block";
 function simulateProgress(){
 
 const messages=[
-"Analyzing your work tasks...",
-"Detecting hidden skills...",
-"Comparing career roles...",
-"Calculating readiness score..."
+"Analyzing tasks...",
+"Detecting skills...",
+"Matching careers..."
 ];
 
 let i=0;
@@ -248,33 +267,24 @@ clearInterval(interval);
 }
 
 function shareScore(){
-
 navigator.clipboard.writeText(
 "I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
 );
-
 alert("Score copied!");
-
 }
 
 function shareWhatsapp(){
-
 window.open("https://wa.me/?text="+encodeURIComponent(
 "I'm "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
 ));
-
 }
 
 function shareLinkedIn(){
-
 window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
-
 }
 
 function shareFacebook(){
-
 window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
-
 }
 
 </script>
