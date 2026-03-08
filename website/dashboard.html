@@ -22,6 +22,10 @@ margin:auto;
 padding:25px;
 }
 
+h2{
+margin-bottom:20px;
+}
+
 .formGrid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -45,7 +49,7 @@ border:none;
 
 textarea{
 width:100%;
-height:120px;
+height:130px;
 padding:12px;
 border-radius:6px;
 border:none;
@@ -66,8 +70,8 @@ color:white;
 
 .loader{
 display:none;
-text-align:center;
 margin-top:20px;
+text-align:center;
 }
 
 .spinner{
@@ -91,6 +95,15 @@ background:#1e293b;
 padding:20px;
 border-radius:8px;
 white-space:pre-wrap;
+line-height:1.6;
+}
+
+#roadmapBox{
+display:none;
+margin-top:25px;
+background:#111827;
+padding:20px;
+border-radius:8px;
 }
 
 .shareBlock{
@@ -117,6 +130,7 @@ footer{
 margin-top:60px;
 text-align:center;
 opacity:0.6;
+font-size:13px;
 }
 
 </style>
@@ -131,8 +145,8 @@ opacity:0.6;
 <div class="formGrid">
 
 <div class="formItem">
-<label>Name</label>
-<input id="name">
+<label>Name *</label>
+<input id="name" required placeholder="Your name">
 </div>
 
 <div class="formItem">
@@ -141,7 +155,7 @@ opacity:0.6;
 </div>
 
 <div class="formItem">
-<label>Experience</label>
+<label>Experience (Years)</label>
 <input id="exp">
 </div>
 
@@ -173,21 +187,57 @@ opacity:0.6;
 
 <label>Describe Daily Work *</label>
 
-<textarea id="userInput"></textarea>
+<textarea id="userInput">
+
+Example tasks:
+
+• I create Excel reports and monitor KPI dashboards
+• I analyze operational data and prepare weekly reports
+• I coordinate with field engineers and track issues
+• I maintain spreadsheets for performance monitoring
+
+Replace this text with your daily work tasks.
+
+</textarea>
 
 <button class="primary" onclick="runAnalysis()">Discover My Career Score</button>
 
 <div class="loader" id="loader">
 <div class="spinner"></div>
+<p id="progressText">Analyzing your work tasks...</p>
 </div>
 
 <div id="outputBox" class="output" style="display:none"></div>
+
+<div id="roadmapBox">
+
+<h3>📘 Personalized Career Roadmap</h3>
+
+<p>
+Get a detailed roadmap based on your current skills.
+</p>
+
+<ul>
+<li>Skill gap breakdown</li>
+<li>Learning roadmap</li>
+<li>Course recommendations</li>
+<li>Project ideas</li>
+<li>Salary progression</li>
+</ul>
+
+<p style="font-weight:bold">Personalized PDF Guide — ₹99</p>
+
+<button onclick="requestRoadmap()" class="primary">
+Request Personalized Guide
+</button>
+
+</div>
 
 <canvas id="shareCard" width="600" height="350"></canvas>
 
 <div id="shareBlock" class="shareBlock">
 
-<h3>Share your score</h3>
+<h3>Share your career score</h3>
 
 <div class="share">
 
@@ -214,11 +264,43 @@ hello@tryqbit.com
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbzv-KBrRXHh3zFzF061k8gEkb4HzbK-9LD2f4vqJm4gQ6Gxh-bKVbl9W4X7dsVlscA8/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbxjSHwkGW3GuZd_SEOGVS5A3lM3FESrkmmtczA_8iGNFMONrzqET2SCta8RQX2TzVjo/exec";
 
 let shareText="";
 
+function simulateProgress(){
+
+const messages=[
+"Analyzing work tasks...",
+"Detecting transferable skills...",
+"Comparing career roles...",
+"Calculating readiness score..."
+];
+
+let i=0;
+
+const interval=setInterval(()=>{
+
+document.getElementById("progressText").innerText=messages[i];
+
+i++;
+
+if(i>=messages.length){
+clearInterval(interval);
+}
+
+},1200);
+
+}
+
 function runAnalysis(){
+
+let name=document.getElementById("name").value;
+
+if(!name || name.trim().length<2){
+alert("Please enter your name.");
+return;
+}
 
 let text=document.getElementById("userInput").value;
 
@@ -229,9 +311,11 @@ return;
 
 document.getElementById("loader").style.display="block";
 
+simulateProgress();
+
 let payload={
 
-name:document.getElementById("name").value,
+name:name,
 text:text,
 role:document.getElementById("role").value,
 exp:document.getElementById("exp").value,
@@ -265,10 +349,13 @@ ${data.gaps.join(", ")}
 
 Learning Roadmap
 ${data.roadmap}
+
 `;
 
 document.getElementById("outputBox").innerText=output;
 document.getElementById("outputBox").style.display="block";
+
+document.getElementById("roadmapBox").style.display="block";
 
 shareText=`I am ${data.score}% ready for ${data.role} according to Qbit.
 
@@ -335,6 +422,14 @@ window.open("https://wa.me/?text="+encodeURIComponent(shareText));
 
 function shareFacebook(){
 window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+encodeURIComponent(shareText));
+}
+
+function requestRoadmap(){
+
+alert("Thanks! We will contact you about the personalized roadmap.");
+
+window.open("mailto:hello@tryqbit.com?subject=Qbit Personalized Career Roadmap");
+
 }
 
 </script>
