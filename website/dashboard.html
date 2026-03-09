@@ -19,7 +19,7 @@ color:white;
 .container{
 max-width:1000px;
 margin:auto;
-padding:30px;
+padding:25px;
 }
 
 /* GRID */
@@ -46,6 +46,24 @@ border-radius:6px;
 border:none;
 }
 
+/* MOBILE */
+
+@media(max-width:900px){
+
+.formGrid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:600px){
+
+.formGrid{
+grid-template-columns:1fr;
+}
+
+}
+
 /* TEXTAREA */
 
 textarea{
@@ -54,13 +72,12 @@ height:130px;
 padding:12px;
 border-radius:6px;
 border:none;
-margin-top:10px;
 }
 
 /* BUTTON */
 
 button{
-margin-top:20px;
+margin-top:15px;
 padding:12px 18px;
 border:none;
 border-radius:6px;
@@ -95,17 +112,17 @@ margin:auto;
 100%{transform:rotate(360deg);}
 }
 
-/* RESULT */
+/* OUTPUT */
 
 .output{
 margin-top:25px;
 background:#1e293b;
-padding:22px;
+padding:20px;
 border-radius:8px;
-line-height:1.7;
+line-height:1.6;
 }
 
-/* PROGRESS BAR */
+/* PROGRESS */
 
 .progressBar{
 height:16px;
@@ -127,16 +144,25 @@ margin-top:25px;
 background:#111827;
 padding:20px;
 border-radius:8px;
-display:none;
 text-align:center;
+display:none;
 }
 
 .share{
 margin-top:12px;
 display:flex;
 gap:10px;
-justify-content:center;
 flex-wrap:wrap;
+justify-content:center;
+}
+
+/* CANVAS */
+
+canvas{
+margin-top:25px;
+background:white;
+border-radius:8px;
+display:none;
 }
 
 /* FOOTER */
@@ -162,7 +188,7 @@ font-size:14px;
 
 <div class="formItem">
 <label>Name *</label>
-<input id="name" required>
+<input id="name">
 </div>
 
 <div class="formItem">
@@ -210,7 +236,7 @@ font-size:14px;
 • I manage field engineers
 "></textarea>
 
-<p style="opacity:0.7;font-size:13px;margin-top:10px;">
+<p style="opacity:0.7;font-size:13px;margin-top:10px">
 Or upload resume (PDF)
 </p>
 
@@ -230,6 +256,33 @@ Or upload resume (PDF)
 <!-- RESULT -->
 
 <div id="outputBox" class="output" style="display:none"></div>
+
+<!-- PERSONALIZED GUIDE -->
+
+<div id="packageBox" style="
+margin-top:25px;
+background:#111827;
+padding:20px;
+border-radius:8px;
+display:none">
+
+<h3>Personalized Career Roadmap</h3>
+
+<p>
+Get a deeper analysis of your career transition with a personalized guide.
+</p>
+
+<button onclick="requestGuide()">Request Personalized Guide</button>
+
+</div>
+
+<!-- SCORE CARD -->
+
+<canvas id="scoreCard" width="600" height="350"></canvas>
+
+<button id="downloadBtn" style="display:none" onclick="downloadCard()">
+Download Score Card
+</button>
 
 <!-- SHARE -->
 
@@ -253,7 +306,6 @@ Or upload resume (PDF)
 
 © 2026 Qbit  
 Career Intelligence Engine  
-
 Contact: hello@tryqbit.com
 
 </footer>
@@ -262,7 +314,7 @@ Contact: hello@tryqbit.com
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbxnFdgOQMR8-NmNLFVAe-oSNpf0_LZhfVMwZBo807VODSJhKAhNDvAHC92YP5ib5eG6/exec"
+const API_URL="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec"
 
 let currentScore=0
 let currentRole=""
@@ -328,40 +380,100 @@ let output=`
 
 <p>${data.percentile}</p>
 
-<h4>Skill Confidence</h4>
-
+<h4>Detected Skills</h4>
 ${skills}
 
 <h4>Skill Gaps</h4>
-
 ${gaps}
 
 <h4>Learning Roadmap</h4>
-
 ${data.roadmap}
-
-<p style="opacity:0.7;margin-top:15px;">
-AI Confidence Level: Moderate<br>
-Based on ${data.skills.length + data.gaps.length} detected signals
-</p>
 
 `
 
 document.getElementById("outputBox").innerHTML=output
 document.getElementById("outputBox").style.display="block"
 
+generateScoreCard(data)
+
 document.getElementById("shareBlock").style.display="block"
+document.getElementById("packageBox").style.display="block"
 
 })
 
 }
 
-/* SHARE */
+
+/* SCORE CARD */
+
+function generateScoreCard(data){
+
+const canvas=document.getElementById("scoreCard")
+const ctx=canvas.getContext("2d")
+
+canvas.style.display="block"
+
+ctx.fillStyle="#ffffff"
+ctx.fillRect(0,0,600,350)
+
+ctx.fillStyle="#000"
+
+ctx.font="26px Arial"
+ctx.fillText("Qbit Career Readiness",20,50)
+
+ctx.font="20px Arial"
+ctx.fillText(userName+"'s Score",20,100)
+
+ctx.font="22px Arial"
+ctx.fillText(data.score+"% Ready for "+data.role,20,150)
+
+ctx.font="16px Arial"
+ctx.fillText(data.percentile,20,200)
+
+ctx.font="14px Arial"
+ctx.fillText("tryqbit.com",20,300)
+
+document.getElementById("downloadBtn").style.display="inline-block"
+
+}
+
+
+/* DOWNLOAD */
+
+function downloadCard(){
+
+let canvas=document.getElementById("scoreCard")
+
+let link=document.createElement("a")
+
+link.download="qbit-score.png"
+
+link.href=canvas.toDataURL()
+
+link.click()
+
+}
+
+
+/* SHARE MESSAGE */
+
+function getShareText(){
+
+return encodeURIComponent(
+userName+" is "+currentScore+
+"% ready for "+currentRole+
+" according to Qbit.\n\n"+
+"Check your career readiness score:\n"+
+"https://tryqbit.com"
+)
+
+}
+
 
 function shareLinkedIn(){
 
 window.open(
-"https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com"
+"https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com&summary="+getShareText()
 )
 
 }
@@ -369,17 +481,25 @@ window.open(
 function shareWhatsapp(){
 
 window.open(
-"https://wa.me/?text="+encodeURIComponent(
-"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit. Check yours: https://tryqbit.com"
-))
+"https://wa.me/?text="+getShareText()
+)
 
 }
 
 function shareFacebook(){
 
 window.open(
-"https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com"
+"https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+getShareText()
 )
+
+}
+
+
+/* GUIDE REQUEST */
+
+function requestGuide(){
+
+alert("Please email hello@tryqbit.com to request your personalized roadmap.")
 
 }
 
