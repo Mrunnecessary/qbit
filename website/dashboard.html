@@ -7,8 +7,6 @@
 
 <title>Qbit Career Analyzer</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
 <style>
 
 body{
@@ -19,23 +17,23 @@ color:white;
 }
 
 .container{
-max-width:960px;
+max-width:1000px;
 margin:auto;
-padding:25px;
+padding:30px;
 }
 
-/* GRID FORM */
+/* GRID */
 
 .formGrid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:20px;
+gap:18px;
 margin-bottom:25px;
 }
 
 .formItem label{
 font-size:13px;
-opacity:0.85;
+opacity:0.9;
 display:block;
 margin-bottom:6px;
 }
@@ -43,26 +41,20 @@ margin-bottom:6px;
 .formItem input,
 .formItem select{
 width:100%;
-padding:9px;
+padding:10px;
 border-radius:6px;
 border:none;
-font-size:13px;
 }
 
 /* TEXTAREA */
 
 textarea{
 width:100%;
-height:140px;
+height:130px;
 padding:12px;
 border-radius:6px;
 border:none;
 margin-top:10px;
-font-size:14px;
-}
-
-textarea::placeholder{
-opacity:0.5;
 }
 
 /* BUTTON */
@@ -103,57 +95,57 @@ margin:auto;
 100%{transform:rotate(360deg);}
 }
 
-.progress{
-margin-top:10px;
-opacity:0.8;
-font-size:14px;
-}
-
-/* OUTPUT */
+/* RESULT */
 
 .output{
 margin-top:25px;
 background:#1e293b;
-padding:20px;
+padding:22px;
 border-radius:8px;
-white-space:pre-wrap;
-line-height:1.6;
+line-height:1.7;
+}
+
+/* PROGRESS BAR */
+
+.progressBar{
+height:16px;
+background:#334155;
+border-radius:8px;
+overflow:hidden;
+margin:10px 0;
+}
+
+.progressFill{
+height:100%;
+background:#2563eb;
 }
 
 /* SHARE */
 
 .shareBlock{
 margin-top:25px;
-background:#0b1220;
-border:1px solid #1f2937;
+background:#111827;
 padding:20px;
 border-radius:8px;
-text-align:center;
 display:none;
+text-align:center;
 }
 
 .share{
 margin-top:12px;
 display:flex;
 gap:10px;
-flex-wrap:wrap;
 justify-content:center;
-}
-
-canvas{
-margin-top:20px;
-background:white;
-border-radius:8px;
-display:none;
+flex-wrap:wrap;
 }
 
 /* FOOTER */
 
-.footer{
-margin-top:50px;
+footer{
+margin-top:60px;
 text-align:center;
-font-size:13px;
-opacity:0.7;
+color:#94a3b8;
+font-size:14px;
 }
 
 </style>
@@ -179,7 +171,7 @@ opacity:0.7;
 </div>
 
 <div class="formItem">
-<label>Experience (Years)</label>
+<label>Experience (years)</label>
 <input id="exp">
 </div>
 
@@ -213,16 +205,12 @@ opacity:0.7;
 
 <textarea id="userInput" placeholder="Example:
 
-• I create Excel reports and dashboards to track telecom KPI performance
-
-• I analyse network data and send weekly reports to management
-
-• I monitor service outages and coordinate with field engineers
-
-• I track issues in Jira and prepare operational summaries
+• I create Excel reports for network monitoring
+• I analyze performance data
+• I manage field engineers
 "></textarea>
 
-<p style="font-size:13px;opacity:0.7">
+<p style="opacity:0.7;font-size:13px;margin-top:10px;">
 Or upload resume (PDF)
 </p>
 
@@ -235,20 +223,13 @@ Or upload resume (PDF)
 <div class="loader" id="loader">
 
 <div class="spinner"></div>
-
-<div class="progress" id="progressText">
-Analyzing your work tasks...
-</div>
+<p>Analyzing your work tasks...</p>
 
 </div>
 
-<!-- OUTPUT -->
+<!-- RESULT -->
 
 <div id="outputBox" class="output" style="display:none"></div>
-
-<!-- SCORE CARD -->
-
-<canvas id="shareCard" width="600" height="350"></canvas>
 
 <!-- SHARE -->
 
@@ -257,8 +238,6 @@ Analyzing your work tasks...
 <h3>Share your score and compare with others</h3>
 
 <div class="share">
-
-<button onclick="downloadCard()">Download Score Card</button>
 
 <button onclick="shareLinkedIn()">LinkedIn</button>
 
@@ -270,68 +249,43 @@ Analyzing your work tasks...
 
 </div>
 
-<div class="footer">
-© 2026 Qbit • hello@tryqbit.com
-</div>
+<footer>
+
+© 2026 Qbit  
+Career Intelligence Engine  
+
+Contact: hello@tryqbit.com
+
+</footer>
 
 </div>
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbyYiqnf3FK3r5ebknICDXpJ9L51Pb0MeCLjfjrqfc0oou9nuJl-LAs5843Eyw9JPpFE/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbxnFdgOQMR8-NmNLFVAe-oSNpf0_LZhfVMwZBo807VODSJhKAhNDvAHC92YP5ib5eG6/exec"
 
-let currentScore=0;
-let currentRole="";
-let userName="";
-
-/* LOADER */
-
-function simulateProgress(){
-
-const messages=[
-"Analyzing your work tasks...",
-"Detecting transferable skills...",
-"Comparing career roles...",
-"Calculating readiness score..."
-];
-
-let i=0;
-
-const interval=setInterval(()=>{
-
-document.getElementById("progressText").innerText=messages[i];
-
-i++;
-
-if(i>=messages.length){
-clearInterval(interval);
-}
-
-},1200);
-
-}
+let currentScore=0
+let currentRole=""
+let userName=""
 
 /* RUN ANALYSIS */
 
 function runAnalysis(){
 
-userName=document.getElementById("name").value;
+let text=document.getElementById("userInput").value
+userName=document.getElementById("name").value
 
-if(!userName){
-alert("Please enter your name");
-return;
+if(userName==""){
+alert("Please enter your name")
+return
 }
-
-let text=document.getElementById("userInput").value;
 
 if(text.length<10){
-alert("Please describe your work tasks.");
-return;
+alert("Please describe your work tasks")
+return
 }
 
-document.getElementById("loader").style.display="block";
-
-simulateProgress();
+document.getElementById("loader").style.display="block"
 
 let payload={
 
@@ -346,7 +300,7 @@ timeline:document.getElementById("timeline").value,
 source:"dashboard",
 device:navigator.userAgent
 
-};
+}
 
 fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
@@ -354,99 +308,78 @@ fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
 .then(data=>{
 
-document.getElementById("loader").style.display="none";
+document.getElementById("loader").style.display="none"
 
-currentScore=data.score;
-currentRole=data.role;
+currentScore=data.score
+currentRole=data.role
+
+let skills=data.skills.map(s=>"✔ "+s).join("<br>")
+let gaps=data.gaps.map(s=>"❌ "+s).join("<br>")
 
 let output=`
 
-${userName}'s Career Alignment Score
+<h3>${userName}'s Career Alignment Score</h3>
 
-${data.score}% ready for ${data.role}
+<h2>${data.score}% ready for ${data.role}</h2>
 
-${data.percentile}
+<div class="progressBar">
+<div class="progressFill" style="width:${data.score}%"></div>
+</div>
 
-Detected Skills
-${data.skills.join(", ")}
+<p>${data.percentile}</p>
 
-Skill Gaps
-${data.gaps.join(", ")}
+<h4>Skill Confidence</h4>
 
-Learning Roadmap
+${skills}
+
+<h4>Skill Gaps</h4>
+
+${gaps}
+
+<h4>Learning Roadmap</h4>
+
 ${data.roadmap}
 
-`;
+<p style="opacity:0.7;margin-top:15px;">
+AI Confidence Level: Moderate<br>
+Based on ${data.skills.length + data.gaps.length} detected signals
+</p>
 
-document.getElementById("outputBox").innerText=output;
-document.getElementById("outputBox").style.display="block";
+`
 
-generateCard(data);
+document.getElementById("outputBox").innerHTML=output
+document.getElementById("outputBox").style.display="block"
 
-document.getElementById("shareBlock").style.display="block";
+document.getElementById("shareBlock").style.display="block"
 
-});
-
-}
-
-/* SCORE CARD */
-
-function generateCard(data){
-
-const canvas=document.getElementById("shareCard");
-const ctx=canvas.getContext("2d");
-
-canvas.style.display="block";
-
-ctx.fillStyle="#fff";
-ctx.fillRect(0,0,600,350);
-
-ctx.fillStyle="#000";
-
-ctx.font="26px Arial";
-ctx.fillText("Qbit Career Readiness",20,50);
-
-ctx.font="20px Arial";
-ctx.fillText(userName+": "+data.score+"% Ready for "+data.role,20,100);
-
-ctx.font="16px Arial";
-ctx.fillText("tryqbit.com",20,300);
+})
 
 }
 
 /* SHARE */
 
-function downloadCard(){
-
-let canvas=document.getElementById("shareCard");
-
-let link=document.createElement("a");
-
-link.download="qbit-score.png";
-
-link.href=canvas.toDataURL();
-
-link.click();
-
-}
-
 function shareLinkedIn(){
 
-window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
+window.open(
+"https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com"
+)
 
 }
 
 function shareWhatsapp(){
 
-window.open("https://wa.me/?text="+encodeURIComponent(
-userName+" is "+currentScore+"% ready for "+currentRole+" according to Qbit https://tryqbit.com"
-));
+window.open(
+"https://wa.me/?text="+encodeURIComponent(
+"I'm "+currentScore+"% ready for "+currentRole+" according to Qbit. Check yours: https://tryqbit.com"
+))
 
 }
 
 function shareFacebook(){
 
-window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com");
+window.open(
+"https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com"
+)
 
 }
 
