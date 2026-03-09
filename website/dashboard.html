@@ -356,7 +356,15 @@ device:navigator.userAgent
 
 fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
-.then(res=>res.json())
+.then(res=>{
+
+if(!res.ok){
+throw new Error("Server error");
+}
+
+return res.json();
+
+})
 
 .then(data=>{
 
@@ -398,6 +406,16 @@ generateScoreCard(data)
 
 document.getElementById("shareBlock").style.display="block"
 document.getElementById("packageBox").style.display="block"
+
+})
+
+.catch(err=>{
+
+document.getElementById("loader").style.display="none"
+
+alert("AI analysis failed. Please try again.")
+
+console.log(err)
 
 })
 
