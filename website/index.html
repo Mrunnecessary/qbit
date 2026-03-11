@@ -121,6 +121,10 @@ Check My Career Score
 
 </form>
 
+<p style="margin-top:10px;opacity:0.7;font-size:13px">
+Resume uploads are analyzed instantly and never stored.
+</p>
+
 <p id="userCountText" style="margin-top:12px;opacity:0.8">
 650+ professionals already exploring hidden career skills
 </p>
@@ -131,9 +135,17 @@ Check My Career Score
 
 <h2>How Qbit Works</h2>
 
-<div class="card">Describe your daily work activities</div>
-<div class="card">AI detects transferable skills</div>
-<div class="card">See career readiness score</div>
+<div class="card">
+Describe your daily work activities
+</div>
+
+<div class="card">
+AI detects transferable skills from your experience
+</div>
+
+<div class="card">
+See your career readiness score and skill gaps
+</div>
 
 </section>
 
@@ -162,6 +174,7 @@ Career Intelligence Engine
 <script>
 
 const API="https://script.google.com/macros/s/AKfycbynnkGoThXsVOjLoBQGdLfKezjvtEG_-mh7iAvA4HHC6t2oIcielbR9rr6pjQwnx6YM/exec";
+
 
 function startAnalysis(e){
 
@@ -194,7 +207,7 @@ fetch(API+"?count=true")
 .then(res=>res.json())
 .then(data=>{
 document.getElementById("userCountText").innerText=
-data.count+"+ professionals already exploring hidden career skills";
+data.count+"+ professionals already exploring hidden career skills on Qbit";
 });
 
 </script>
