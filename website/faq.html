@@ -1,33 +1,62 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FAQ – Qbit</title>
+<title>Qbit FAQ</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 
 body{
-font-family:system-ui;
+margin:0;
+font-family:Inter,sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.container{
 max-width:900px;
 margin:auto;
 padding:20px;
-line-height:1.7;
 }
 
-h1{
-margin-top:20px;
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-h2{
-margin-top:25px;
+.logo{
+font-size:22px;
+font-weight:800;
 }
 
-a{
-color:#2563eb;
+nav a{
+margin-left:15px;
+color:#94a3b8;
 text-decoration:none;
+}
+
+.section{
+margin-top:40px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:8px;
+margin-bottom:15px;
+}
+
+footer{
+margin-top:60px;
+text-align:center;
+color:#94a3b8;
 }
 
 </style>
@@ -36,69 +65,95 @@ text-decoration:none;
 
 <body>
 
-<a href="index.html">← Back to Home</a>
+<div class="container">
+
+<header>
+
+<div class="logo">Qbit</div>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="privacy.html">Privacy</a>
+<a href="investors.html">Investor</a>
+</nav>
+
+</header>
+
+<div class="section">
 
 <h1>Frequently Asked Questions</h1>
 
-<h2>What is Qbit?</h2>
-<p>
-Qbit is a career intelligence platform that analyzes your current skills and
-shows how prepared you are for future roles such as Data Analyst,
-Backend Developer, or Cloud Engineer.
-</p>
+<div class="card">
 
-<h2>How is Qbit different from other AI tools?</h2>
-<p>
-Most AI tools give generic advice like “learn Python” or “learn SQL”.
-Qbit measures your existing skills and calculates your readiness before
-suggesting what to learn next.
-</p>
-
-<h2>Who should use Qbit?</h2>
-<p>
-Qbit is designed for:
-</p>
-
-<ul>
-<li>Professionals switching careers</li>
-<li>People exploring technology roles</li>
-<li>Students choosing career paths</li>
-<li>Anyone confused by online courses and career advice</li>
-</ul>
-
-<h2>How accurate are Qbit scores?</h2>
+<h3>What is Qbit?</h3>
 
 <p>
-Scores are indicative estimates based on the information provided by the
-user and publicly available skill requirements for different roles.
-They are intended to guide learning priorities rather than replace
-professional hiring evaluations.
+Qbit is an AI-powered career intelligence platform that analyzes your daily work activities to detect transferable skills and estimate your readiness for different career roles.
 </p>
 
-<h2>Does Qbit store my work description?</h2>
+</div>
+
+<div class="card">
+
+<h3>How does Qbit calculate career readiness?</h3>
 
 <p>
-User descriptions may be temporarily processed to generate skill
-analysis. Qbit does not publish or share personal inputs publicly.
+Qbit detects skills from your work description and compares them with the required skills of multiple professional roles. The score is calculated based on how many required skills are matched.
 </p>
 
-<h2>Does Qbit apply to jobs for me?</h2>
+</div>
+
+<div class="card">
+
+<h3>Do I need to upload my resume?</h3>
+
 <p>
-No. Qbit helps you understand your readiness, identify skill gaps,
-and find relevant job opportunities with official links.
+No. You can simply describe your daily work activities. Resume upload is optional.
 </p>
 
-<h2>Is Qbit free?</h2>
+</div>
+
+<div class="card">
+
+<h3>Does Qbit store my resume?</h3>
+
 <p>
-Qbit is currently in early access. Early users can explore the product
-and help shape future features.
+No. If you upload a resume, it is only analyzed temporarily to detect skills and is not stored.
 </p>
 
-<h2>How can I give feedback?</h2>
+</div>
+
+<div class="card">
+
+<h3>Why does Qbit ask for my email?</h3>
+
 <p>
-You can email us at
-<a href="mailto:hello@tryqbit.com">hello@tryqbit.com</a>.
+Your email helps us improve career recommendations and send optional updates about new career insights and tools.
 </p>
+
+</div>
+
+<div class="card">
+
+<h3>Is Qbit free?</h3>
+
+<p>
+The career readiness analysis is free. Advanced career roadmap tools and coaching features may be introduced in future versions.
+</p>
+
+</div>
+
+</div>
+
+<footer>
+
+© 2026 Qbit
+Career Intelligence Engine
+[hello@tryqbit.com](mailto:hello@tryqbit.com)
+
+</footer>
+
+</div>
 
 </body>
 </html>

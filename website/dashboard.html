@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 
 <html>
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Qbit Career Analyzer</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 
 <style>
 
@@ -24,22 +21,15 @@ margin:0;
 max-width:1000px;
 margin:auto;
 padding:25px;
+text-align:center;
 }
 
 textarea{
-width:100%;
-height:130px;
+width:80%;
+height:120px;
 padding:10px;
 border-radius:6px;
 border:none;
-}
-
-input{
-width:100%;
-padding:10px;
-border-radius:6px;
-border:none;
-margin-bottom:10px;
 }
 
 button{
@@ -51,6 +41,18 @@ border-radius:6px;
 cursor:pointer;
 }
 
+.circle{
+width:160px;
+height:160px;
+border-radius:50%;
+border:10px solid #2563eb;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+margin:20px auto;
+}
+
 .card{
 background:#1e293b;
 padding:20px;
@@ -58,26 +60,12 @@ border-radius:8px;
 margin-top:20px;
 }
 
-.progressBar{
-height:16px;
-background:#334155;
-border-radius:8px;
-overflow:hidden;
-}
-
-.progressFill{
-height:100%;
-background:#2563eb;
-}
-
 .loader{
-display:none;
 margin-top:20px;
 }
 
 footer{
 margin-top:60px;
-text-align:center;
 color:#94a3b8;
 }
 
@@ -91,33 +79,13 @@ color:#94a3b8;
 
 <h2>Career Readiness Analyzer</h2>
 
-<label>Name</label> <input id="name">
+<textarea id="work" placeholder="Describe your daily work..."></textarea>
 
-<label>Current Role</label> <input id="role">
-
-<label>Experience</label> <input id="exp">
-
-<label>Target Role</label> <input id="targetRole">
-
-<label>Describe Daily Work</label>
-
-<textarea id="work"></textarea>
-
-<p style="opacity:0.7;font-size:13px">
-Upload resume (optional). File is analyzed but never stored.
-</p>
-
-<input type="file" id="resume">
+<br><br>
 
 <button onclick="runAnalysis()">Analyze Career</button>
 
-<div class="loader" id="loader">
-
-<p id="aiStatus">
-Analyzing your work patterns...
-</p>
-
-</div>
+<div id="aiLoader" class="loader"></div>
 
 <div id="result"></div>
 
@@ -126,9 +94,8 @@ Analyzing your work patterns...
 <h3>How Qbit Calculates Your Score</h3>
 
 <p>
-Qbit compares your detected skills with the required skills of
-multiple career roles. The score is calculated based on how many
-required skills are matched.
+Qbit compares detected skills against required skills
+across 30 professional roles.
 </p>
 
 <p>
@@ -144,7 +111,6 @@ Accuracy improves as Qbit learns from more professionals.
 <footer>
 
 © 2026 Qbit
-Career Intelligence Engine
 [hello@tryqbit.com](mailto:hello@tryqbit.com)
 
 </footer>
@@ -153,24 +119,30 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec";
+const API="https://script.google.com/macros/s/AKfycbynnkGoThXsVOjLoBQGdLfKezjvtEG_-mh7iAvA4HHC6t2oIcielbR9rr6pjQwnx6YM/exec";
 
 const params=new URLSearchParams(window.location.search);
+
 const session=params.get("session");
 
-async function runAnalysis(){
 
-let text=document.getElementById("work").value;
+function runAnalysis(){
 
-document.getElementById("loader").style.display="block";
+const text=document.getElementById("work").value;
+
+const loader=document.getElementById("aiLoader");
+
+loader.innerHTML="Detecting transferable skills...";
+
+setTimeout(()=>{
+loader.innerHTML="Matching career roles...";
+},1200);
+
+setTimeout(()=>{
 
 fetch(API+"?analyze=true&data="+encodeURIComponent(JSON.stringify({
 
 session_id:session,
-name:document.getElementById("name").value,
-role:document.getElementById("role").value,
-exp:document.getElementById("exp").value,
-targetRole:document.getElementById("targetRole").value,
 text:text
 
 })))
@@ -178,87 +150,123 @@ text:text
 .then(res=>res.json())
 .then(data=>{
 
-document.getElementById("loader").style.display="none";
+loader.innerHTML="";
 
 renderResult(data);
 
 });
 
+},2200);
+
 }
+
 
 function renderResult(data){
 
 let html="";
 
 html+=`
-<div class='card'>
 
-<h3>${data.score}% Ready for ${data.role}</h3>
+<div class="circle">
 
-<div class='progressBar'>
-<div class='progressFill' style='width:${data.score}%'></div>
+${data.score}%
+
 </div>
+
+<div class="card">
+
+<h3>${data.role}</h3>
 
 <p>${data.percentile}</p>
 
 </div>
+
 `;
 
-html+=`
-<div class='card'>
 
-<h4>Detected Skills</h4>
+html+=`
+
+<div class="card">
+
+<h3>Top Career Matches</h3>
+
+${data.top_roles.map(r=>r.role+" ("+r.score+"%)").join("<br>")}
+
+</div>
+
+`;
+
+
+html+=`
+
+<div class="card">
+
+<h3>Detected Skills</h3>
 
 ${data.skills.join(", ")}
 
-<h4>Skill Gaps</h4>
+</div>
+
+`;
+
+
+html+=`
+
+<div class="card">
+
+<h3>Skill Gaps</h3>
 
 ${data.gaps.join(", ")}
 
 </div>
+
 `;
 
-html+=`
-<div class='card'>
 
-<h4>Weekly Career Kit</h4>
+html+=`
+
+<div class="card">
+
+<h3>Weekly Career Kit</h3>
 
 ${data.weekly}
 
 </div>
+
 `;
 
-html+=`
-<div class='card'>
-
-<h4>Career Path Opportunities</h4>
-
-${data.career_path}
-
-</div>
-`;
 
 html+=`
-<div class='card'>
 
-<h4>Salary Insight</h4>
+<div class="card">
+
+<h3>Salary Insight</h3>
 
 ${data.salary}
 
 </div>
+
 `;
 
-html+=`
-<div class='card'>
 
-<button onclick="requestRoadmap()">Request Personalized Roadmap</button>
+html+=`
+
+<div class="card">
+
+<button onclick="requestRoadmap()">
+
+Request Personalized Roadmap
+
+</button>
 
 </div>
+
 `;
 
 document.getElementById("result").innerHTML=html;
 
 }
+
 
 function requestRoadmap(){
 
@@ -281,5 +289,4 @@ alert("Your roadmap request has been received.");
 </script>
 
 </body>
-
 </html>

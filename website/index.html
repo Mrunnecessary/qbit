@@ -1,62 +1,85 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 <head>
 
-<title>Qbit Career Intelligence</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qbit | Career Intelligence Engine</title>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
-
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XXXXXXXX');
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 
 body{
+margin:0;
 font-family:Inter,sans-serif;
 background:#0f172a;
 color:white;
-margin:0;
 }
 
 .container{
-max-width:900px;
+max-width:1100px;
 margin:auto;
-padding:40px;
+padding:20px;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:22px;
+font-weight:800;
+}
+
+nav a{
+margin-left:20px;
+color:#94a3b8;
+text-decoration:none;
+}
+
+.hero{
 text-align:center;
+padding:80px 0;
+}
+
+.btn{
+background:#2563eb;
+padding:12px 20px;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
 }
 
 input{
 padding:12px;
 border:none;
 border-radius:6px;
-width:260px;
-}
-
-button{
-padding:12px 20px;
-border:none;
-border-radius:6px;
-background:#2563eb;
-color:white;
-cursor:pointer;
+width:250px;
+margin-right:10px;
 }
 
 .section{
-margin-top:50px;
+margin-top:60px;
 }
 
 .card{
 background:#1e293b;
 padding:20px;
 border-radius:8px;
-margin-top:15px;
+margin-bottom:20px;
+}
+
+footer{
+margin-top:80px;
+text-align:center;
+color:#94a3b8;
+font-size:14px;
 }
 
 </style>
@@ -67,33 +90,54 @@ margin-top:15px;
 
 <div class="container">
 
+<header>
+
+<div class="logo">Qbit</div>
+
+<nav>
+<a href="faq.html">FAQ</a>
+<a href="privacy.html">Privacy</a>
+<a href="investors.html">Investor</a>
+</nav>
+
+</header>
+
+<section class="hero">
+
 <h1>Discover the Job Role You Are Secretly Qualified For</h1>
 
-<p>AI analyzes your work and calculates career readiness.</p>
+<p>
+Describe your daily work and discover your
+<b>Career Readiness Score in 30 seconds</b>
+</p>
 
-<form onsubmit="start(event)">
+<form onsubmit="startAnalysis(event)">
 
-<input id="email" placeholder="Enter email" required>
+<input id="email" type="email" placeholder="Enter email" required>
 
-<button>Check My Career Score</button>
+<button class="btn">
+Check My Career Score
+</button>
 
 </form>
 
-<p style="margin-top:10px;opacity:0.7;">
-600+ professionals exploring hidden career skills
+<p id="userCountText" style="margin-top:12px;opacity:0.8">
+650+ professionals already exploring hidden career skills
 </p>
 
-<div class="section">
+</section>
+
+<section class="section">
 
 <h2>How Qbit Works</h2>
 
-<div class="card">Describe daily work</div>
+<div class="card">Describe your daily work activities</div>
 <div class="card">AI detects transferable skills</div>
 <div class="card">See career readiness score</div>
 
-</div>
+</section>
 
-<div class="section">
+<section class="section">
 
 <h2>Upcoming Features</h2>
 
@@ -103,15 +147,23 @@ margin-top:15px;
 <div class="card">Government job intelligence</div>
 <div class="card">Student career discovery</div>
 
-</div>
+</section>
+
+<footer>
+
+© 2026 Qbit
+Career Intelligence Engine
+[hello@tryqbit.com](mailto:hello@tryqbit.com)
+
+</footer>
 
 </div>
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec";
+const API="https://script.google.com/macros/s/AKfycbynnkGoThXsVOjLoBQGdLfKezjvtEG_-mh7iAvA4HHC6t2oIcielbR9rr6pjQwnx6YM/exec";
 
-function start(e){
+function startAnalysis(e){
 
 e.preventDefault();
 
@@ -126,14 +178,24 @@ device:navigator.userAgent
 })
 })
 
-.then(r=>r.json())
-.then(d=>{
+.then(res=>res.json())
+.then(data=>{
 
-window.location="dashboard.html?session="+d.session;
+window.location.href="dashboard.html?session="+data.session;
 
 });
 
 }
+
+
+/* dynamic user count */
+
+fetch(API+"?count=true")
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("userCountText").innerText=
+data.count+"+ professionals already exploring hidden career skills";
+});
 
 </script>
 
