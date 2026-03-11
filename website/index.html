@@ -1,308 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qbit Career Intelligence</title>
 
-<title>Qbit | Discover Your Hidden Skills</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" href="/favicon-32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
 
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config','G-24B2PVFE1Q');
+gtag('config', 'G-XXXXXXXX');
 </script>
 
 <style>
 
 body{
-margin:0;
 font-family:Inter,sans-serif;
 background:#0f172a;
 color:white;
+margin:0;
 }
 
 .container{
-max-width:1100px;
+max-width:900px;
 margin:auto;
-padding:20px;
+padding:40px;
+text-align:center;
 }
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-}
-
-.logo{
-font-size:22px;
-font-weight:800;
-}
-
-nav{
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-}
-
-nav a{
-color:#94a3b8;
-text-decoration:none;
-}
-
-.btn{
-background:#2563eb;
-padding:10px 18px;
-border-radius:6px;
-color:white;
+input{
+padding:12px;
 border:none;
+border-radius:6px;
+width:260px;
+}
+
+button{
+padding:12px 20px;
+border:none;
+border-radius:6px;
+background:#2563eb;
+color:white;
 cursor:pointer;
 }
 
-.hero{
-text-align:center;
-padding:70px 0;
-}
-
 .section{
-margin-top:60px;
+margin-top:50px;
 }
 
 .card{
 background:#1e293b;
 padding:20px;
 border-radius:8px;
-margin-bottom:20px;
-}
-
-.example{
-background:#111827;
-padding:20px;
-border-radius:8px;
-}
-
-.testimonial{
-background:#111827;
-padding:20px;
-border-radius:8px;
-margin-bottom:15px;
-}
-
-footer{
-margin-top:80px;
-text-align:center;
-padding:30px 10px;
-font-size:14px;
-color:#94a3b8;
-}
-
-input{
-padding:10px;
-border-radius:6px;
-border:none;
-width:220px;
-margin-right:8px;
-}
-
-@media(max-width:768px){
-
-.hero{
-padding:40px 0
-}
-
-input{
-width:180px;
-margin-bottom:10px;
-}
-
+margin-top:15px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<header>
+<h1>Discover the Job Role You Are Secretly Qualified For</h1>
 
-<div class="logo">Qbit</div>
+<p>AI analyzes your work and calculates career readiness.</p>
 
-<nav>
-<a href="faq.html">FAQ</a>
-<a href="privacy.html">Privacy</a>
-<a href="investors.html">Investor</a>
-<a href="dashboard.html" class="btn">Try Free Analysis</a>
-</nav>
+<form onsubmit="start(event)">
 
-</header>
+<input id="email" placeholder="Enter email" required>
 
-<section class="hero">
-
-<h1>How Ready Are You for a Career Switch?</h1>
-
-<p>
-No resume required. Just describe your daily work.<br>
-Discover your <b>Career Readiness Score in 30 seconds</b>.
-</p>
-
-<form onsubmit="joinWaitlist(event); return false;" style="margin-top:20px;">
-
-<input id="email" type="email" placeholder="Enter email" required>
-
-<button class="btn" id="submitBtn">Discover the job role you are secretly qualified for</button>
+<button>Check My Career Score</button>
 
 </form>
 
-<p style="opacity:0.8;margin-top:10px;font-size:14px;">
-Join 100+ professionals discovering their hidden career skills.
+<p style="margin-top:10px;opacity:0.7;">
+600+ professionals exploring hidden career skills
 </p>
 
-</section>
-
-<section class="section">
-
-<h2>Example Career Score</h2>
-
-<div class="example">
-
-<p style="font-size:22px;font-weight:700;">
-58% Ready for Data Analyst
-</p>
-
-<p style="opacity:0.9;">
-Based on work tasks similar to:
-</p>
-
-<ul>
-<li>Excel reporting</li>
-<li>KPI monitoring</li>
-<li>Weekly dashboards</li>
-</ul>
-
-<p><b>Skill Gaps</b></p>
-
-<ul>
-<li>SQL</li>
-<li>Python</li>
-<li>Statistics</li>
-</ul>
-
-<p><b>Learning Roadmap</b></p>
-
-<p>
-Start with SQL joins → Python data analysis → build a simple reporting dashboard.
-</p>
-
-<p style="opacity:0.7;">
-This user was ahead of 63% of beginners switching careers.
-</p>
-
-</div>
-
-</section>
-
-<section class="section">
+<div class="section">
 
 <h2>How Qbit Works</h2>
 
-<div class="card">
-<h3>1️⃣ Describe Your Work</h3>
-<p>Explain your daily work activities.</p>
+<div class="card">Describe daily work</div>
+<div class="card">AI detects transferable skills</div>
+<div class="card">See career readiness score</div>
+
 </div>
 
-<div class="card">
-<h3>2️⃣ Hidden Skills Detection</h3>
-<p>Qbit extracts transferable skills.</p>
-</div>
-
-<div class="card">
-<h3>3️⃣ Career Alignment Score</h3>
-<p>See how close you are to your desired roles.</p>
-</div>
-
-</section>
-
-<section class="section">
+<div class="section">
 
 <h2>Upcoming Features</h2>
 
-<div class="card">Weekly career readiness tracking</div>
-<div class="card">AI job discovery engine</div>
-<div class="card">Government exam preparation engine</div>
-<div class="card">Real-time salary prediction</div>
-<div class="card">College comparison for career ROI</div>
-<div class="card">Study abroad advisor</div>
-<div class="card">Startup decision advisor</div>
-<div class="card">Coding project lab with recruiter portfolio</div>
-<div class="card">Recruiter talent discovery using skill alignment</div>
+<div class="card">Career readiness leaderboard</div>
+<div class="card">Weekly skill progress tracking</div>
+<div class="card">AI career twin discovery</div>
+<div class="card">Government job intelligence</div>
+<div class="card">Student career discovery</div>
 
-</section>
-
-<section class="section">
-
-<h2>Early Feedback</h2>
-
-<div class="testimonial">
-“Helped me realize I already had many skills needed for data analysis.”
 </div>
-
-<div class="testimonial">
-“Finally a tool that shows what skills I actually have.”
-</div>
-
-</section>
-
-<footer>
-
-© 2026 Qbit<br>
-hello@tryqbit.com
-
-</footer>
 
 </div>
 
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec";
+const API="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec";
 
-function joinWaitlist(e){
+function start(e){
 
 e.preventDefault();
 
 const email=document.getElementById("email").value;
 
-if(!email.includes("@")){
-alert("Please enter a valid email");
-return;
-}
-
-document.getElementById("submitBtn").innerText="Loading...";
-
-fetch(SCRIPT_URL,{
+fetch(API,{
 method:"POST",
 body:new URLSearchParams({
+action:"create_session",
 email:email,
-source:"landing",
 device:navigator.userAgent
 })
 })
-.then(res=>res.text())
-.then(data=>{
 
-gtag('event','waitlist_signup');
+.then(r=>r.json())
+.then(d=>{
 
-window.location.href="dashboard.html";
+window.location="dashboard.html?session="+d.session;
 
 });
 

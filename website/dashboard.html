@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Qbit Career Analyzer</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 
 <style>
 
 body{
-margin:0;
 font-family:system-ui;
 background:#0f172a;
 color:white;
@@ -19,117 +20,31 @@ color:white;
 .container{
 max-width:1000px;
 margin:auto;
-padding:25px;
+padding:30px;
 }
-
-/* GRID */
-
-.formGrid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:18px;
-margin-bottom:25px;
-}
-
-.formItem label{
-font-size:13px;
-opacity:0.9;
-display:block;
-margin-bottom:6px;
-}
-
-.formItem input,
-.formItem select{
-width:100%;
-padding:10px;
-border-radius:6px;
-border:none;
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-.formGrid{
-grid-template-columns:repeat(2,1fr);
-}
-
-}
-
-@media(max-width:600px){
-
-.formGrid{
-grid-template-columns:1fr;
-}
-
-}
-
-/* TEXTAREA */
 
 textarea{
 width:100%;
-height:130px;
-padding:12px;
-border-radius:6px;
+height:120px;
 border:none;
+border-radius:6px;
+padding:10px;
 }
 
-/* BUTTON */
-
 button{
-margin-top:15px;
 padding:12px 18px;
 border:none;
 border-radius:6px;
+background:#2563eb;
+color:white;
 cursor:pointer;
 }
 
-.primary{
-background:#2563eb;
-color:white;
-}
-
-/* LOADER */
-
-.loader{
-display:none;
-margin-top:25px;
-text-align:center;
-}
-
-.spinner{
-width:40px;
-height:40px;
-border:4px solid #334155;
-border-top:4px solid #2563eb;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:auto;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-/* OUTPUT */
-
-.output{
-margin-top:25px;
-background:#1e293b;
-padding:20px;
-border-radius:8px;
-line-height:1.6;
-}
-
-/* PROGRESS */
-
 .progressBar{
-height:16px;
+height:18px;
 background:#334155;
 border-radius:8px;
 overflow:hidden;
-margin:10px 0;
 }
 
 .progressFill{
@@ -137,41 +52,16 @@ height:100%;
 background:#2563eb;
 }
 
-/* SHARE */
-
-.shareBlock{
-margin-top:25px;
-background:#111827;
+.card{
+background:#1e293b;
 padding:20px;
 border-radius:8px;
-text-align:center;
+margin-top:20px;
+}
+
+.loader{
 display:none;
-}
-
-.share{
-margin-top:12px;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-/* CANVAS */
-
-canvas{
-margin-top:25px;
-background:white;
-border-radius:8px;
-display:none;
-}
-
-/* FOOTER */
-
-footer{
-margin-top:60px;
-text-align:center;
-color:#94a3b8;
-font-size:14px;
+margin-top:20px;
 }
 
 </style>
@@ -184,340 +74,175 @@ font-size:14px;
 
 <h2>Career Readiness Analyzer</h2>
 
-<div class="formGrid">
+<label>Name</label> <input id="name">
 
-<div class="formItem">
-<label>Name *</label>
-<input id="name">
-</div>
+<label>Current Role</label> <input id="role">
 
-<div class="formItem">
-<label>Current Role</label>
-<input id="role">
-</div>
+<label>Experience</label> <input id="exp">
 
-<div class="formItem">
-<label>Experience (years)</label>
-<input id="exp">
-</div>
+<label>Target Role</label> <input id="targetRole">
 
-<div class="formItem">
-<label>Current Salary</label>
-<select id="salary">
-<option>Below 5L</option>
-<option>5L - 10L</option>
-<option>10L - 20L</option>
-<option>20L+</option>
-</select>
-</div>
+<label>Describe Work</label>
 
-<div class="formItem">
-<label>Target Role</label>
-<input id="targetRole">
-</div>
+<textarea id="work"></textarea>
 
-<div class="formItem">
-<label>Timeline</label>
-<select id="timeline">
-<option>3 months</option>
-<option>6 months</option>
-<option>12 months</option>
-</select>
-</div>
+<p style="opacity:0.7;">Upload resume (file analyzed but not stored)</p>
 
-</div>
+<input type="file" id="resume">
 
-<label>Describe Daily Work *</label>
+<br><br>
 
-<textarea id="userInput" placeholder="Example:
-
-• I create Excel reports for network monitoring
-• I analyze performance data
-• I manage field engineers
-"></textarea>
-
-<p style="opacity:0.7;font-size:13px;margin-top:10px">
-Or upload resume (PDF)
-</p>
-
-<input type="file" id="resumeFile" accept="application/pdf">
-
-<button class="primary" onclick="runAnalysis()">Discover My Career Score</button>
-
-<!-- LOADER -->
+<button onclick="run()">Analyze Career</button>
 
 <div class="loader" id="loader">
-
-<div class="spinner"></div>
-<p>Analyzing your work tasks...</p>
-
+<p id="aiStatus">Analyzing work patterns...</p>
 </div>
 
-<!-- RESULT -->
-
-<div id="outputBox" class="output" style="display:none"></div>
-
-<!-- PERSONALIZED GUIDE -->
-
-<div id="packageBox" style="
-margin-top:25px;
-background:#111827;
-padding:20px;
-border-radius:8px;
-display:none">
-
-<h3>Personalized Career Roadmap</h3>
-
-<p>
-Get a deeper analysis of your career transition with a personalized guide.
-</p>
-
-<button onclick="requestGuide()">Request Personalized Guide</button>
-
-</div>
-
-<!-- SCORE CARD -->
-
-<canvas id="scoreCard" width="600" height="350"></canvas>
-
-<button id="downloadBtn" style="display:none" onclick="downloadCard()">
-Download Score Card
-</button>
-
-<!-- SHARE -->
-
-<div id="shareBlock" class="shareBlock">
-
-<h3>Share your score and compare with others</h3>
-
-<div class="share">
-
-<button onclick="shareLinkedIn()">LinkedIn</button>
-
-<button onclick="shareWhatsapp()">WhatsApp</button>
-
-<button onclick="shareFacebook()">Facebook</button>
-
-</div>
-
-</div>
-
-<footer>
-
-© 2026 Qbit  
-Career Intelligence Engine  
-Contact: hello@tryqbit.com
-
-</footer>
+<div id="result"></div>
 
 </div>
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec"
+const API="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec";
 
-let currentScore=0
-let currentRole=""
-let userName=""
+const params=new URLSearchParams(location.search);
+const session=params.get("session");
 
-/* RUN ANALYSIS */
+async function parsePDF(file){
 
-function runAnalysis(){
+const reader=new FileReader();
 
-let text=document.getElementById("userInput").value
-userName=document.getElementById("name").value
+return new Promise(resolve=>{
 
-if(userName==""){
-alert("Please enter your name")
-return
+reader.onload=async function(){
+
+const typedarray=new Uint8Array(this.result);
+
+const pdf=await pdfjsLib.getDocument(typedarray).promise;
+
+let text="";
+
+for(let i=1;i<=pdf.numPages;i++){
+
+const page=await pdf.getPage(i);
+
+const content=await page.getTextContent();
+
+content.items.forEach(item=>{
+text+=item.str+" ";
+});
+
 }
 
-if(text.length<10){
-alert("Please describe your work tasks")
-return
+resolve(text);
+
+};
+
+reader.readAsArrayBuffer(file);
+
+});
+
 }
 
-document.getElementById("loader").style.display="block"
+async function run(){
 
-let payload={
+let text=document.getElementById("work").value;
 
-name:userName,
-text:text,
+const file=document.getElementById("resume").files[0];
+
+if(file){
+
+const resume=await parsePDF(file);
+
+text=text+" "+resume;
+
+}
+
+document.getElementById("loader").style.display="block";
+
+fetch(API+"?analyze=true&data="+encodeURIComponent(JSON.stringify({
+
+session_id:session,
+name:document.getElementById("name").value,
 role:document.getElementById("role").value,
 exp:document.getElementById("exp").value,
-salary:document.getElementById("salary").value,
 targetRole:document.getElementById("targetRole").value,
-timeline:document.getElementById("timeline").value,
+text:text
 
-source:"dashboard",
-device:navigator.userAgent
+})))
+
+.then(r=>r.json())
+.then(d=>{
+
+document.getElementById("loader").style.display="none";
+
+render(d);
+
+});
 
 }
 
-fetch(API_URL+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
+function render(data){
 
-.then(res=>{
+let html="";
 
-if(!res.ok){
-throw new Error("Server error");
+html+=`<div class='card'>`;
+
+html+=`<h3>${data.score}% Ready for ${data.role}</h3>`;
+
+html+=`<div class='progressBar'><div class='progressFill' style='width:${data.score}%'></div></div>`;
+
+html+=`<p>${data.percentile}</p>`;
+
+html+=`</div>`;
+
+html+=`<div class='card'><h4>Score Explanation</h4>`;
+
+html+=`Matched Skills: ${data.skills.join(", ")}<br>`;
+html+=`Missing Skills: ${data.gaps.join(", ")}`;
+
+html+=`</div>`;
+
+html+=`<div class='card'><h4>Weekly Career Kit</h4>`;
+
+html+=`Practice: ${data.weekly}`;
+
+html+=`</div>`;
+
+html+=`<div class='card'><h4>Career Path</h4>`;
+
+html+=data.career_path;
+
+html+=`</div>`;
+
+html+=`<div class='card'><h4>Salary Insight</h4>`;
+
+html+=`Potential salary: ${data.salary}`;
+
+html+=`</div>`;
+
+html+=`<button onclick="roadmap()">Request Personalized Roadmap</button>`;
+
+document.getElementById("result").innerHTML=html;
+
 }
 
-return res.json();
+function roadmap(){
 
+if(confirm("Generate personalized roadmap?")){
+
+fetch(API,{
+method:"POST",
+body:new URLSearchParams({
+action:"roadmap",
+session:session
 })
+});
 
-.then(data=>{
-
-document.getElementById("loader").style.display="none"
-
-currentScore=data.score
-currentRole=data.role
-
-let skills=data.skills.map(s=>"✔ "+s).join("<br>")
-let gaps=data.gaps.map(s=>"❌ "+s).join("<br>")
-
-let output=`
-
-<h3>${userName}'s Career Alignment Score</h3>
-
-<h2>${data.score}% ready for ${data.role}</h2>
-
-<div class="progressBar">
-<div class="progressFill" style="width:${data.score}%"></div>
-</div>
-
-<p>${data.percentile}</p>
-
-<h4>Detected Skills</h4>
-${skills}
-
-<h4>Skill Gaps</h4>
-${gaps}
-
-<h4>Learning Roadmap</h4>
-${data.roadmap}
-
-`
-
-document.getElementById("outputBox").innerHTML=output
-document.getElementById("outputBox").style.display="block"
-
-generateScoreCard(data)
-
-document.getElementById("shareBlock").style.display="block"
-document.getElementById("packageBox").style.display="block"
-
-})
-
-.catch(err=>{
-
-document.getElementById("loader").style.display="none"
-
-alert("AI analysis failed. Please try again.")
-
-console.log(err)
-
-})
+alert("Roadmap request received. It will be emailed soon.");
 
 }
-
-
-/* SCORE CARD */
-
-function generateScoreCard(data){
-
-const canvas=document.getElementById("scoreCard")
-const ctx=canvas.getContext("2d")
-
-canvas.style.display="block"
-
-ctx.fillStyle="#ffffff"
-ctx.fillRect(0,0,600,350)
-
-ctx.fillStyle="#000"
-
-ctx.font="26px Arial"
-ctx.fillText("Qbit Career Readiness",20,50)
-
-ctx.font="20px Arial"
-ctx.fillText(userName+"'s Score",20,100)
-
-ctx.font="22px Arial"
-ctx.fillText(data.score+"% Ready for "+data.role,20,150)
-
-ctx.font="16px Arial"
-ctx.fillText(data.percentile,20,200)
-
-ctx.font="14px Arial"
-ctx.fillText("tryqbit.com",20,300)
-
-document.getElementById("downloadBtn").style.display="inline-block"
-
-}
-
-
-/* DOWNLOAD */
-
-function downloadCard(){
-
-let canvas=document.getElementById("scoreCard")
-
-let link=document.createElement("a")
-
-link.download="qbit-score.png"
-
-link.href=canvas.toDataURL()
-
-link.click()
-
-}
-
-
-/* SHARE MESSAGE */
-
-function getShareText(){
-
-return encodeURIComponent(
-userName+" is "+currentScore+
-"% ready for "+currentRole+
-" according to Qbit.\n\n"+
-"Check your career readiness score:\n"+
-"https://tryqbit.com"
-)
-
-}
-
-
-function shareLinkedIn(){
-
-window.open(
-"https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com&summary="+getShareText()
-)
-
-}
-
-function shareWhatsapp(){
-
-window.open(
-"https://wa.me/?text="+getShareText()
-)
-
-}
-
-function shareFacebook(){
-
-window.open(
-"https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+getShareText()
-)
-
-}
-
-
-/* GUIDE REQUEST */
-
-function requestGuide(){
-
-alert("Please email hello@tryqbit.com to request your personalized roadmap.")
 
 }
 
