@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
 
-<title>Qbit Career Analyzer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qbit Career Analyzer</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 
@@ -15,33 +17,49 @@ body{
 font-family:system-ui;
 background:#0f172a;
 color:white;
+margin:0;
 }
 
 .container{
 max-width:1000px;
 margin:auto;
-padding:30px;
+padding:25px;
 }
 
 textarea{
 width:100%;
-height:120px;
-border:none;
-border-radius:6px;
+height:130px;
 padding:10px;
+border-radius:6px;
+border:none;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:6px;
+border:none;
+margin-bottom:10px;
 }
 
 button{
 padding:12px 18px;
-border:none;
-border-radius:6px;
 background:#2563eb;
 color:white;
+border:none;
+border-radius:6px;
 cursor:pointer;
 }
 
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:8px;
+margin-top:20px;
+}
+
 .progressBar{
-height:18px;
+height:16px;
 background:#334155;
 border-radius:8px;
 overflow:hidden;
@@ -52,16 +70,15 @@ height:100%;
 background:#2563eb;
 }
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:8px;
-margin-top:20px;
-}
-
 .loader{
 display:none;
 margin-top:20px;
+}
+
+footer{
+margin-top:60px;
+text-align:center;
+color:#94a3b8;
 }
 
 </style>
@@ -82,23 +99,55 @@ margin-top:20px;
 
 <label>Target Role</label> <input id="targetRole">
 
-<label>Describe Work</label>
+<label>Describe Daily Work</label>
 
 <textarea id="work"></textarea>
 
-<p style="opacity:0.7;">Upload resume (file analyzed but not stored)</p>
+<p style="opacity:0.7;font-size:13px">
+Upload resume (optional). File is analyzed but never stored.
+</p>
 
 <input type="file" id="resume">
 
-<br><br>
-
-<button onclick="run()">Analyze Career</button>
+<button onclick="runAnalysis()">Analyze Career</button>
 
 <div class="loader" id="loader">
-<p id="aiStatus">Analyzing work patterns...</p>
+
+<p id="aiStatus">
+Analyzing your work patterns...
+</p>
+
 </div>
 
 <div id="result"></div>
+
+<div class="card">
+
+<h3>How Qbit Calculates Your Score</h3>
+
+<p>
+Qbit compares your detected skills with the required skills of
+multiple career roles. The score is calculated based on how many
+required skills are matched.
+</p>
+
+<p>
+Score = Matched Skills / Required Skills
+</p>
+
+<p>
+Accuracy improves as Qbit learns from more professionals.
+</p>
+
+</div>
+
+<footer>
+
+© 2026 Qbit
+Career Intelligence Engine
+[hello@tryqbit.com](mailto:hello@tryqbit.com)
+
+</footer>
 
 </div>
 
@@ -106,58 +155,12 @@ margin-top:20px;
 
 const API="https://script.google.com/macros/s/AKfycbw-CN9Qoln7WeWn27Ys-vOtVKrEwgdY5GkZ5ev7vs3RHvoYXUJgrkcKbCGUom1Wn-DQ/exec";
 
-const params=new URLSearchParams(location.search);
+const params=new URLSearchParams(window.location.search);
 const session=params.get("session");
 
-async function parsePDF(file){
-
-const reader=new FileReader();
-
-return new Promise(resolve=>{
-
-reader.onload=async function(){
-
-const typedarray=new Uint8Array(this.result);
-
-const pdf=await pdfjsLib.getDocument(typedarray).promise;
-
-let text="";
-
-for(let i=1;i<=pdf.numPages;i++){
-
-const page=await pdf.getPage(i);
-
-const content=await page.getTextContent();
-
-content.items.forEach(item=>{
-text+=item.str+" ";
-});
-
-}
-
-resolve(text);
-
-};
-
-reader.readAsArrayBuffer(file);
-
-});
-
-}
-
-async function run(){
+async function runAnalysis(){
 
 let text=document.getElementById("work").value;
-
-const file=document.getElementById("resume").files[0];
-
-if(file){
-
-const resume=await parsePDF(file);
-
-text=text+" "+resume;
-
-}
 
 document.getElementById("loader").style.display="block";
 
@@ -172,63 +175,92 @@ text:text
 
 })))
 
-.then(r=>r.json())
-.then(d=>{
+.then(res=>res.json())
+.then(data=>{
 
 document.getElementById("loader").style.display="none";
 
-render(d);
+renderResult(data);
 
 });
 
 }
 
-function render(data){
+function renderResult(data){
 
 let html="";
 
-html+=`<div class='card'>`;
+html+=`
+<div class='card'>
 
-html+=`<h3>${data.score}% Ready for ${data.role}</h3>`;
+<h3>${data.score}% Ready for ${data.role}</h3>
 
-html+=`<div class='progressBar'><div class='progressFill' style='width:${data.score}%'></div></div>`;
+<div class='progressBar'>
+<div class='progressFill' style='width:${data.score}%'></div>
+</div>
 
-html+=`<p>${data.percentile}</p>`;
+<p>${data.percentile}</p>
 
-html+=`</div>`;
+</div>
+`;
 
-html+=`<div class='card'><h4>Score Explanation</h4>`;
+html+=`
+<div class='card'>
 
-html+=`Matched Skills: ${data.skills.join(", ")}<br>`;
-html+=`Missing Skills: ${data.gaps.join(", ")}`;
+<h4>Detected Skills</h4>
 
-html+=`</div>`;
+${data.skills.join(", ")}
 
-html+=`<div class='card'><h4>Weekly Career Kit</h4>`;
+<h4>Skill Gaps</h4>
 
-html+=`Practice: ${data.weekly}`;
+${data.gaps.join(", ")}
 
-html+=`</div>`;
+</div>
+`;
 
-html+=`<div class='card'><h4>Career Path</h4>`;
+html+=`
+<div class='card'>
 
-html+=data.career_path;
+<h4>Weekly Career Kit</h4>
 
-html+=`</div>`;
+${data.weekly}
 
-html+=`<div class='card'><h4>Salary Insight</h4>`;
+</div>
+`;
 
-html+=`Potential salary: ${data.salary}`;
+html+=`
+<div class='card'>
 
-html+=`</div>`;
+<h4>Career Path Opportunities</h4>
 
-html+=`<button onclick="roadmap()">Request Personalized Roadmap</button>`;
+${data.career_path}
+
+</div>
+`;
+
+html+=`
+<div class='card'>
+
+<h4>Salary Insight</h4>
+
+${data.salary}
+
+</div>
+`;
+
+html+=`
+<div class='card'>
+
+<button onclick="requestRoadmap()">Request Personalized Roadmap</button>
+
+</div>
+`;
 
 document.getElementById("result").innerHTML=html;
 
 }
 
-function roadmap(){
+function requestRoadmap(){
 
 if(confirm("Generate personalized roadmap?")){
 
@@ -240,7 +272,7 @@ session:session
 })
 });
 
-alert("Roadmap request received. It will be emailed soon.");
+alert("Your roadmap request has been received.");
 
 }
 
@@ -249,4 +281,5 @@ alert("Roadmap request received. It will be emailed soon.");
 </script>
 
 </body>
+
 </html>
