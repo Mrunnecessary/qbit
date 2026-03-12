@@ -25,6 +25,46 @@ margin:auto;
 padding:25px;
 }
 
+/* GRID */
+
+.formGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+margin-bottom:25px;
+}
+
+.formItem label{
+font-size:13px;
+opacity:0.9;
+display:block;
+margin-bottom:6px;
+}
+
+.formItem input,
+.formItem select{
+width:100%;
+padding:10px;
+border-radius:6px;
+border:none;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+.formGrid{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+@media(max-width:600px){
+.formGrid{
+grid-template-columns:1fr;
+}
+}
+
+/* TEXTAREA */
+
 textarea{
 width:100%;
 height:130px;
@@ -33,15 +73,10 @@ border-radius:6px;
 border:none;
 }
 
-input{
-width:100%;
-padding:10px;
-border-radius:6px;
-border:none;
-margin-bottom:10px;
-}
+/* BUTTON */
 
 button{
+margin-top:15px;
 padding:12px 18px;
 border:none;
 border-radius:6px;
@@ -49,6 +84,8 @@ cursor:pointer;
 background:#2563eb;
 color:white;
 }
+
+/* SCORE CIRCLE */
 
 .circle{
 width:160px;
@@ -62,12 +99,34 @@ font-size:32px;
 margin:auto;
 }
 
+/* PROGRESS BAR (NEW SaaS UI) */
+
+.progressBar{
+height:14px;
+background:#334155;
+border-radius:8px;
+overflow:hidden;
+margin-top:15px;
+}
+
+.progressFill{
+height:100%;
+background:#2563eb;
+width:0%;
+transition:width 1.5s ease;
+}
+
+/* CARD */
+
 .card{
 background:#1e293b;
 padding:20px;
 border-radius:8px;
 margin-top:20px;
+line-height:1.6;
 }
+
+/* LOADER */
 
 .loader{
 margin-top:20px;
@@ -89,6 +148,8 @@ margin:auto;
 100%{transform:rotate(360deg);}
 }
 
+/* SHARE */
+
 .share{
 margin-top:15px;
 display:flex;
@@ -96,16 +157,21 @@ gap:10px;
 flex-wrap:wrap;
 }
 
+/* CANVAS */
+
 canvas{
 margin-top:25px;
 background:white;
 border-radius:8px;
 }
 
+/* FOOTER */
+
 footer{
 margin-top:60px;
 text-align:center;
 color:#94a3b8;
+font-size:14px;
 }
 
 </style>
@@ -118,17 +184,57 @@ color:#94a3b8;
 
 <h2>Career Readiness Analyzer</h2>
 
-<label>Name</label> <input id="name">
+<div class="formGrid">
 
-<label>Describe Daily Work</label>
+<div class="formItem">
+<label>Name *</label>
+<input id="name">
+</div>
 
-<textarea id="userInput"
-placeholder="Example:
-• I create Excel reports
-• I analyze data
-• I manage operations"></textarea>
+<div class="formItem">
+<label>Current Role</label>
+<input id="role">
+</div>
 
-<p style="opacity:0.7;font-size:13px">
+<div class="formItem">
+<label>Experience (years)</label>
+<input id="exp">
+</div>
+
+<div class="formItem">
+<label>Current Salary</label>
+<select id="salary">
+<option>Below 5L</option>
+<option>5L - 10L</option>
+<option>10L - 20L</option>
+<option>20L+</option>
+</select>
+</div>
+
+<div class="formItem">
+<label>Target Role</label>
+<input id="targetRole">
+</div>
+
+<div class="formItem">
+<label>Timeline</label>
+<select id="timeline">
+<option>3 months</option>
+<option>6 months</option>
+<option>12 months</option>
+</select>
+</div>
+
+</div>
+
+<label>Describe Daily Work *</label>
+
+<textarea id="userInput" placeholder="Example:
+• I design AWS cloud infrastructure
+• I automate CI/CD pipelines
+• I manage deployments"></textarea>
+
+<p style="opacity:0.7;font-size:13px;margin-top:10px">
 Or upload resume (PDF). File is analyzed but never stored.
 </p>
 
@@ -136,35 +242,40 @@ Or upload resume (PDF). File is analyzed but never stored.
 
 <button onclick="runAnalysis()">Discover My Career Score</button>
 
+<!-- LOADER -->
+
 <div class="loader" id="loader" style="display:none">
 
 <div class="spinner"></div>
-
-<p id="aiStatus">
-Analyzing your work tasks...
-</p>
+<p id="aiStatus">Analyzing your work tasks...</p>
 
 </div>
 
+<!-- RESULT -->
+
 <div id="outputBox" class="card" style="display:none"></div>
+
+<!-- ROADMAP -->
 
 <div id="packageBox" class="card" style="display:none">
 
 <h3>Personalized Career Roadmap</h3>
 
-<p>
-Get a deeper analysis with projects, interview prep and roadmap.
-</p>
+<p>Get projects, learning plan and interview preparation guide.</p>
 
 <button onclick="requestGuide()">Generate My Roadmap</button>
 
 </div>
+
+<!-- SCORE CARD -->
 
 <canvas id="scoreCanvas" width="600" height="350" style="display:none"></canvas>
 
 <button id="downloadBtn" style="display:none" onclick="downloadScorecard()">
 Download Score Card
 </button>
+
+<!-- SHARE -->
 
 <div id="shareBlock" class="card" style="display:none">
 
@@ -178,21 +289,17 @@ Download Score Card
 
 </div>
 
+<!-- SCORE EXPLAIN -->
+
 <div class="card">
 
 <h3>How Qbit Calculates Your Score</h3>
 
-<p>
-Qbit compares detected skills against required skills across 30 roles.
-</p>
+<p>Qbit compares detected skills against required skills across 30 roles.</p>
 
-<p>
-Score = Matched Skills / Required Skills
-</p>
+<p>Score = Matched Skills / Required Skills</p>
 
-<p>
-Accuracy improves as Qbit learns from more professionals.
-</p>
+<p>Accuracy improves as Qbit learns from more professionals.</p>
 
 </div>
 
@@ -208,19 +315,26 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbynnkGoThXsVOjLoBQGdLfKezjvtEG_-mh7iAvA4HHC6t2oIcielbR9rr6pjQwnx6YM/exec"
+const API="https://script.google.com/macros/s/AKfycbzRQs-Nm5uiWKHJ5r6HJqxkS9jyr7WQHmYlm45FvrGFNf4dFHMbCE_BVqS-uLh3bBIS/exec"
+const params = new URLSearchParams(window.location.search);
+
+const sessionId = params.get("session") || "";
+const userEmail = params.get("email") || "";
 
 let currentScore=0
 let currentRole=""
 let userName=""
 let previousScore=0
 
-
 async function runAnalysis(){
 
 let text=document.getElementById("userInput").value
-
 userName=document.getElementById("name").value
+
+if(userName==""){
+alert("Please enter your name")
+return
+}
 
 if(text.length<10){
 alert("Please describe your work tasks")
@@ -243,12 +357,20 @@ i++
 if(i>=steps.length) clearInterval(stepInterval)
 },1200)
 
-
 let payload={
-name:userName,
-text:text
-}
 
+session_id:sessionId,
+email:userEmail,
+
+name:userName,
+text:text,
+role:document.getElementById("role").value,
+exp:document.getElementById("exp").value,
+salary:document.getElementById("salary").value,
+targetRole:document.getElementById("targetRole").value,
+timeline:document.getElementById("timeline").value
+
+}
 
 fetch(API+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
@@ -260,11 +382,10 @@ document.getElementById("loader").style.display="none"
 
 previousScore=currentScore
 
-currentScore=data.score
-currentRole=data.role
+currentScore=data.score || 0
+currentRole=data.role || "Career Role"
 
 renderResult(data)
-
 generateScorecard(data)
 
 document.getElementById("shareBlock").style.display="block"
@@ -274,27 +395,28 @@ document.getElementById("packageBox").style.display="block"
 
 }
 
-
-
-/******** RENDER RESULT ********/
+/******** RESULT ********/
 
 function renderResult(data){
 
-let skills=data.skills.map(s=>"✔ "+s).join("<br>")
-let gaps=data.gaps.map(s=>"❌ "+s).join("<br>")
+let skills=(data.skills||[]).map(s=>"✔ "+s).join("<br>")
+let gaps=(data.gaps||[]).map(s=>"❌ "+s).join("<br>")
 
-let topRoles=data.top_roles.map(r=>r.role+" ("+r.score+"%)").join("<br>")
-
+let topRoles=(data.top_roles||[]).map(r=>r.role+" ("+r.score+"%)").join("<br>")
 
 let output=`
 
 <h3>${userName}'s Career Alignment</h3>
 
-<div class="circle">${data.score}%</div>
+<div class="circle">${data.score || 0}%</div>
 
-<h3>${data.role}</h3>
+<div class="progressBar">
+<div id="scoreProgress" class="progressFill"></div>
+</div>
 
-<p>${data.percentile}</p>
+<h3>${data.role || "Suggested Career"}</h3>
+
+<p>${data.percentile || ""}</p>
 
 <h4>Top Career Matches</h4>
 ${topRoles}
@@ -306,29 +428,23 @@ ${skills}
 ${gaps}
 
 <h4>Weekly Career Kit</h4>
-${data.weekly}
+${data.weekly || ""}
 
 <h4>Salary Insight</h4>
-${data.salary}
+${data.salary || ""}
 
 <h4>Career Path</h4>
-${data.career_path}
+${data.career_path || ""}
 
 <h4>Career Twin</h4>
-Professionals with similar skill profiles often move into:<br>
+Professionals with similar skills often become:<br>
 ${topRoles}
 
 `
 
-
 if(previousScore>0){
-
-output+=`
-<h4>Progress</h4>
-Your score improved from ${previousScore}% → ${data.score}%
-`
+output+=`<h4>Progress</h4>Score improved from ${previousScore}% → ${data.score || 0}%`
 }
-
 
 output+=`
 
@@ -338,25 +454,16 @@ output+=`
 
 `
 
-
-if(data.score>=75){
-
-output+=`
-<p style="color:#22c55e">
-🎉 Scorecard color customization unlocked!
-</p>
-`
-
-}
-
 document.getElementById("outputBox").innerHTML=output
 document.getElementById("outputBox").style.display="block"
 
+setTimeout(()=>{
+document.getElementById("scoreProgress").style.width=(data.score||0)+"%"
+},300)
+
 }
 
-
-
-/******** RECHECK SCORE ********/
+/******** RECHECK ********/
 
 function recheckScore(){
 
@@ -364,13 +471,9 @@ document.getElementById("userInput").scrollIntoView({
 behavior:"smooth"
 });
 
-alert(
-"Improve your missing skills using the weekly career kit and run the analysis again to see your improved score."
-);
+alert("Improve your skills and run analysis again to see your improved score.");
 
 }
-
-
 
 /******** SCORECARD ********/
 
@@ -393,10 +496,10 @@ ctx.font="20px Arial"
 ctx.fillText(userName+"'s Score",20,100)
 
 ctx.font="22px Arial"
-ctx.fillText(data.score+"% Ready for "+data.role,20,150)
+ctx.fillText((data.score || 0)+"% Ready for "+(data.role||""),20,150)
 
 ctx.font="16px Arial"
-ctx.fillText(data.percentile,20,200)
+ctx.fillText(data.percentile||"",20,200)
 
 ctx.font="14px Arial"
 ctx.fillText("tryqbit.com",20,300)
@@ -404,8 +507,6 @@ ctx.fillText("tryqbit.com",20,300)
 document.getElementById("downloadBtn").style.display="inline-block"
 
 }
-
-
 
 /******** DOWNLOAD ********/
 
@@ -423,52 +524,31 @@ link.click()
 
 }
 
-
-
 /******** SHARE ********/
 
 function getShareText(){
 
-let text=userName+" is "+currentScore+"% ready for "+currentRole+" according to Qbit."
-
-if(previousScore>0){
-
-text+="\n\nImproved score: "+previousScore+"% → "+currentScore+"%"
-
-}
-
-text+="\n\nCheck your career readiness score:\nhttps://tryqbit.com"
-
-return encodeURIComponent(text)
-
-}
-
-
-function shareLinkedIn(){
-
-window.open(
-"https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com&summary="+getShareText()
+return encodeURIComponent(
+userName+" is "+currentScore+
+"% ready for "+currentRole+
+" according to Qbit.\n\n"+
+"Check your career readiness score:\n"+
+"https://tryqbit.com"
 )
 
+}
+
+function shareLinkedIn(){
+window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com&summary="+getShareText())
 }
 
 function shareWhatsapp(){
-
-window.open(
-"https://wa.me/?text="+getShareText()
-)
-
+window.open("https://wa.me/?text="+getShareText())
 }
 
 function shareFacebook(){
-
-window.open(
-"https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+getShareText()
-)
-
+window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+getShareText())
 }
-
-
 
 /******** ROADMAP ********/
 
@@ -485,6 +565,14 @@ action:"roadmap"
 
 alert("Your roadmap request has been sent.")
 
+}
+
+}
+
+window.onload=function(){
+
+if(userEmail){
+console.log("Email captured:",userEmail);
 }
 
 }
