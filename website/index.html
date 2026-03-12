@@ -165,7 +165,7 @@ See your career readiness score and skill gaps
 
 © 2026 Qbit
 Career Intelligence Engine
-[hello@tryqbit.com](mailto:hello@tryqbit.com)
+(mailto:hello@tryqbit.com)
 
 </footer>
 
@@ -191,11 +191,22 @@ device:navigator.userAgent
 })
 })
 
-.then(res=>res.json())
+.then(res=>{
+if(!res.ok){
+throw new Error("Server error");
+}
+return res.json();
+})
+
 .then(data=>{
 
 window.location.href="dashboard.html?session="+data.session;
 
+})
+
+.catch(err=>{
+alert("Server connection error. Please try again.");
+console.log(err);
 });
 
 }
