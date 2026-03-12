@@ -427,13 +427,14 @@ let output=`
 
 </div>
 
-if(data.score>=75){
-document.getElementById("colorSelector").style.display="block";
-}
 
 <div class="progressBar">
 <div id="scoreProgress" class="progressFill"></div>
 </div>
+
+if(data.score>=75){
+document.getElementById("colorSelector").style.display="block";
+}
 
 <button onclick="explainScore()">Explain My Score</button>
 
