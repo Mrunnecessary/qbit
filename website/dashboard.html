@@ -66,6 +66,16 @@ grid-template-columns:1fr;
 }
 }
 
+/* Progress Bar growing */
+
+.progressFill{
+height:100%;
+background:#2563eb;
+width:0%;
+transition:width 1s ease;
+}
+
+
 /* TEXTAREA */
 
 textarea{
@@ -416,6 +426,11 @@ let output=`
 
 <div class="circle">${data.score || 30}%</div>
 
+<p style="margin-top:8px;opacity:0.8">
+Estimated time to reach 80% readiness:
+<b>${estimateWeeks(data.score)} weeks</b>
+</p>
+
 <div id="colorSelector" style="margin-top:15px;display:none"> /*Color option for score  card*/
 
 <p>Select scorecard color:</p>
@@ -429,12 +444,8 @@ let output=`
 
 
 <div class="progressBar">
-<div id="scoreProgress" class="progressFill"></div>
+<div id="scoreProgress" class="progressFill" style="width:0%"></div>
 </div>
-
-if(data.score>=75){
-document.getElementById("colorSelector").style.display="block";
-}
 
 <button onclick="explainScore()">Explain My Score</button>
 
@@ -449,14 +460,40 @@ Accuracy improves as more professionals use the platform.
 
 <p>${data.percentile || ""}</p>
 
+<p style="opacity:0.7;font-size:13px">
+Compared with professionals exploring similar career transitions on Qbit.
+</p>
+<p style="opacity:0.7;font-size:13px">
+Compared to professionals exploring career transitions on Qbit.
+</p>
+
+
 <h4>Top Career Matches</h4>
 ${topRoles}
 
 <h4>Detected Skills</h4>
 ${skills}
 
+<h4>How Qbit Calculated Your Score</h4>
+
+<p>
+Matched skills: <b>${(data.skills || []).length}</b><br>
+Required skills for this role: <b>${((data.skills || []).length + (data.gaps || []).length)}</b>
+</p>
+
 <h4>Skill Gaps</h4>
 ${gaps}
+
+<h4>Potential Score Improvement</h4>
+
+<p>
+If you learn these 3 skills, your score could increase to 
+<b>${Math.min((data.score || 30) + 20, 90)}%</b>
+</p>
+
+<ul>
+${(data.gaps || []).slice(0,3).map(skill => `<li>${skill}</li>`).join("")}
+</ul>
 
 <h4>Weekly Career Kit</h4>
 ${data.weekly || ""}
@@ -466,6 +503,18 @@ ${data.salary || ""}
 
 <h4>Career Path</h4>
 ${data.career_path || ""}
+
+<h4>Compare Your Score</h4>
+
+<button onclick="compareScore()">Compare My Score With Others</button>
+
+<div id="compareBox" style="
+margin-top:10px;
+padding:15px;
+background:#111827;
+border-radius:6px;
+display:none">
+</div>
 
 <h4>Why This Score?</h4>
 
@@ -479,9 +528,17 @@ border-radius:6px;
 display:none">
 </div>
 
-<h4>Career Twin</h4>
-Professionals with similar skills often become:<br>
+<h4>Career Twin Insight</h4>
+
+Professionals with similar skills frequently transition to:
+
+<div style="margin-top:6px;font-weight:600">
 ${topRoles}
+</div>
+
+<p style="opacity:0.75;font-size:13px">
+Based on anonymized skill patterns from Qbit users.
+</p>
 
 
 
@@ -502,15 +559,42 @@ output+=`
 document.getElementById("outputBox").innerHTML=output
 document.getElementById("outputBox").style.display="block"
 
+if((data.score || 0) >= 75){
+
+let selector=document.getElementById("colorSelector");
+
+if(selector){
+selector.style.display="block";
+}
+
+}
+
 setTimeout(()=>{
 document.getElementById("scoreProgress").style.width=(data.score || 30)+"%";
 },300);
 
-setTimeout(()=>{
-document.getElementById("scoreProgress").style.width=(data.score||0)+"%"
-},300)
+
 
 }
+
+
+<h4>Ask Qbit About Your Career</h4>
+
+<input id="careerQuestion"
+placeholder="Ask Qbit anything about your career transition (example: What skill should I learn first?)"
+style="width:100%;padding:10px;border-radius:6px;border:none;margin-top:8px">
+
+<button onclick="askCareerAI()" style="margin-top:10px">
+Ask Qbit
+</button>
+
+<div id="aiAnswerBox" style="
+margin-top:12px;
+padding:15px;
+background:#111827;
+border-radius:6px;
+display:none">
+</div>
 
 /******** RECHECK ********/
 
@@ -603,16 +687,29 @@ window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&qu
 
 function requestGuide(){
 
-if(confirm("Generate personalized roadmap?")){
+if(confirm("Generate personalized roadmap? It will be emailed shortly.")){
 
 fetch(API,{
 method:"POST",
 body:new URLSearchParams({
-action:"roadmap"
+
+action:"roadmap",
+
+name:userName,
+email:userEmail,
+score:currentScore,
+role:currentRole,
+skills:(currentSkills || []).join(",")
+
 })
 })
 
-alert("Your roadmap request has been sent.")
+.then(res=>res.text())
+.then(()=>{
+
+alert("Your roadmap request has been received. We will send it shortly.");
+
+})
 
 }
 
@@ -655,6 +752,70 @@ function setColor(color){
 cardColor=color;
 
 generateScorecard({score:currentScore,role:currentRole});
+
+}
+
+function estimateWeeks(score){
+
+score=score || 30;
+
+let gap=80-score;
+
+let weeks=Math.ceil(gap/5);
+
+if(weeks<2) weeks=2;
+
+return weeks+"–"+(weeks+2);
+
+}
+
+function compareScore(){
+
+let percentileText="";
+
+if(currentScore>=70){
+percentileText="You are ahead of 80% of professionals exploring this role.";
+}
+else if(currentScore>=50){
+percentileText="You are ahead of 60% of professionals exploring this role.";
+}
+else{
+percentileText="You are ahead of 30% of professionals exploring this role.";
+}
+
+document.getElementById("compareBox").innerHTML=percentileText;
+
+document.getElementById("compareBox").style.display="block";
+
+}
+
+function askCareerAI(){
+
+let question=document.getElementById("careerQuestion").value;
+
+if(!question){
+alert("Please enter a question");
+return;
+}
+
+fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
+
+question:question,
+skills:currentSkills,
+role:currentRole,
+score:currentScore
+
+})))
+
+.then(res=>res.text())
+
+.then(answer=>{
+
+document.getElementById("aiAnswerBox").innerHTML=answer;
+
+document.getElementById("aiAnswerBox").style.display="block";
+
+})
 
 }
 
