@@ -331,8 +331,12 @@ Career Intelligence Engine
 const API="https://script.google.com/macros/s/AKfycbzRQs-Nm5uiWKHJ5r6HJqxkS9jyr7WQHmYlm45FvrGFNf4dFHMbCE_BVqS-uLh3bBIS/exec"
 const params = new URLSearchParams(window.location.search);
 
+<script>
+
 const sessionId = params.get("session") || "";
 const userEmail = params.get("email") || "";
+
+</script>
 
 let currentScore=0
 let currentRole=""
@@ -406,6 +410,11 @@ document.getElementById("packageBox").style.display="block"
 
 })
 
+.catch(err=>{
+console.log(err)
+alert("Analysis failed. Please try again.")
+})
+
 }
 
 /******** RESULT ********/
@@ -431,7 +440,7 @@ Estimated time to reach 80% readiness:
 <b>${estimateWeeks(data.score)} weeks</b>
 </p>
 
-<div id="colorSelector" style="margin-top:15px;display:none"> /*Color option for score  card*/
+<div id="colorSelector" style="margin-top:15px;display:none">
 
 <p>Select scorecard color:</p>
 
@@ -449,7 +458,7 @@ Estimated time to reach 80% readiness:
 
 <button onclick="explainScore()">Explain My Score</button>
 
-<div id="explanationBox" class="card" style="display:none"></div>
+
 
 <h3>${data.role || "Suggested Career"}</h3>
 <p style="opacity:0.7;font-size:13px;margin-top:8px">
@@ -463,10 +472,6 @@ Accuracy improves as more professionals use the platform.
 <p style="opacity:0.7;font-size:13px">
 Compared with professionals exploring similar career transitions on Qbit.
 </p>
-<p style="opacity:0.7;font-size:13px">
-Compared to professionals exploring career transitions on Qbit.
-</p>
-
 
 <h4>Top Career Matches</h4>
 ${topRoles}
@@ -540,9 +545,24 @@ ${topRoles}
 Based on anonymized skill patterns from Qbit users.
 </p>
 
+<h4>Ask Qbit About Your Career</h4>
 
+<input id="careerQuestion"
+placeholder="Ask Qbit anything about your career transition (example: What skill should I learn first?)"
+style="width:100%;padding:10px;border-radius:6px;border:none;margin-top:8px">
 
-`
+<button onclick="askCareerAI()" style="margin-top:10px">
+Ask Qbit
+</button>
+
+<div id="aiAnswerBox" style="
+margin-top:12px;
+padding:15px;
+background:#111827;
+border-radius:6px;
+display:none">
+</div>
+
 
 if(previousScore>0){
 output+=`<h4>Progress</h4>Score improved from ${previousScore}% → ${data.score || 0}%`
@@ -570,31 +590,16 @@ selector.style.display="block";
 }
 
 setTimeout(()=>{
-document.getElementById("scoreProgress").style.width=(data.score || 30)+"%";
+let bar=document.getElementById("scoreProgress");
+if(bar){
+bar.style.width=(data.score || 30)+"%";
+}
 },300);
-
 
 
 }
 
 
-<h4>Ask Qbit About Your Career</h4>
-
-<input id="careerQuestion"
-placeholder="Ask Qbit anything about your career transition (example: What skill should I learn first?)"
-style="width:100%;padding:10px;border-radius:6px;border:none;margin-top:8px">
-
-<button onclick="askCareerAI()" style="margin-top:10px">
-Ask Qbit
-</button>
-
-<div id="aiAnswerBox" style="
-margin-top:12px;
-padding:15px;
-background:#111827;
-border-radius:6px;
-display:none">
-</div>
 
 /******** RECHECK ********/
 
