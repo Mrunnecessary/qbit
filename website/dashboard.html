@@ -10,6 +10,9 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 
+let currentSkills=[]
+let currentGaps=[]
+
 <style>
 
 body{
@@ -399,6 +402,9 @@ document.getElementById("packageBox").style.display="block"
 
 function renderResult(data){
 
+currentSkills=data.skills || [];
+currentGaps=data.gaps || [];
+
 let skills=(data.skills||[]).map(s=>"✔ "+s).join("<br>")
 let gaps=(data.gaps||[]).map(s=>"❌ "+s).join("<br>")
 
@@ -408,13 +414,37 @@ let output=`
 
 <h3>${userName}'s Career Alignment</h3>
 
-<div class="circle">${data.score || 0}%</div>
+<div class="circle">${data.score || 30}%</div>
+
+<div id="colorSelector" style="margin-top:15px;display:none"> /*Color option for score  card*/
+
+<p>Select scorecard color:</p>
+
+<button onclick="setColor('#2563eb')">Blue</button>
+<button onclick="setColor('#9333ea')">Purple</button>
+<button onclick="setColor('#16a34a')">Green</button>
+<button onclick="setColor('#f59e0b')">Gold</button>
+
+</div>
+
+if(data.score>=75){
+document.getElementById("colorSelector").style.display="block";
+}
 
 <div class="progressBar">
 <div id="scoreProgress" class="progressFill"></div>
 </div>
 
+<button onclick="explainScore()">Explain My Score</button>
+
+<div id="explanationBox" class="card" style="display:none"></div>
+
 <h3>${data.role || "Suggested Career"}</h3>
+<p style="opacity:0.7;font-size:13px;margin-top:8px">
+This score is based on the information you shared.  
+Currently Qbit does not conduct skill assessments.  
+Accuracy improves as more professionals use the platform.
+</p>
 
 <p>${data.percentile || ""}</p>
 
@@ -436,9 +466,23 @@ ${data.salary || ""}
 <h4>Career Path</h4>
 ${data.career_path || ""}
 
+<h4>Why This Score?</h4>
+
+<button onclick="explainScore()">Explain My Score</button>
+
+<div id="explanationBox" style="
+margin-top:10px;
+padding:15px;
+background:#111827;
+border-radius:6px;
+display:none">
+</div>
+
 <h4>Career Twin</h4>
 Professionals with similar skills often become:<br>
 ${topRoles}
+
+
 
 `
 
@@ -456,6 +500,10 @@ output+=`
 
 document.getElementById("outputBox").innerHTML=output
 document.getElementById("outputBox").style.display="block"
+
+setTimeout(()=>{
+document.getElementById("scoreProgress").style.width=(data.score || 30)+"%";
+},300);
 
 setTimeout(()=>{
 document.getElementById("scoreProgress").style.width=(data.score||0)+"%"
@@ -487,7 +535,7 @@ canvas.style.display="block"
 ctx.fillStyle="#ffffff"
 ctx.fillRect(0,0,600,350)
 
-ctx.fillStyle="#000"
+ctx.fillStyle=cardColor
 
 ctx.font="26px Arial"
 ctx.fillText("Qbit Career Readiness",20,50)
@@ -529,9 +577,9 @@ link.click()
 function getShareText(){
 
 return encodeURIComponent(
-userName+" is "+currentScore+
-"% ready for "+currentRole+
-" according to Qbit.\n\n"+
+"I discovered I'm already "+currentScore+
+"% ready for a "+currentRole+
+" role using Qbit AI.\n\n"+
 "Check your career readiness score:\n"+
 "https://tryqbit.com"
 )
@@ -569,11 +617,43 @@ alert("Your roadmap request has been sent.")
 
 }
 
+function explainScore(){
+
+fetch(API+"?explain=true&data="+encodeURIComponent(JSON.stringify({
+
+skills:currentSkills,
+gaps:currentGaps,
+role:currentRole
+
+})))
+
+.then(res=>res.text())
+
+.then(text=>{
+
+document.getElementById("explanationBox").innerHTML=text;
+
+document.getElementById("explanationBox").style.display="block";
+
+})
+
+}
+
 window.onload=function(){
 
 if(userEmail){
 console.log("Email captured:",userEmail);
 }
+
+}
+
+let cardColor="#2563eb";
+
+function setColor(color){
+
+cardColor=color;
+
+generateScorecard({score:currentScore,role:currentRole});
 
 }
 
