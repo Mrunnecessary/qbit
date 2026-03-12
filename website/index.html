@@ -133,6 +133,48 @@ Resume uploads are analyzed instantly and never stored.
 
 <section class="section">
 
+<h2>Example Career Score</h2>
+
+<div class="card">
+
+<p style="font-size:22px;font-weight:700;">
+58% Ready for Data Analyst
+</p>
+
+<p style="opacity:0.9;">
+Based on work tasks similar to:
+</p>
+
+<ul>
+<li>Excel reporting</li>
+<li>KPI monitoring</li>
+<li>Weekly dashboards</li>
+</ul>
+
+<p><b>Skill Gaps</b></p>
+
+<ul>
+<li>SQL</li>
+<li>Python</li>
+<li>Statistics</li>
+</ul>
+
+<p><b>Learning Roadmap</b></p>
+
+<p>
+Start with SQL joins → Python data analysis → build a simple reporting dashboard.
+</p>
+
+<p style="opacity:0.7;">
+This user was ahead of 63% of beginners switching careers.
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
 <h2>How Qbit Works</h2>
 
 <div class="card">
@@ -165,7 +207,7 @@ See your career readiness score and skill gaps
 
 © 2026 Qbit
 Career Intelligence Engine
-(mailto:hello@tryqbit.com)
+[hello@tryqbit.com](mailto:hello@tryqbit.com)
 
 </footer>
 
@@ -184,6 +226,9 @@ const email=document.getElementById("email").value;
 
 fetch(API,{
 method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
 body:new URLSearchParams({
 action:"create_session",
 email:email,
@@ -191,22 +236,11 @@ device:navigator.userAgent
 })
 })
 
-.then(res=>{
-if(!res.ok){
-throw new Error("Server error");
-}
-return res.json();
-})
-
+.then(res=>res.json())
 .then(data=>{
 
 window.location.href="dashboard.html?session="+data.session;
 
-})
-
-.catch(err=>{
-alert("Server connection error. Please try again.");
-console.log(err);
 });
 
 }

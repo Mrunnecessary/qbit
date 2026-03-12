@@ -172,11 +172,7 @@ Download Score Card
 
 <div class="share">
 
-<button onclick="shareLinkedIn()">LinkedIn</button>
-
-<button onclick="shareWhatsapp()">WhatsApp</button>
-
-<button onclick="shareFacebook()">Facebook</button>
+<button onclick="shareLinkedIn()">LinkedIn</button> <button onclick="shareWhatsapp()">WhatsApp</button> <button onclick="shareFacebook()">Facebook</button>
 
 </div>
 
@@ -217,6 +213,7 @@ const API="https://script.google.com/macros/s/AKfycbynnkGoThXsVOjLoBQGdLfKezjvtE
 let currentScore=0
 let currentRole=""
 let userName=""
+let previousScore=0
 
 
 async function runAnalysis(){
@@ -261,6 +258,8 @@ fetch(API+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
 document.getElementById("loader").style.display="none"
 
+previousScore=currentScore
+
 currentScore=data.score
 currentRole=data.role
 
@@ -276,6 +275,7 @@ document.getElementById("packageBox").style.display="block"
 }
 
 
+
 /******** RENDER RESULT ********/
 
 function renderResult(data){
@@ -284,6 +284,7 @@ let skills=data.skills.map(s=>"✔ "+s).join("<br>")
 let gaps=data.gaps.map(s=>"❌ "+s).join("<br>")
 
 let topRoles=data.top_roles.map(r=>r.role+" ("+r.score+"%)").join("<br>")
+
 
 let output=`
 
@@ -313,11 +314,30 @@ ${data.salary}
 <h4>Career Path</h4>
 ${data.career_path}
 
+<h4>Career Twin</h4>
+Professionals with similar skill profiles often move into:<br>
+${topRoles}
+
+`
+
+
+if(previousScore>0){
+
+output+=`
+<h4>Progress</h4>
+Your score improved from ${previousScore}% → ${data.score}%
+`
+}
+
+
+output+=`
+
 <div style="margin-top:20px">
 <button onclick="recheckScore()">Improve Skills & Recheck Score</button>
 </div>
 
 `
+
 
 if(data.score>=75){
 
@@ -335,6 +355,7 @@ document.getElementById("outputBox").style.display="block"
 }
 
 
+
 /******** RECHECK SCORE ********/
 
 function recheckScore(){
@@ -348,6 +369,7 @@ alert(
 );
 
 }
+
 
 
 /******** SCORECARD ********/
@@ -384,6 +406,7 @@ document.getElementById("downloadBtn").style.display="inline-block"
 }
 
 
+
 /******** DOWNLOAD ********/
 
 function downloadScorecard(){
@@ -401,17 +424,22 @@ link.click()
 }
 
 
+
 /******** SHARE ********/
 
 function getShareText(){
 
-return encodeURIComponent(
-userName+" is "+currentScore+
-"% ready for "+currentRole+
-" according to Qbit.\n\n"+
-"Check your career readiness score:\n"+
-"https://tryqbit.com"
-)
+let text=userName+" is "+currentScore+"% ready for "+currentRole+" according to Qbit."
+
+if(previousScore>0){
+
+text+="\n\nImproved score: "+previousScore+"% → "+currentScore+"%"
+
+}
+
+text+="\n\nCheck your career readiness score:\nhttps://tryqbit.com"
+
+return encodeURIComponent(text)
 
 }
 
@@ -439,6 +467,7 @@ window.open(
 )
 
 }
+
 
 
 /******** ROADMAP ********/
