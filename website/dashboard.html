@@ -10,8 +10,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 
+<script>
 let currentSkills=[]
 let currentGaps=[]
+</script>
 
 <style>
 
@@ -331,12 +333,9 @@ Career Intelligence Engine
 const API="https://script.google.com/macros/s/AKfycbzRQs-Nm5uiWKHJ5r6HJqxkS9jyr7WQHmYlm45FvrGFNf4dFHMbCE_BVqS-uLh3bBIS/exec"
 const params = new URLSearchParams(window.location.search);
 
-<script>
 
 const sessionId = params.get("session") || "";
 const userEmail = params.get("email") || "";
-
-</script>
 
 let currentScore=0
 let currentRole=""
@@ -563,9 +562,13 @@ border-radius:6px;
 display:none">
 </div>
 
+`;
 
 if(previousScore>0){
-output+=`<h4>Progress</h4>Score improved from ${previousScore}% → ${data.score || 0}%`
+output+=`
+<h4>Progress</h4>
+Score improved from ${previousScore}% → ${data.score || 0}%
+`;
 }
 
 output+=`
