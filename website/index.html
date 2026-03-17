@@ -322,9 +322,7 @@ device:navigator.userAgent
 .then(res=>res.json())
 .then(data=>{
 
-console.log("Session API response:", data);
-
-const session = data.session || "";
+const session=data.session || "";
 
 if(!session){
 alert("Session error. Please refresh and try again.");
@@ -333,10 +331,6 @@ return;
 
 window.location.href="dashboard.html?session="+session+"&email="+email;
 
-})
-.catch(err=>{
-console.log(err);
-alert("Network error. Please try again.");
 });
 
 }
