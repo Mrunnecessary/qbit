@@ -299,7 +299,7 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbw1D98C5tL5KBtjwAwi7txPSrtRsvyAHtoQ2k0GVKkVbsPf-z4fg-uYOaVuhY6yyiYK/exec";
+const API="https://script.google.com/macros/s/AKfycbwscHOmzqms3-XRPgo5H-7T2OjO5tKMWpyH-OJ3Z9Sqdu9nbzbPjegKvDZ8mGCzi8_D/exec";
 
 
 function startAnalysis(e){
@@ -311,9 +311,9 @@ const email=document.getElementById("email").value;
 fetch(API,{
 method:"POST",
 headers:{
-"Content-Type":"application/x-www-form-urlencoded"
+"Content-Type":"application/json"
 },
-body:new URLSearchParams({
+body:JSON.stringify({
 action:"create_session",
 email:email,
 device:navigator.userAgent
