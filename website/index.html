@@ -323,8 +323,9 @@ device:navigator.userAgent
 .then(res=>res.json())
 .then(data=>{
 
-window.location.href=
-"dashboard.html?session="+data.session+"&email="+encodeURIComponent(email);
+const session=data.session || "";
+
+window.location.href="dashboard.html?session="+session+"&email="+email;
 
 });
 
