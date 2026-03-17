@@ -299,7 +299,7 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbzRQs-Nm5uiWKHJ5r6HJqxkS9jyr7WQHmYlm45FvrGFNf4dFHMbCE_BVqS-uLh3bBIS/exec";
+const API="https://script.google.com/macros/s/AKfycbw1D98C5tL5KBtjwAwi7txPSrtRsvyAHtoQ2k0GVKkVbsPf-z4fg-uYOaVuhY6yyiYK/exec";
 
 
 function startAnalysis(e){
@@ -323,7 +323,12 @@ device:navigator.userAgent
 .then(res=>res.json())
 .then(data=>{
 
-const session=data.session || "";
+const session=data.session;
+
+if(!session){
+alert("Session error. Try again.");
+return;
+}
 
 window.location.href="dashboard.html?session="+session+"&email="+email;
 

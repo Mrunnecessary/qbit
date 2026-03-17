@@ -322,7 +322,7 @@ Download Score Card
 
 © 2026 Qbit
 Career Intelligence Engine
-[hello@tryqbit.com](mailto:hello@tryqbit.com)
+[hello@tryqbit.com]
 
 </footer>
 
@@ -330,7 +330,7 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbzRQs-Nm5uiWKHJ5r6HJqxkS9jyr7WQHmYlm45FvrGFNf4dFHMbCE_BVqS-uLh3bBIS/exec"
+const API="https://script.google.com/macros/s/AKfycbw1D98C5tL5KBtjwAwi7txPSrtRsvyAHtoQ2k0GVKkVbsPf-z4fg-uYOaVuhY6yyiYK/exec"
 const params = new URLSearchParams(window.location.search);
 
 
@@ -433,6 +433,10 @@ let output=`
 <h3>${userName}'s Career Alignment</h3>
 
 <div class="circle">${data.score || 30}%</div>
+
+<p style="color:#22c55e;font-weight:600;margin-top:8px">
+🔥 You are just ${(80 - (data.score||30))}% away from becoming job-ready.
+</p>
 
 <p style="margin-top:8px;opacity:0.8">
 Estimated time to reach 80% readiness:
@@ -625,22 +629,21 @@ const ctx=canvas.getContext("2d")
 
 canvas.style.display="block"
 
+ctx.clearRect(0,0,600,350)
+
 ctx.fillStyle="#ffffff"
 ctx.fillRect(0,0,600,350)
 
 ctx.fillStyle=cardColor
 
-ctx.font="26px Arial"
-ctx.fillText(currentScore+"% Ready for "+currentRole,20,150)
-
-ctx.font="20px Arial"
-ctx.fillText(userName+"'s Score",20,100)
-
 ctx.font="22px Arial"
-ctx.fillText(currentScore+"% Ready for "+currentRole,20,150)
+ctx.fillText(userName+"'s Career Score",20,80)
+
+ctx.font="28px Arial"
+ctx.fillText((data.score || 0)+"% Ready for "+(data.role||""),20,140)
 
 ctx.font="16px Arial"
-ctx.fillText(data.percentile||"",20,200)
+ctx.fillText(data.percentile||"",20,190)
 
 ctx.font="14px Arial"
 ctx.fillText("tryqbit.com",20,300)
@@ -734,14 +737,21 @@ role:currentRole
 })))
 
 .then(res=>res.text())
-
 .then(text=>{
 
+if(text.includes("failed") || text.includes("unavailable")){
+document.getElementById("explanationBox").innerHTML="⚠️ AI temporarily unavailable. Try again.";
+}else{
 document.getElementById("explanationBox").innerHTML=text;
+}
 
 document.getElementById("explanationBox").style.display="block";
 
 })
+.catch(()=>{
+document.getElementById("explanationBox").innerHTML="⚠️ Error loading explanation.";
+document.getElementById("explanationBox").style.display="block";
+});
 
 }
 
@@ -819,11 +829,18 @@ score:currentScore
 
 .then(answer=>{
 
-document.getElementById("aiAnswerBox").innerHTML=answer;
+if(answer.includes("failed") || answer.includes("unavailable")){
+answer="⚠️ AI temporarily unavailable. Try again.";
+}
 
+document.getElementById("aiAnswerBox").innerHTML=answer;
 document.getElementById("aiAnswerBox").style.display="block";
 
 })
+.catch(()=>{
+document.getElementById("aiAnswerBox").innerHTML="⚠️ Error loading response.";
+document.getElementById("aiAnswerBox").style.display="block";
+});
 
 }
 
