@@ -299,7 +299,7 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbwscHOmzqms3-XRPgo5H-7T2OjO5tKMWpyH-OJ3Z9Sqdu9nbzbPjegKvDZ8mGCzi8_D/exec";
+const API="https://script.google.com/macros/s/AKfycbxyR28RbzFWvk2nvgTMiZoNEr9BneCcUMJ-zi4aZoeM5I0zSVOFEbxXXw8KfvoMNJIh/exec";
 
 
 function startAnalysis(e){
@@ -308,29 +308,25 @@ e.preventDefault();
 
 const email=document.getElementById("email").value;
 
-fetch(API,{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-action:"create_session",
-email:email,
-device:navigator.userAgent
-})
-})
+fetch(API+"?create_session=true&email="+encodeURIComponent(email))
 .then(res=>res.json())
 .then(data=>{
 
-const session=data.session || "";
+console.log("SESSION:", data);
+
+const session = data.session;
 
 if(!session){
-alert("Session error. Please refresh and try again.");
+alert("Session error. Please try again.");
 return;
 }
 
 window.location.href="dashboard.html?session="+session+"&email="+email;
 
+})
+.catch(err=>{
+console.log(err);
+alert("Network error. Please try again.");
 });
 
 }
@@ -341,8 +337,14 @@ window.location.href="dashboard.html?session="+session+"&email="+email;
 fetch(API+"?count=true")
 .then(res=>res.json())
 .then(data=>{
-document.getElementById("userCountText").innerText=
+
+let el = document.getElementById("userCountText");
+
+if(el){
+el.innerText =
 data.count+"+ professionals already exploring hidden career skills on Qbit";
+}
+
 });
 
 </script>

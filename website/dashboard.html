@@ -330,11 +330,19 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbwscHOmzqms3-XRPgo5H-7T2OjO5tKMWpyH-OJ3Z9Sqdu9nbzbPjegKvDZ8mGCzi8_D/exec"
+const API="https://script.google.com/macros/s/AKfycbxyR28RbzFWvk2nvgTMiZoNEr9BneCcUMJ-zi4aZoeM5I0zSVOFEbxXXw8KfvoMNJIh/exec"
 const params = new URLSearchParams(window.location.search);
 
 
 const sessionId = params.get("session") || "";
+
+// START SESSION FIX
+if(!sessionId){
+alert("Session missing. Please restart.");
+window.location.href="index.html";
+}
+// END SESSION FIX
+
 const userEmail = params.get("email") || "";
 
 let currentScore=0
@@ -398,8 +406,10 @@ document.getElementById("loader").style.display="none"
 
 previousScore=currentScore
 
-currentScore=data.score || 0
-currentRole=data.role || "Career Role"
+// START SCORE SAFETY
+currentScore = typeof data.score === "number" ? data.score : 30;
+// END SCORE SAFETY
+currentRole = data.role || data.bestRole || "Career Role";
 
 renderResult(data)
 generateScorecard(data)
@@ -435,7 +445,7 @@ let output=`
 <div class="circle">${data.score || 30}%</div>
 
 <p style="color:#22c55e;font-weight:600;margin-top:8px">
-🔥 You are just ${(80 - (data.score||30))}% away from becoming job-ready.
+🔥 You are just ${Math.max(0, 80 - (data.score||30))}% away
 </p>
 
 <p style="margin-top:8px;opacity:0.8">
@@ -586,14 +596,9 @@ output+=`
 document.getElementById("outputBox").innerHTML=output
 document.getElementById("outputBox").style.display="block"
 
-if((data.score || 0) >= 75){
-
 let selector=document.getElementById("colorSelector");
-
-if(selector){
+if(selector && (data.score || 0) >= 75){
 selector.style.display="block";
-}
-
 }
 
 setTimeout(()=>{
@@ -640,7 +645,9 @@ ctx.font="22px Arial"
 ctx.fillText(userName+"'s Career Score",20,80)
 
 ctx.font="28px Arial"
-ctx.fillText((data.score || 0)+"% Ready for "+(data.role||""),20,140)
+// START ROLE FIX
+ctx.fillText((data.score || 0)+"% Ready for "+(data.role || currentRole),20,140)
+// END ROLE FIX
 
 ctx.font="16px Arial"
 ctx.fillText(data.percentile||"",20,190)
@@ -739,7 +746,8 @@ role:currentRole
 .then(res=>res.text())
 .then(text=>{
 
-if(text.includes("failed") || text.includes("unavailable")){
+
+if(!text || text.toLowerCase().includes("unavailable")){
 document.getElementById("explanationBox").innerHTML="⚠️ AI temporarily unavailable. Try again.";
 }else{
 document.getElementById("explanationBox").innerHTML=text;
@@ -829,7 +837,7 @@ score:currentScore
 
 .then(answer=>{
 
-if(answer.includes("failed") || answer.includes("unavailable")){
+if(!answer || answer.toLowerCase().includes("unavailable")){
 answer="⚠️ AI temporarily unavailable. Try again.";
 }
 
