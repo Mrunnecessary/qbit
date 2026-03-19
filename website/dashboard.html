@@ -232,6 +232,15 @@ font-size:14px;
 </div>
 
 <div class="formItem">
+<label>Target Salary</label>
+<select id="targetSalary">
+<option>5L - 10L</option>
+<option>10L - 20L</option>
+<option>20L+</option>
+</select>
+</div>
+
+<div class="formItem">
 <label>Timeline</label>
 <select id="timeline">
 <option>3 months</option>
@@ -391,6 +400,7 @@ text:text,
 role:document.getElementById("role").value,
 exp:document.getElementById("exp").value,
 salary:document.getElementById("salary").value,
+targetSalary:document.getElementById("targetSalary").value,  // 🔥 ADD THIS
 targetRole:document.getElementById("targetRole").value,
 timeline:document.getElementById("timeline").value
 
@@ -679,18 +689,23 @@ link.click()
 
 function getShareText(){
 
-return encodeURIComponent(
-"I discovered I'm already "+currentScore+
-"% ready for a "+currentRole+
-" role using Qbit AI.\n\n"+
-"Check your career readiness score:\n"+
-"https://tryqbit.com"
-)
+let text = 
+`I just checked my Career Readiness Score on Qbit 🚀
+
+Score: ${currentScore}%  
+Role: ${currentRole}
+
+Check yours now 👇  
+https://tryqbit.com`;
+
+return encodeURIComponent(text);
 
 }
 
 function shareLinkedIn(){
-window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com&summary="+getShareText())
+window.open(
+"https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com"
+);
 }
 
 function shareWhatsapp(){
