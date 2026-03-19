@@ -330,7 +330,7 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbw27070Zz-mNc_0Pv44QFE8UWrAlClOWqrZ3RNxrpEmv2P_yyw7r5urPDqNGCGdIv3A/exec"
+const API="https://script.google.com/macros/s/AKfycbyNj-BVmYGz-0YqbCMPwcShZ7JW1cmlYFJeV6ZIxM8hDwpAiVMAht8x6RkrHMGyqXr-/exec"
 const params = new URLSearchParams(window.location.search);
 
 
@@ -436,7 +436,7 @@ currentGaps=data.gaps || [];
 let skills=(data.skills||[]).map(s=>"✔ "+s).join("<br>")
 let gaps=(data.gaps||[]).map(s=>"❌ "+s).join("<br>")
 
-let topRoles=(data.top_roles||[]).map(r=>r.role+" ("+r.score+"%)").join("<br>")
+let topRoles=(data.careerOptions||[]).map(r=>r.role+" ("+r.score+"%)").join("<br>")
 
 let output=`
 
@@ -757,7 +757,8 @@ document.getElementById("explanationBox").style.display="block";
 
 })
 .catch(()=>{
-document.getElementById("explanationBox").innerHTML="⚠️ Error loading explanation.";
+console.log("Explain Error:", err);
+document.getElementById("explanationBox").innerHTML="⚠️ AI error. Please try again.";
 document.getElementById("explanationBox").style.display="block";
 });
 
@@ -845,8 +846,9 @@ document.getElementById("aiAnswerBox").innerHTML=answer;
 document.getElementById("aiAnswerBox").style.display="block";
 
 })
-.catch(()=>{
-document.getElementById("aiAnswerBox").innerHTML="⚠️ Error loading response.";
+.catch((err)=>{
+console.log("AI Error:", err);
+document.getElementById("aiAnswerBox").innerHTML="⚠️ AI error. Try again.";
 document.getElementById("aiAnswerBox").style.display="block";
 });
 
