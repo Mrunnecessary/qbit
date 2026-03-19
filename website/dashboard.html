@@ -339,7 +339,7 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbxlzKjlDgjQJjXn5bcZhDU60IucxKhb-oZGwMRRsl8PW6bYf-evCg5FUE_NnDWBxsfK/exec"
+const API="https://script.google.com/macros/s/AKfycbz2fKG_tYlrfAgKaYnq61XXcbULQsaBhTvge0oNLwURatawcu1KtAuaplBkPrQLR_Ec/exec"
 const params = new URLSearchParams(window.location.search);
 
 
@@ -868,6 +868,25 @@ document.getElementById("aiAnswerBox").style.display="block";
 });
 
 }
+
+// START ENTER KEY FIX (CORRECT PLACE)
+document.addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+
+e.preventDefault();
+
+if(document.getElementById("userInput") === document.activeElement){
+runAnalysis();
+}
+else if(document.getElementById("careerQuestion") === document.activeElement){
+askCareerAI();
+}
+
+}
+
+});
+// END ENTER KEY FIX
 
 </script>
 
