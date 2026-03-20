@@ -339,7 +339,7 @@ Career Intelligence Engine
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbz2fKG_tYlrfAgKaYnq61XXcbULQsaBhTvge0oNLwURatawcu1KtAuaplBkPrQLR_Ec/exec"
+const API="https://script.google.com/macros/s/AKfycbztGdKcWNdFVEyrzNN2dUrcAkvzhUBDwuMpe3m5DAx1ebGrXEMRXaq2xUSml4q8f92L/exec"
 const params = new URLSearchParams(window.location.search);
 
 
@@ -400,11 +400,29 @@ text:text,
 role:document.getElementById("role").value,
 exp:document.getElementById("exp").value,
 salary:document.getElementById("salary").value,
-targetSalary:document.getElementById("targetSalary").value,  // 🔥 ADD THIS
+targetSalary:document.getElementById("targetSalary").value,
 targetRole:document.getElementById("targetRole").value,
 timeline:document.getElementById("timeline").value
 
 }
+
+
+// START SALARY VALIDATION
+
+let current = document.getElementById("salary").value;
+let target = document.getElementById("targetSalary").value;
+
+let c = parseInt(current);
+let t = parseInt(target);
+
+if(target && c && t <= c){
+alert("Target salary must be higher than current salary");
+document.getElementById("loader").style.display="none";
+return;
+}
+
+// END SALARY VALIDATION
+
 
 fetch(API+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
 
