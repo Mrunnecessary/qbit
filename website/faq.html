@@ -1,159 +1,272 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Qbit FAQ</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+<title>FAQ — Qbit Career Intelligence Engine</title>
+<meta name="description" content="Frequently asked questions about Qbit — the AI-powered Career Intelligence Engine.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Inter,sans-serif;background:#0f172a;color:#f1f5f9;line-height:1.6;}
+.container{max-width:860px;margin:auto;padding:20px 24px;}
 
-body{
-margin:0;
-font-family:Inter,sans-serif;
-background:#0f172a;
-color:white;
+/* NAV */
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 0 12px;}
+.logo{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+.logo span{color:#3b82f6;}
+nav a{margin-left:20px;color:#94a3b8;text-decoration:none;font-size:14px;transition:color .2s;}
+nav a:hover{color:#fff;}
+
+/* HERO */
+.page-hero{padding:48px 0 36px;}
+.page-hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;letter-spacing:-.5px;margin-bottom:10px;}
+.page-hero p{font-size:15px;color:#94a3b8;max-width:520px;}
+
+/* FAQ ITEMS */
+.faq-list{display:flex;flex-direction:column;gap:12px;margin-bottom:48px;}
+.faq-item{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden;transition:border-color .2s;}
+.faq-item:hover{border-color:#475569;}
+.faq-item.open{border-color:#3b82f6;}
+.faq-q{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 20px;cursor:pointer;gap:16px;
 }
-
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
+.faq-q h3{font-size:15px;font-weight:600;color:#f1f5f9;line-height:1.4;}
+.faq-chevron{
+  width:28px;height:28px;border-radius:50%;background:#0f172a;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:14px;color:#64748b;
+  transition:transform .25s, background .2s;
 }
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
+.faq-item.open .faq-chevron{transform:rotate(180deg);background:#2563eb;color:#fff;}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height .3s ease, padding .3s ease;
+  padding:0 20px;font-size:14px;color:#94a3b8;line-height:1.75;
 }
+.faq-item.open .faq-a{max-height:300px;padding:0 20px 18px;}
+.faq-a a{color:#3b82f6;text-decoration:none;}
+.faq-a a:hover{text-decoration:underline;}
 
-.logo{
-font-size:22px;
-font-weight:800;
+/* CATEGORIES */
+.faq-section-title{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#475569;margin:32px 0 14px;
+  display:flex;align-items:center;gap:8px;
 }
+.faq-section-title::after{content:"";flex:1;height:1px;background:#1e293b;}
 
-nav a{
-margin-left:15px;
-color:#94a3b8;
-text-decoration:none;
+/* CONTACT CTA */
+.contact-cta{
+  background:#1e293b;border:1px solid #334155;border-radius:12px;
+  padding:24px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;margin-bottom:60px;
 }
-
-.section{
-margin-top:40px;
+.contact-cta p{font-size:14px;color:#94a3b8;}
+.contact-cta strong{display:block;font-size:16px;font-weight:700;color:#f1f5f9;margin-bottom:4px;}
+.cta-link{
+  padding:10px 20px;background:#2563eb;color:#fff;border-radius:8px;
+  text-decoration:none;font-size:14px;font-weight:600;transition:background .2s;white-space:nowrap;
 }
+.cta-link:hover{background:#1d4ed8;}
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:8px;
-margin-bottom:15px;
-}
-
-footer{
-margin-top:60px;
-text-align:center;
-color:#94a3b8;
-}
-
+/* FOOTER */
+footer{border-top:1px solid #1e293b;padding:28px 0 36px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-left{font-size:13px;color:#64748b;}
+.footer-links{display:flex;gap:18px;}
+.footer-links a{font-size:13px;color:#64748b;text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:#94a3b8;}
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
 
-<header>
+  <header>
+    <div class="logo">Q<span>bit</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="investors.html">Investors</a>
+    </nav>
+  </header>
 
-<div class="logo">Qbit</div>
+  <div class="page-hero">
+    <h1>Frequently Asked Questions</h1>
+    <p>Everything you need to know about Qbit. Can't find your answer? Email us at <a href="mailto:hello@tryqbit.com" style="color:#3b82f6;text-decoration:none;">hello@tryqbit.com</a></p>
+  </div>
 
-<nav>
-<a href="index.html">Home</a>
-<a href="privacy.html">Privacy</a>
-<a href="investors.html">Investor</a>
-</nav>
+  <!-- ABOUT QBIT -->
+  <div class="faq-section-title">About Qbit</div>
+  <div class="faq-list">
 
-</header>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>What is Qbit?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Qbit is an AI-powered Career Intelligence Engine. It analyzes your daily work activities, detects your transferable skills, calculates your readiness score for different career roles, identifies skill gaps, and gives you a personalized roadmap to reach your target role.</div>
+    </div>
 
-<div class="section">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>Who is Qbit for?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Qbit is built for professionals exploring career transitions — especially career switchers who want clarity on where they stand and what they need to learn. It also works well for fresh graduates, content creators, bloggers, and anyone trying to understand the market value of their current skills.</div>
+    </div>
 
-<h1>Frequently Asked Questions</h1>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>Is Qbit free to use?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Yes — the core career readiness analysis, skill detection, gap analysis, and portfolio page are completely free. Premium features like unlimited AI mentor questions, detailed PDF reports, 3-month score history, and mock interview sessions will be available in an upcoming paid tier. You can also unlock the PDF report by referring just one friend.</div>
+    </div>
 
-<div class="card">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>How is Qbit different from LinkedIn or Coursera?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">LinkedIn shows what you've done — Qbit tells you what you're ready for next. Coursera sells courses — Qbit tells you which 2–3 skills to learn first. No other platform combines skill detection, role readiness scoring, gap analysis, and a personalized roadmap in one 30-second flow with no resume required.</div>
+    </div>
 
-<h3>What is Qbit?</h3>
+  </div>
 
-<p>
-Qbit is an AI-powered career intelligence platform that analyzes your daily work activities to detect transferable skills and estimate your readiness for different career roles.
-</p>
+  <!-- HOW IT WORKS -->
+  <div class="faq-section-title">How it works</div>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>How does Qbit calculate my career readiness score?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Qbit uses AI (powered by Google Gemini) to extract skills from your work description. It then compares those skills against the required skill set for 30 professional roles. Your score is calculated as: Matched Skills ÷ Required Skills × 100. The score improves as you learn new skills and re-run the analysis.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>Do I need to upload my resume?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">No — just describe your daily work activities in plain English. Resume upload is optional and only used to extract additional skill context. The more detail you provide in your description, the more accurate your score will be.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>How accurate is the score?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">The score is a strong indicator of skill alignment, not a guarantee of job readiness. It gets more accurate as you provide more detail about your work. Qbit does not conduct live skill tests — the score is based on self-reported work activities analyzed by AI. We're building a skill assessment module that will make scores even more precise.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>Can I recheck my score after learning new skills?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Absolutely — that's one of the most powerful ways to use Qbit. Update your work description to reflect your new skills and run the analysis again. You'll see exactly how your score improved and which gaps you've closed. Premium users get a 3-month score history chart to visualize their progress.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>What is the Career Portfolio page?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">After your analysis, Qbit generates a public career portfolio page with your score, detected skills, career path, salary insight, and any projects or certificates you add. You get a shareable URL and a QR code — perfect for sharing with recruiters or posting on LinkedIn. You can also download it as a PDF report.</div>
+    </div>
+
+  </div>
+
+  <!-- DATA & PRIVACY -->
+  <div class="faq-section-title">Data & privacy</div>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>Why does Qbit ask for my email?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Your email is used to send your welcome message, career roadmap, and occasional feature updates. It also lets you return to Qbit and track your score history over time. We never sell your email to third parties.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>Does Qbit store my resume?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">No. If you upload a resume, it is read temporarily in your browser to extract skill information and is never sent to our servers or stored anywhere. Only your email, detected skills, and score are recorded.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>What data does Qbit store?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">We store your email address, the skills detected from your description, your readiness score, your target role, and your analysis timestamp. This data is used to improve Qbit's skill detection accuracy and send you relevant career updates. See our <a href="privacy.html">Privacy Policy</a> for full details.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>Which AI does Qbit use?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Qbit uses Google Gemini (gemini-1.5-flash) for skill extraction, career score explanation, roadmap generation, and AI mentor responses. Your work description is sent to Gemini's API for processing and is subject to Google's data handling policies.</div>
+    </div>
+
+  </div>
+
+  <!-- REFERRAL -->
+  <div class="faq-section-title">Referral & premium</div>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>How does the referral program work?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">After your analysis, you get a personal referral link on your dashboard. Share it with friends — when they sign up and complete their analysis, your referral count increases. 1 referral unlocks your PDF report. 3 referrals unlocks 3-month score history. 5 referrals earns you 1 month of Qbit Premium free. Every additional 5 referrals = 1 more free month.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <h3>What does Qbit Premium include?</h3>
+        <div class="faq-chevron">▾</div>
+      </div>
+      <div class="faq-a">Premium includes: unlimited AI mentor questions, 3-month score history chart, instant PDF reports, Gold/Diamond scorecard tiers always available, mock interview sessions, weekly progress emails, and early access to new features like recruiter profile visibility. Pricing will be announced soon.</div>
+    </div>
+
+  </div>
+
+  <!-- CONTACT CTA -->
+  <div class="contact-cta">
+    <div>
+      <strong>Still have questions?</strong>
+      <p>We read every email and typically respond within 24 hours.</p>
+    </div>
+    <a href="mailto:hello@tryqbit.com" class="cta-link">Email us →</a>
+  </div>
+
+  <footer>
+    <div class="footer-left">© 2026 Qbit — Career Intelligence Engine</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="investors.html">Investors</a>
+      <a href="mailto:hello@tryqbit.com">hello@tryqbit.com</a>
+    </div>
+  </footer>
 
 </div>
 
-<div class="card">
-
-<h3>How does Qbit calculate career readiness?</h3>
-
-<p>
-Qbit detects skills from your work description and compares them with the required skills of multiple professional roles. The score is calculated based on how many required skills are matched.
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Do I need to upload my resume?</h3>
-
-<p>
-No. You can simply describe your daily work activities. Resume upload is optional.
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Does Qbit store my resume?</h3>
-
-<p>
-No. If you upload a resume, it is only analyzed temporarily to detect skills and is not stored.
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Why does Qbit ask for my email?</h3>
-
-<p>
-Your email helps us improve career recommendations and send optional updates about new career insights and tools.
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Is Qbit free?</h3>
-
-<p>
-The career readiness analysis is free. Advanced career roadmap tools and coaching features may be introduced in future versions.
-</p>
-
-</div>
-
-</div>
-
-<footer>
-
-© 2026 Qbit
-Career Intelligence Engine
-[hello@tryqbit.com](mailto:hello@tryqbit.com)
-
-</footer>
-
-</div>
-
+<script>
+function toggle(el){
+  const item = el.closest(".faq-item");
+  const wasOpen = item.classList.contains("open");
+  document.querySelectorAll(".faq-item.open").forEach(i => i.classList.remove("open"));
+  if(!wasOpen) item.classList.add("open");
+}
+</script>
 </body>
 </html>

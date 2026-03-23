@@ -1,111 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Investors – Qbit</title>
-
+<title>Investors — Qbit Career Intelligence Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
-
+*{box-sizing:border-box;margin:0;padding:0;}
 body{
-font-family:system-ui;
-max-width:900px;
-margin:auto;
-padding:20px;
-line-height:1.7;
+  font-family:Inter,sans-serif;
+  background:#0f172a;
+  color:#f1f5f9;
+  line-height:1.7;
 }
+.container{max-width:860px;margin:auto;padding:32px 24px;}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px;}
+.logo{font-size:20px;font-weight:800;}
+.logo span{color:#3b82f6;}
+.back{font-size:13px;color:#64748b;text-decoration:none;}
+.back:hover{color:#94a3b8;}
 
-a{
-color:#2563eb;
-text-decoration:none;
+h1{font-size:32px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;}
+.tagline{font-size:16px;color:#64748b;margin-bottom:48px;}
+
+.section{margin-bottom:44px;}
+.section h2{
+  font-size:13px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:#3b82f6;
+  margin-bottom:14px;
 }
+.section p{font-size:15px;color:#94a3b8;margin-bottom:12px;}
 
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px;}
+.stat-card{
+  background:#1e293b;
+  border:1px solid #334155;
+  padding:20px;
+  border-radius:10px;
+}
+.stat-card .number{font-size:28px;font-weight:800;color:#22c55e;margin-bottom:4px;}
+.stat-card .label{font-size:13px;color:#64748b;}
+
+ul.clean{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+ul.clean li{
+  font-size:15px;
+  color:#94a3b8;
+  padding:10px 0;
+  border-bottom:1px solid #1e293b;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+ul.clean li::before{
+  content:"→";
+  color:#3b82f6;
+  font-weight:700;
+  flex-shrink:0;
+  margin-top:1px;
+}
+ul.clean li:last-child{border-bottom:none;}
+
+.contact-box{
+  background:#1e293b;
+  border:1px solid #334155;
+  padding:28px;
+  border-radius:12px;
+  margin-top:16px;
+}
+.contact-box p{font-size:15px;color:#94a3b8;margin-bottom:16px;}
+.contact-btn{
+  display:inline-block;
+  background:#2563eb;
+  color:#fff;
+  text-decoration:none;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:600;
+  transition:background .2s;
+}
+.contact-btn:hover{background:#1d4ed8;}
+
+footer{
+  margin-top:60px;
+  border-top:1px solid #1e293b;
+  padding:24px 0;
+  text-align:center;
+  font-size:13px;
+  color:#64748b;
+}
+@media(max-width:600px){.card-grid{grid-template-columns:1fr;}}
 </style>
-
 </head>
-
 <body>
+<div class="container">
 
-<a href="index.html">← Back to Home</a>
+  <div class="top-bar">
+    <div class="logo">Q<span>bit</span></div>
+    <a href="index.html" class="back">← Back to home</a>
+  </div>
 
-<h1>Qbit – Investor Overview</h1>
+  <h1>Investor Overview</h1>
+  <p class="tagline">Building the career intelligence layer for the AI era.</p>
 
-<h2>Vision</h2>
+  <div class="section">
+    <h2>The Problem</h2>
+    <p>Millions of professionals want to switch careers but don't know where to start. Existing platforms are static and resume-based — they tell you what you've done, not what you're capable of next.</p>
+    <p>Nobody tells professionals: <em>"Here's exactly how ready you are for your target role, and here's what to do about it."</em></p>
+  </div>
 
-<p>
-Build the career intelligence layer for the AI era.
-</p>
+  <div class="section">
+    <h2>The Solution</h2>
+    <p>Qbit is an AI-powered Career Intelligence Engine. Users describe their daily work — Qbit detects transferable skills, calculates a readiness score for their target role, identifies skill gaps, and generates a personalized growth roadmap.</p>
+    <p>No resume required. Results in 30 seconds. Actionable from day one.</p>
+  </div>
 
-<h2>Problem</h2>
+  <div class="section">
+    <h2>Current Traction</h2>
+    <div class="card-grid">
+      <div class="stat-card">
+        <div class="number">650+</div>
+        <div class="label">Early users on platform</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">30</div>
+        <div class="label">Career roles in analysis engine</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">MVP</div>
+        <div class="label">Live on Vercel — tryqbit.com</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">₹0.02–0.05</div>
+        <div class="label">Per-user AI processing cost</div>
+      </div>
+    </div>
+  </div>
 
-<p>
-Millions of professionals struggle to understand:
-</p>
+  <div class="section">
+    <h2>Revenue Model</h2>
+    <ul class="clean">
+      <li>Freemium — free career readiness score for all users</li>
+      <li>Premium reports — detailed roadmap, salary insights, certification mapping</li>
+      <li>Subscriptions — weekly score tracking and progress updates</li>
+      <li>Enterprise — team skill gap analytics for HR and L&D teams</li>
+      <li>Recruiter tools — candidate discovery based on verified skill alignment</li>
+    </ul>
+  </div>
 
-<ul>
-<li>Which skills they already have</li>
-<li>Which skills they actually need</li>
-<li>Whether they are ready for a new career role</li>
-</ul>
+  <div class="section">
+    <h2>Defensible Moat</h2>
+    <ul class="clean">
+      <li>Proprietary dataset of career transitions, skill gaps, and readiness scores</li>
+      <li>Behavioral intelligence layer from real career-switching patterns</li>
+      <li>Viral growth loop via shareable career scorecards on LinkedIn</li>
+      <li>Network effects: more users → better benchmarks → better scores for everyone</li>
+    </ul>
+  </div>
 
-<p>
-Most online courses and career advice platforms provide generic
-guidance without measuring skill readiness.
-</p>
+  <div class="section">
+    <h2>Long-Term Vision</h2>
+    <p>Qbit evolves into a Career Operating System — continuously measuring and improving professional readiness. The end state: every professional has a live career readiness score, updated as their skills grow and job markets shift.</p>
+  </div>
 
-<h2>Solution</h2>
+  <div class="section">
+    <h2>Technology</h2>
+    <ul class="clean">
+      <li>Frontend: HTML/CSS/JS hosted on Vercel</li>
+      <li>Backend: Google Apps Script (scaling to Node.js/FastAPI)</li>
+      <li>AI: OpenAI GPT-4o-mini for skill extraction and career intelligence</li>
+      <li>Database: Google Sheets (scaling to PostgreSQL)</li>
+      <li>Email: Resend for transactional and follow-up automation</li>
+    </ul>
+  </div>
 
-<p>
-Qbit analyzes user skills and calculates career alignment scores
-for future roles.
-</p>
+  <div class="section">
+    <h2>Contact</h2>
+    <div class="contact-box">
+      <p>For partnership or investment inquiries, reach out directly. We're actively looking for early-stage partners who believe in the future of AI-driven career intelligence.</p>
+      <a href="mailto:hello@tryqbit.com" class="contact-btn">hello@tryqbit.com →</a>
+    </div>
+  </div>
 
-<p>
-The platform highlights:
-</p>
-
-<ul>
-<li>Skill readiness</li>
-<li>Skill gaps</li>
-<li>Learning roadmap</li>
-<li>Relevant job opportunities</li>
-</ul>
-
-<h2>Current Status</h2>
-
-<ul>
-<li>Early waitlist users</li>
-<li>Founder-led product development</li>
-<li>Career intelligence MVP launching</li>
-</ul>
-
-<h2>Long-Term Vision</h2>
-
-<p>
-Qbit aims to evolve into a career operating system that helps
-individuals continuously measure and improve their professional
-readiness.
-</p>
-
-<h2>Future Platform Expansion</h2>
-
-<p>
-Future versions of Qbit will include recruiter-facing tools that allow
-companies to discover candidates based on verified skill alignment
-scores rather than traditional resumes.
-</p>
-
-<h2>Contact</h2>
-
-<p>
-For partnership or investment inquiries:
-</p>
-
-<p>
-<a href="mailto:hello@tryqbit.com">hello@tryqbit.com</a>
-</p>
-
+  <footer>© 2026 Qbit — Career Intelligence Engine</footer>
+</div>
 </body>
 </html>

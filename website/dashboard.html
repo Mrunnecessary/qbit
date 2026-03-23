@@ -1,912 +1,836 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Qbit Career Analyzer</title>
-
+<title>Qbit — Career Readiness Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
-
-<script>
-let currentSkills=[]
-let currentGaps=[]
-</script>
-
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GA_MEASUREMENT_ID');</script>
 <style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Inter,sans-serif;background:#0f172a;color:#f1f5f9;line-height:1.6;}
+.container{max-width:900px;margin:auto;padding:24px;}
 
-body{
-margin:0;
-font-family:system-ui;
-background:#0f172a;
-color:white;
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+.logo{font-size:20px;font-weight:800;color:#fff;}.logo span{color:#3b82f6;}
+.back-link{font-size:13px;color:#64748b;text-decoration:none;}.back-link:hover{color:#94a3b8;}
+
+.form-section h2{font-size:20px;font-weight:700;margin-bottom:20px;}
+.formGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+.formItem label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#64748b;display:block;margin-bottom:6px;}
+.formItem input,.formItem select{width:100%;padding:10px 12px;border-radius:7px;border:1.5px solid #334155;background:#1e293b;color:#f1f5f9;font-size:14px;font-family:Inter,sans-serif;outline:none;transition:border-color .2s;}
+.formItem input:focus,.formItem select:focus{border-color:#3b82f6;}
+.formItem select option{background:#1e293b;}
+
+.textarea-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#64748b;display:block;margin-bottom:8px;}
+textarea{width:100%;height:140px;padding:14px;border-radius:8px;border:1.5px solid #334155;background:#1e293b;color:#f1f5f9;font-size:14px;font-family:Inter,sans-serif;resize:vertical;outline:none;transition:border-color .2s;}
+textarea:focus{border-color:#3b82f6;}
+textarea::placeholder{color:#475569;}
+
+.file-note{font-size:12px;color:#475569;margin-top:10px;margin-bottom:6px;}
+input[type="file"]{font-size:13px;color:#94a3b8;}
+
+.analyze-btn{margin-top:18px;padding:14px 24px;border:none;border-radius:8px;cursor:pointer;background:#2563eb;color:white;font-size:15px;font-weight:600;font-family:Inter,sans-serif;transition:background .2s,transform .1s;width:100%;}
+.analyze-btn:hover{background:#1d4ed8;}.analyze-btn:active{transform:scale(.99);}.analyze-btn:disabled{background:#334155;cursor:not-allowed;}
+
+.loader{margin-top:28px;text-align:center;display:none;}
+.spinner{width:42px;height:42px;border:4px solid #1e293b;border-top:4px solid #3b82f6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader p{color:#94a3b8;font-size:14px;}
+
+.card{background:#1e293b;border:1px solid #334155;padding:24px;border-radius:12px;margin-top:24px;}
+.card h3{font-size:18px;font-weight:700;margin-bottom:4px;}
+.card h4{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin:20px 0 8px;}
+.card h4:first-of-type{margin-top:16px;}
+
+.score-wrap{text-align:center;margin:8px 0 4px;}
+.circle{width:150px;height:150px;border-radius:50%;border:10px solid #2563eb;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;margin:auto;color:#22c55e;transition:border-color .5s;}
+
+.progressBar{height:12px;background:#334155;border-radius:8px;overflow:hidden;margin-top:14px;}
+.progressFill{height:100%;background:linear-gradient(90deg,#2563eb,#22c55e);width:0%;border-radius:8px;transition:width 1.5s ease;}
+
+.tag-list{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;}
+.tag{background:#0f172a;border:1px solid #334155;color:#94a3b8;font-size:12px;padding:5px 12px;border-radius:20px;font-weight:500;}
+.tag.gap{border-color:#ef4444;color:#f87171;background:#1e0d0d;}
+.tag.skill{border-color:#22c55e;color:#4ade80;background:#0a1f0f;}
+
+.ai-box{margin-top:12px;padding:16px;background:#0f172a;border-radius:8px;border:1px solid #1e293b;font-size:14px;color:#94a3b8;display:none;line-height:1.7;white-space:pre-wrap;}
+.ai-input{width:100%;padding:10px 12px;border-radius:7px;border:1.5px solid #334155;background:#0f172a;color:#f1f5f9;font-size:14px;font-family:Inter,sans-serif;outline:none;margin-top:8px;transition:border-color .2s;}
+.ai-input:focus{border-color:#3b82f6;}
+
+.action-btn{padding:10px 16px;border:none;border-radius:7px;cursor:pointer;background:#2563eb;color:white;font-size:13px;font-weight:600;font-family:Inter,sans-serif;transition:background .2s;margin-top:10px;}
+.action-btn:hover{background:#1d4ed8;}
+.action-btn.secondary{background:#1e293b;border:1px solid #334155;color:#94a3b8;}
+.action-btn.secondary:hover{border-color:#64748b;color:#f1f5f9;}
+
+.share-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+
+/* ====== PREMIUM SCORECARD TIERS ====== */
+.tier-selector{margin-top:16px;}
+.tier-selector p{font-size:13px;color:#64748b;margin-bottom:10px;}
+.tier-cards{display:flex;gap:10px;flex-wrap:wrap;}
+.tier-card{
+  padding:10px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;
+  border:2px solid transparent;transition:all .2s;display:flex;align-items:center;gap:8px;
 }
+.tier-card.active{border-color:#fff;}
+.tier-card.bronze{background:#431407;color:#fb923c;border-color:#9a3412;}
+.tier-card.bronze.active{border-color:#fb923c;}
+.tier-card.silver{background:#0f172a;color:#94a3b8;border-color:#475569;}
+.tier-card.silver.active{border-color:#e2e8f0;}
+.tier-card.gold{background:#422006;color:#fbbf24;border-color:#92400e;}
+.tier-card.gold.active{border-color:#fbbf24;}
+.tier-card.diamond{background:#1e1b4b;color:#a5b4fc;border-color:#4338ca;}
+.tier-card.diamond.active{border-color:#818cf8;}
+.tier-card.locked{opacity:.4;cursor:not-allowed;}
+.tier-badge{font-size:16px;}
+.score-canvas-wrap{margin-top:16px;}
+canvas{border-radius:10px;max-width:100%;display:block;}
 
-.container{
-max-width:1000px;
-margin:auto;
-padding:25px;
-}
+/* ====== REFERRAL PANEL ====== */
+.referral-panel{background:#1e293b;border:1px solid #334155;padding:24px;border-radius:12px;margin-top:24px;}
+.referral-panel h3{font-size:16px;font-weight:700;margin-bottom:4px;}
+.referral-panel p{font-size:13px;color:#64748b;margin-bottom:16px;}
+.referral-progress{background:#0f172a;border-radius:10px;padding:16px;margin-bottom:14px;}
+.ref-bar-wrap{background:#334155;border-radius:8px;height:10px;margin:10px 0;}
+.ref-bar-fill{height:100%;background:linear-gradient(90deg,#f59e0b,#22c55e);border-radius:8px;transition:width .6s ease;}
+.referral-link-box{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.referral-link-input{flex:1;padding:10px 12px;border-radius:7px;border:1.5px solid #334155;background:#0f172a;color:#f1f5f9;font-size:13px;outline:none;min-width:0;}
+.copy-btn{padding:10px 14px;border:none;border-radius:7px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s;}
+.copy-btn:hover{background:#1d4ed8;}
+.reward-badge{display:inline-flex;align-items:center;gap:6px;background:#422006;border:1px solid #92400e;color:#fbbf24;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-top:10px;}
 
-/* GRID */
+footer{margin-top:60px;border-top:1px solid #1e293b;padding:24px 0 32px;text-align:center;color:#64748b;font-size:13px;}
 
-.formGrid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:18px;
-margin-bottom:25px;
-}
-
-.formItem label{
-font-size:13px;
-opacity:0.9;
-display:block;
-margin-bottom:6px;
-}
-
-.formItem input,
-.formItem select{
-width:100%;
-padding:10px;
-border-radius:6px;
-border:none;
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-.formGrid{
-grid-template-columns:repeat(2,1fr);
-}
-}
-
-@media(max-width:600px){
-.formGrid{
-grid-template-columns:1fr;
-}
-}
-
-/* Progress Bar growing */
-
-.progressFill{
-height:100%;
-background:#2563eb;
-width:0%;
-transition:width 1s ease;
-}
-
-
-/* TEXTAREA */
-
-textarea{
-width:100%;
-height:130px;
-padding:12px;
-border-radius:6px;
-border:none;
-}
-
-/* BUTTON */
-
-button{
-margin-top:15px;
-padding:12px 18px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#2563eb;
-color:white;
-}
-
-/* SCORE CIRCLE */
-
-.circle{
-width:160px;
-height:160px;
-border-radius:50%;
-border:10px solid #2563eb;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:32px;
-margin:auto;
-}
-
-/* PROGRESS BAR (NEW SaaS UI) */
-
-.progressBar{
-height:14px;
-background:#334155;
-border-radius:8px;
-overflow:hidden;
-margin-top:15px;
-}
-
-.progressFill{
-height:100%;
-background:#2563eb;
-width:0%;
-transition:width 1.5s ease;
-}
-
-/* CARD */
-
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:8px;
-margin-top:20px;
-line-height:1.6;
-}
-
-/* LOADER */
-
-.loader{
-margin-top:20px;
-text-align:center;
-}
-
-.spinner{
-width:40px;
-height:40px;
-border:4px solid #334155;
-border-top:4px solid #2563eb;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:auto;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-/* SHARE */
-
-.share{
-margin-top:15px;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-/* CANVAS */
-
-canvas{
-margin-top:25px;
-background:white;
-border-radius:8px;
-}
-
-/* FOOTER */
-
-footer{
-margin-top:60px;
-text-align:center;
-color:#94a3b8;
-font-size:14px;
-}
-
+@media(max-width:700px){.formGrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.formGrid{grid-template-columns:1fr;}.tier-cards{flex-direction:column;}}
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
 
-<h2>Career Readiness Analyzer</h2>
+  <div class="top-bar">
+    <div class="logo">Q<span>bit</span></div>
+    <a href="index.html" class="back-link">← Back to home</a>
+  </div>
 
-<div class="formGrid">
+  <div class="form-section">
+    <h2>Career Readiness Analyzer</h2>
+    <div class="formGrid">
+      <div class="formItem"><label>Your Name *</label><input id="name" placeholder="e.g. Priya Sharma" autocomplete="name"></div>
+      <div class="formItem"><label>Current Role</label><input id="role" placeholder="e.g. Marketing Executive"></div>
+      <div class="formItem"><label>Experience (years)</label><input id="exp" type="number" min="0" max="40" placeholder="e.g. 4"></div>
+      <div class="formItem"><label>Current Salary</label>
+        <select id="salary"><option value="">Select range</option><option>Below 5L</option><option>5L - 10L</option><option>10L - 20L</option><option>20L+</option></select>
+      </div>
+      <div class="formItem"><label>Target Role</label><input id="targetRole" placeholder="e.g. Data Analyst"></div>
+      <div class="formItem"><label>Target Salary</label>
+        <select id="targetSalary"><option value="">Select range</option><option>5L - 10L</option><option>10L - 20L</option><option>20L+</option></select>
+      </div>
+      <div class="formItem"><label>Timeline</label>
+        <select id="timeline"><option>3 months</option><option>6 months</option><option>12 months</option></select>
+      </div>
+    </div>
 
-<div class="formItem">
-<label>Name *</label>
-<input id="name">
+    <label class="textarea-label">Describe your daily work tasks *</label>
+    <textarea id="userInput" placeholder="Example:&#10;• I create Excel dashboards and KPI reports&#10;• I manage vendor communication&#10;• I run weekly data analysis"></textarea>
+
+    <p class="file-note">Optional: Upload resume (PDF) — analyzed only, never stored.</p>
+    <input type="file" id="resumeFile" accept="application/pdf">
+
+    <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">Discover My Career Score →</button>
+  </div>
+
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p id="aiStatus">Analyzing your work tasks...</p>
+  </div>
+
+  <div id="outputBox" class="card" style="display:none"></div>
+
+  <!-- SCORECARD SECTION -->
+  <div id="scorecardSection" style="display:none">
+    <div class="card">
+      <h3>Your Career Score Card</h3>
+      <p style="font-size:13px;color:#64748b;margin-top:4px;margin-bottom:16px">Download and share on LinkedIn or WhatsApp</p>
+
+      <div class="tier-selector" id="tierSelector">
+        <p>Select your scorecard theme:</p>
+        <div class="tier-cards">
+          <div class="tier-card bronze active" id="tier-bronze" onclick="setTier('bronze',this)">
+            <span class="tier-badge">🥉</span> Bronze
+          </div>
+          <div class="tier-card silver" id="tier-silver" onclick="setTier('silver',this)">
+            <span class="tier-badge">🥈</span> Silver
+          </div>
+          <div class="tier-card gold locked" id="tier-gold" title="Unlock at 75%+ score">
+            <span class="tier-badge">🥇</span> Gold <span style="font-size:11px;opacity:.7">(75%+)</span>
+          </div>
+          <div class="tier-card diamond locked" id="tier-diamond" title="Unlock at 90%+ score">
+            <span class="tier-badge">💎</span> Diamond <span style="font-size:11px;opacity:.7">(90%+)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="score-canvas-wrap">
+        <canvas id="scoreCanvas" width="600" height="340"></canvas>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <button class="action-btn" onclick="downloadScorecard()">⬇ Download Score Card</button>
+        <button class="action-btn secondary" onclick="shareLinkedIn()">Share on LinkedIn</button>
+        <button class="action-btn secondary" onclick="shareWhatsapp()">Share on WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL PANEL (shown after analysis) -->
+  <div class="referral-panel" id="referralPanel" style="display:none">
+    <h3>🎁 Refer friends — earn Premium free</h3>
+    <p>Every 5 professionals you refer = 1 month of Qbit Premium (detailed reports, salary insights, weekly tracking)</p>
+    <div class="referral-progress">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:14px;font-weight:600">Your referrals: <span id="refCount" style="color:#22c55e">0</span> / 5</span>
+        <span style="font-size:12px;color:#64748b"><span id="refNeeded">5</span> more to unlock Premium</span>
+      </div>
+      <div class="ref-bar-wrap"><div class="ref-bar-fill" id="refBar" style="width:0%"></div></div>
+      <div id="rewardBadge" style="display:none">
+        <div class="reward-badge">🎉 Premium unlocked! Check your email.</div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:8px">Your personal referral link:</p>
+    <div class="referral-link-box">
+      <input class="referral-link-input" id="referralLinkInput" readonly value="Loading...">
+      <button class="copy-btn" onclick="copyReferralLink()">Copy Link</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+      <button class="action-btn secondary" onclick="shareReferralWhatsapp()" style="font-size:12px">Share via WhatsApp</button>
+      <button class="action-btn secondary" onclick="shareReferralLinkedIn()" style="font-size:12px">Share via LinkedIn</button>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="packageBox" class="card" style="display:none">
+    <h3>Get your personalized 90-day roadmap</h3>
+    <p style="font-size:14px;color:#94a3b8;margin-top:6px">Projects, learning plan, certifications, and interview prep — tailored to your score.</p>
+    <button class="action-btn" onclick="requestGuide()" style="margin-top:14px">Generate My Roadmap →</button>
+  </div>
+
+  <!-- SCORE EXPLAIN -->
+  <div class="card" style="margin-top:24px;">
+    <h4 style="margin-top:0">How Qbit calculates your score</h4>
+    <div style="margin-top:8px;padding:12px 14px;background:#0f172a;border-radius:8px;border:1px solid #1e293b;font-size:13px;color:#64748b;">
+      Qbit compares your detected skills against required skills across 30 career roles.<br>
+      <b style="color:#94a3b8">Score = Matched Skills ÷ Required Skills</b><br>
+      Accuracy improves as more professionals use the platform.
+    </div>
+  </div>
+
+  <footer>© 2026 Qbit — Career Intelligence Engine &nbsp;|&nbsp; <a href="/cdn-cgi/l/email-protection#a1c9c4cdcdcee1d5d3d8d0c3c8d58fc2cecc" style="color:#64748b;text-decoration:none;"><span class="__cf_email__" data-cfemail="2a424f4646456a5e58535b48435e04494547">[email&#160;protected]</span></a></footer>
 </div>
 
-<div class="formItem">
-<label>Current Role</label>
-<input id="role">
-</div>
-
-<div class="formItem">
-<label>Experience (years)</label>
-<input id="exp">
-</div>
-
-<div class="formItem">
-<label>Current Salary</label>
-<select id="salary">
-<option>Below 5L</option>
-<option>5L - 10L</option>
-<option>10L - 20L</option>
-<option>20L+</option>
-</select>
-</div>
-
-<div class="formItem">
-<label>Target Role</label>
-<input id="targetRole">
-</div>
-
-<div class="formItem">
-<label>Target Salary</label>
-<select id="targetSalary">
-<option>5L - 10L</option>
-<option>10L - 20L</option>
-<option>20L+</option>
-</select>
-</div>
-
-<div class="formItem">
-<label>Timeline</label>
-<select id="timeline">
-<option>3 months</option>
-<option>6 months</option>
-<option>12 months</option>
-</select>
-</div>
-
-</div>
-
-<label>Describe Daily Work *</label>
-
-<textarea id="userInput" placeholder="Example:
-• I design AWS cloud infrastructure
-• I automate CI/CD pipelines
-• I manage deployments"></textarea>
-
-<p style="opacity:0.7;font-size:13px;margin-top:10px">
-Or upload resume (PDF). File is analyzed but never stored.
-</p>
-
-<input type="file" id="resumeFile" accept="application/pdf">
-
-<button onclick="runAnalysis()">Discover My Career Score</button>
-
-<!-- LOADER -->
-
-<div class="loader" id="loader" style="display:none">
-
-<div class="spinner"></div>
-<p id="aiStatus">Analyzing your work tasks...</p>
-
-</div>
-
-<!-- RESULT -->
-
-<div id="outputBox" class="card" style="display:none"></div>
-
-<!-- ROADMAP -->
-
-<div id="packageBox" class="card" style="display:none">
-
-<h3>Personalized Career Roadmap</h3>
-
-<p>Get projects, learning plan and interview preparation guide.</p>
-
-<button onclick="requestGuide()">Generate My Roadmap</button>
-
-</div>
-
-<!-- SCORE CARD -->
-
-<canvas id="scoreCanvas" width="600" height="350" style="display:none"></canvas>
-
-<button id="downloadBtn" style="display:none" onclick="downloadScorecard()">
-Download Score Card
-</button>
-
-<!-- SHARE -->
-
-<div id="shareBlock" class="card" style="display:none">
-
-<h3>Share your score</h3>
-
-<div class="share">
-
-<button onclick="shareLinkedIn()">LinkedIn</button> <button onclick="shareWhatsapp()">WhatsApp</button> <button onclick="shareFacebook()">Facebook</button>
-
-</div>
-
-</div>
-
-<!-- SCORE EXPLAIN -->
-
-<div class="card">
-
-<h3>How Qbit Calculates Your Score</h3>
-
-<p>Qbit compares detected skills against required skills across 30 roles.</p>
-
-<p>Score = Matched Skills / Required Skills</p>
-
-<p>Accuracy improves as Qbit learns from more professionals.</p>
-
-</div>
-
-<footer>
-
-© 2026 Qbit
-Career Intelligence Engine
-[hello@tryqbit.com]
-
-</footer>
-
-</div>
-
-<script>
-
-const API="https://script.google.com/macros/s/AKfycbztGdKcWNdFVEyrzNN2dUrcAkvzhUBDwuMpe3m5DAx1ebGrXEMRXaq2xUSml4q8f92L/exec"
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const API    = "https://script.google.com/macros/s/AKfycbzOZgCcF5TMdczAkG_T-lisUvTDHlxxnvIel-a73OS3lLA46aTyGMQ4mj0cbJxhokHG/exec";
 const params = new URLSearchParams(window.location.search);
 
+// Get session + email from URL (passed from index.html)
+const sessionId  = params.get("session") || "";
+const userEmail  = decodeURIComponent(params.get("email") || "");
+const referredBy = params.get("ref") || "";
 
-const sessionId = params.get("session") || "";
+if(!sessionId){ window.location.href = "index.html"; }
 
-// START SESSION FIX
-if(!sessionId){
-alert("Session missing. Please restart.");
-window.location.href="index.html";
+let currentScore   = 0;
+let currentRole    = "";
+let userName       = "";
+let currentSkills  = [];
+let currentGaps    = [];
+let currentTier    = "bronze";
+let referralCode   = "";
+let referralCount  = 0;
+
+// ====== PDF EXTRACTION ======
+async function extractPDFText(file){
+  try{
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+    let text = "";
+    for(let i=1;i<=Math.min(pdf.numPages,3);i++){
+      const page    = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(item=>item.str).join(" ")+" ";
+    }
+    return text.trim();
+  }catch(e){ return ""; }
 }
-// END SESSION FIX
 
-const userEmail = params.get("email") || "";
-
-let currentScore=0
-let currentRole=""
-let userName=""
-let previousScore=0
-
+// ====== MAIN ANALYSIS ======
 async function runAnalysis(){
+  userName = document.getElementById("name").value.trim();
+  let text = document.getElementById("userInput").value.trim();
 
-let text=document.getElementById("userInput").value
-userName=document.getElementById("name").value
+  if(!userName){ alert("Please enter your name."); return; }
 
-if(userName==""){
-alert("Please enter your name")
-return
+  const fileInput = document.getElementById("resumeFile");
+  if(fileInput.files.length>0){
+    const pdfText = await extractPDFText(fileInput.files[0]);
+    if(pdfText.length>20){
+  const limited = pdfText.substring(0,1500); // prevent overflow
+  text = (text + " " + limited).trim();
 }
-
-if(text.length<10){
-alert("Please describe your work tasks")
-return
-}
-
-document.getElementById("loader").style.display="block"
-
-const steps=[
-"Detecting transferable skills...",
-"Matching career roles...",
-"Calculating readiness score..."
-]
-
-let i=0
-
-let stepInterval=setInterval(()=>{
-document.getElementById("aiStatus").innerText=steps[i]
-i++
-if(i>=steps.length) clearInterval(stepInterval)
-},1200)
-
-let payload={
-
-session_id:sessionId,
-email:userEmail,
-
-name:userName,
-text:text,
-role:document.getElementById("role").value,
-exp:document.getElementById("exp").value,
-salary:document.getElementById("salary").value,
-targetSalary:document.getElementById("targetSalary").value,
-targetRole:document.getElementById("targetRole").value,
-timeline:document.getElementById("timeline").value
-
-}
-
-
-// START SALARY VALIDATION
-
-let current = document.getElementById("salary").value;
-let target = document.getElementById("targetSalary").value;
-
-let c = parseInt(current);
-let t = parseInt(target);
-
-if(target && c && t <= c){
-alert("Target salary must be higher than current salary");
-document.getElementById("loader").style.display="none";
-return;
-}
-
-// END SALARY VALIDATION
-
-
-fetch(API+"?analyze=true&data="+encodeURIComponent(JSON.stringify(payload)))
-
-.then(res=>res.json())
-
-.then(data=>{
-
-document.getElementById("loader").style.display="none"
-
-previousScore=currentScore
-
-// START SCORE SAFETY
-currentScore = typeof data.score === "number" ? data.score : 30;
-// END SCORE SAFETY
-currentRole = data.role || data.bestRole || "Career Role";
-
-renderResult(data)
-generateScorecard(data)
-
-document.getElementById("shareBlock").style.display="block"
-document.getElementById("packageBox").style.display="block"
-
-})
-
-.catch(err=>{
-console.log(err)
-alert("Analysis failed. Please try again.")
-})
-
-}
-
-/******** RESULT ********/
-
-function renderResult(data){
-
-currentSkills=data.skills || [];
-currentGaps=data.gaps || [];
-
-let skills=(data.skills||[]).map(s=>"✔ "+s).join("<br>")
-let gaps=(data.gaps||[]).map(s=>"❌ "+s).join("<br>")
-
-let topRoles=(data.careerOptions||[]).map(r=>r.role+" ("+r.score+"%)").join("<br>")
-
-let output=`
-
-<h3>${userName}'s Career Alignment</h3>
-
-<div class="circle">${data.score || 30}%</div>
-
-<p style="color:#22c55e;font-weight:600;margin-top:8px">
-🔥 You are just ${Math.max(0, 80 - (data.score||30))}% away
-</p>
-
-<p style="margin-top:8px;opacity:0.8">
-Estimated time to reach 80% readiness:
-<b>${estimateWeeks(data.score)} weeks</b>
-</p>
-
-<div id="colorSelector" style="margin-top:15px;display:none">
-
-<p>Select scorecard color:</p>
-
-<button onclick="setColor('#2563eb')">Blue</button>
-<button onclick="setColor('#9333ea')">Purple</button>
-<button onclick="setColor('#16a34a')">Green</button>
-<button onclick="setColor('#f59e0b')">Gold</button>
-
-</div>
-
-
-<div class="progressBar">
-<div id="scoreProgress" class="progressFill" style="width:0%"></div>
-</div>
-
-<button onclick="explainScore()">Explain My Score</button>
-
-
-
-<h3>${data.role || "Suggested Career"}</h3>
-<p style="opacity:0.7;font-size:13px;margin-top:8px">
-This score is based on the information you shared.  
-Currently Qbit does not conduct skill assessments.  
-Accuracy improves as more professionals use the platform.
-</p>
-
-<p>${data.percentile || ""}</p>
-
-<p style="opacity:0.7;font-size:13px">
-Compared with professionals exploring similar career transitions on Qbit.
-</p>
-
-<h4>Top Career Matches</h4>
-${topRoles}
-
-<h4>Detected Skills</h4>
-${skills}
-
-<h4>How Qbit Calculated Your Score</h4>
-
-<p>
-Matched skills: <b>${(data.skills || []).length}</b><br>
-Required skills for this role: <b>${((data.skills || []).length + (data.gaps || []).length)}</b>
-</p>
-
-<h4>Skill Gaps</h4>
-${gaps}
-
-<h4>Potential Score Improvement</h4>
-
-<p>
-If you learn these 3 skills, your score could increase to 
-<b>${Math.min((data.score || 30) + 20, 90)}%</b>
-</p>
-
-<ul>
-${(data.gaps || []).slice(0,3).map(skill => `<li>${skill}</li>`).join("")}
-</ul>
-
-<h4>Weekly Career Kit</h4>
-${data.weekly || ""}
-
-<h4>Salary Insight</h4>
-${data.salary || ""}
-
-<h4>Career Path</h4>
-${data.career_path || ""}
-
-<h4>Compare Your Score</h4>
-
-<button onclick="compareScore()">Compare My Score With Others</button>
-
-<div id="compareBox" style="
-margin-top:10px;
-padding:15px;
-background:#111827;
-border-radius:6px;
-display:none">
-</div>
-
-<h4>Why This Score?</h4>
-
-<button onclick="explainScore()">Explain My Score</button>
-
-<div id="explanationBox" style="
-margin-top:10px;
-padding:15px;
-background:#111827;
-border-radius:6px;
-display:none">
-</div>
-
-<h4>Career Twin Insight</h4>
-
-Professionals with similar skills frequently transition to:
-
-<div style="margin-top:6px;font-weight:600">
-${topRoles}
-</div>
-
-<p style="opacity:0.75;font-size:13px">
-Based on anonymized skill patterns from Qbit users.
-</p>
-
-<h4>Ask Qbit About Your Career</h4>
-
-<input id="careerQuestion"
-placeholder="Ask Qbit anything about your career transition (example: What skill should I learn first?)"
-style="width:100%;padding:10px;border-radius:6px;border:none;margin-top:8px">
-
-<button onclick="askCareerAI()" style="margin-top:10px">
-Ask Qbit
-</button>
-
-<div id="aiAnswerBox" style="
-margin-top:12px;
-padding:15px;
-background:#111827;
-border-radius:6px;
-display:none">
-</div>
-
-`;
-
-if(previousScore>0){
-output+=`
-<h4>Progress</h4>
-Score improved from ${previousScore}% → ${data.score || 0}%
-`;
-}
-
-output+=`
-
-<div style="margin-top:20px">
-<button onclick="recheckScore()">Improve Skills & Recheck Score</button>
-</div>
-
-`
-
-document.getElementById("outputBox").innerHTML=output
-document.getElementById("outputBox").style.display="block"
-
-let selector=document.getElementById("colorSelector");
-if(selector && (data.score || 0) >= 75){
-selector.style.display="block";
-}
-
-setTimeout(()=>{
-let bar=document.getElementById("scoreProgress");
-if(bar){
-bar.style.width=(data.score || 30)+"%";
-}
-},300);
-
-
-}
-
-
-
-/******** RECHECK ********/
-
-function recheckScore(){
-
-document.getElementById("userInput").scrollIntoView({
-behavior:"smooth"
+  }
+
+  if(text.length<10){ alert("Please describe your daily work tasks (at least a sentence)."); return; }
+
+  // Salary validation
+  const salaryOrder = {"Below 5L":1,"5L - 10L":2,"10L - 20L":3,"20L+":4};
+  const cur = document.getElementById("salary").value;
+  const tgt = document.getElementById("targetSalary").value;
+  if(cur&&tgt&&salaryOrder[tgt]&&salaryOrder[cur]&&salaryOrder[tgt]<=salaryOrder[cur]){
+    alert("Target salary should be higher than your current salary."); return;
+  }
+
+  document.getElementById("loader").style.display = "block";
+  document.getElementById("outputBox").style.display = "none";
+  document.getElementById("analyzeBtn").disabled = true;
+
+  const steps = ["Detecting transferable skills...","Matching career roles...","Calculating readiness score..."];
+  let si = 0;
+  const stepInterval = setInterval(()=>{ document.getElementById("aiStatus").textContent=steps[si]; si++; if(si>=steps.length) clearInterval(stepInterval); },1400);
+
+  // ============================================================
+  // START CHANGE: fetch client IP to pass to App Script for org tracking
+  let clientIp = "";
+  try{
+    const ipRes  = await fetch("https://api.ipify.org?format=json");
+    const ipData = await ipRes.json();
+    clientIp = ipData.ip || "";
+  }catch(e){}
+  // END CHANGE
+  // ============================================================
+
+  const payload = {
+    session_id:       sessionId,
+    email:            userEmail,
+    referred_by:      referredBy,
+    referral_code:    referredBy,                          // code they used to sign up
+    name:             userName,
+    text,
+    role:             document.getElementById("role").value,
+    exp:              document.getElementById("exp").value,
+    salary:           document.getElementById("salary").value,
+    targetSalary:     document.getElementById("targetSalary").value,
+    targetRole:       document.getElementById("targetRole").value,
+    timeline:         document.getElementById("timeline").value,
+    device:           /Mobi/.test(navigator.userAgent) ? "mobile" : "desktop",
+    // ============================================================
+    // START CHANGE: extra tracking fields for full 37-column dataset
+    client_ip:        clientIp,                            // passed to App Script for geo-lookup
+    source_ip:        clientIp,                            // stored directly
+    resume_uploaded:  (document.getElementById("resumeFile").files.length > 0) ? "yes" : "no",
+    score_card_color: currentTier || "bronze",             // tier selected at time of analysis
+    share_clicked:    "no",                                // updated to "yes" when share is clicked
+    ai_queries:       0,                                   // incremented when Ask Qbit is used
+    roadmap_requested:"no",                                // updated when roadmap is requested
+    // END CHANGE
+    // ============================================================
+  };
+
+  try{
+    const res = await fetch(API, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    action: "analyze",
+    data: payload
+  })
 });
 
-alert("Improve your skills and run analysis again to see your improved score.");
-
+let data;
+try {
+  data = await res.json();
+} catch (err) {
+  const text = await res.text();
+  console.error("Invalid JSON response:", text);
+  alert("Server error. Please try again.");
+  return;
 }
 
-/******** SCORECARD ********/
+    clearInterval(stepInterval);
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("analyzeBtn").disabled = false;
 
-function generateScorecard(data){
+    currentScore  = typeof data.score==="number"?data.score:30;
+    currentRole   = data.role||"Career Match";
+    currentSkills = (data.skills && data.skills.length) 
+  ? data.skills 
+  : ["Communication","Problem Solving","Execution"];
 
-const canvas=document.getElementById("scoreCanvas")
-const ctx=canvas.getContext("2d")
+currentGaps = (data.gaps && data.gaps.length)
+  ? data.gaps
+  : ["Advanced tools","Domain expertise"];
 
-canvas.style.display="block"
+    // ============================================================
+    // START CHANGE: store full result for portfolio page launch
+    window._portfolioData = {
+      name:         userName,
+      score:        currentScore,
+      role:         currentRole,
+      skills:       currentSkills,
+      gaps:         currentGaps,
+      salary:       data.salary||"",
+      career_path:  data.career_path||"",
+      weekly:       data.weekly||"",
+      percentile:   data.percentile||"",
+      careerOptions: data.careerOptions||[],
+      email:        userEmail,
+      session:      sessionId,
+      date:         new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})
+    };
+    // END CHANGE
+    // ============================================================
 
-ctx.clearRect(0,0,600,350)
+    // Unlock tiers based on score
+    unlockTiers(currentScore);
 
-ctx.fillStyle="#ffffff"
-ctx.fillRect(0,0,600,350)
+    renderResult(data);
+    generateScorecard();
+    document.getElementById("packageBox").style.display = "block";
 
-ctx.fillStyle=cardColor
+    // Load referral info
+    loadReferralPanel();
 
-ctx.font="22px Arial"
-ctx.fillText(userName+"'s Career Score",20,80)
+    gtag('event','analysis_complete',{score:currentScore,role:currentRole});
+    setTimeout(()=>{ document.getElementById("outputBox").scrollIntoView({behavior:"smooth",block:"start"}); },200);
 
-ctx.font="28px Arial"
-// START ROLE FIX
-ctx.fillText((data.score || 0)+"% Ready for "+(data.role || currentRole),20,140)
-// END ROLE FIX
+  }catch(err){
+  clearInterval(stepInterval);
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("analyzeBtn").disabled = false;
 
-ctx.font="16px Arial"
-ctx.fillText(data.percentile||"",20,190)
+  console.error("API ERROR:", err);
 
-ctx.font="14px Arial"
-ctx.fillText("tryqbit.com",20,300)
-
-document.getElementById("downloadBtn").style.display="inline-block"
-
+  alert("High traffic or server issue. Please try again in 10 seconds.");
+}
 }
 
-/******** DOWNLOAD ********/
+// ====== TIER SYSTEM ======
+function unlockTiers(score){
+  document.getElementById("scorecardSection").style.display = "block";
+
+  // Always unlock bronze + silver
+  const silver = document.getElementById("tier-silver");
+  silver.classList.remove("locked");
+  silver.onclick = ()=>setTier("silver",silver);
+
+  if(score>=75){
+    const gold = document.getElementById("tier-gold");
+    gold.classList.remove("locked");
+    gold.title = "";
+    gold.onclick = ()=>setTier("gold",gold);
+  }
+  if(score>=90){
+    const diamond = document.getElementById("tier-diamond");
+    diamond.classList.remove("locked");
+    diamond.title = "";
+    diamond.onclick = ()=>setTier("diamond",diamond);
+  }
+
+  // Auto-select best tier
+  if(score>=90)      setTier("diamond", document.getElementById("tier-diamond"));
+  else if(score>=75) setTier("gold",    document.getElementById("tier-gold"));
+  else               setTier("bronze",  document.getElementById("tier-bronze"));
+}
+
+function setTier(tier, el){
+  if(el.classList.contains("locked")) return;
+  currentTier = tier;
+  document.querySelectorAll(".tier-card").forEach(c=>c.classList.remove("active"));
+  el.classList.add("active");
+  generateScorecard();
+}
+
+// ====== SCORECARD GENERATION ======
+const TIER_THEMES = {
+  bronze:  { bg:"#1c0a00", header:["#b45309","#92400e"], score:"#fb923c", border:"#92400e", label:"🥉 Bronze" },
+  silver:  { bg:"#0f172a", header:["#475569","#1e293b"], score:"#e2e8f0", border:"#64748b", label:"🥈 Silver" },
+  gold:    { bg:"#1c1000", header:["#d97706","#92400e"], score:"#fbbf24", border:"#f59e0b", label:"🥇 Gold Career Score" },
+  diamond: { bg:"#0f0c2e", header:["#6366f1","#7c3aed"], score:"#a5b4fc", border:"#818cf8", label:"💎 Diamond Career Score" }
+};
+
+function generateScorecard(){
+  const canvas = document.getElementById("scoreCanvas");
+  const ctx    = canvas.getContext("2d");
+  const theme  = TIER_THEMES[currentTier];
+
+  ctx.clearRect(0,0,600,340);
+
+  // Background
+  ctx.fillStyle = theme.bg;
+  ctx.fillRect(0,0,600,340);
+
+  // Header gradient
+  const grad = ctx.createLinearGradient(0,0,600,0);
+  grad.addColorStop(0, theme.header[0]);
+  grad.addColorStop(1, theme.header[1]);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,600,90);
+
+  // Diamond shimmer overlay
+  if(currentTier==="diamond"){
+    ctx.fillStyle = "rgba(165,180,252,0.08)";
+    for(let x=0;x<600;x+=40){
+      ctx.fillRect(x,0,20,90);
+    }
+  }
+
+  // Brand
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 20px Arial";
+  ctx.fillText("Qbit", 22, 38);
+  ctx.font = "13px Arial";
+  ctx.fillStyle = "rgba(255,255,255,.75)";
+  ctx.fillText("Career Intelligence Engine", 22, 58);
+
+  // Tier badge top-right
+  ctx.font = "bold 13px Arial";
+  ctx.fillStyle = "rgba(255,255,255,.9)";
+  ctx.textAlign = "right";
+  ctx.fillText(theme.label, 578, 38);
+  ctx.textAlign = "left";
+
+  // Date
+  ctx.font = "12px Arial";
+  ctx.fillStyle = "rgba(255,255,255,.55)";
+  ctx.textAlign = "right";
+  ctx.fillText(new Date().toLocaleDateString('en-IN'), 578, 58);
+  ctx.textAlign = "left";
+
+  // Name
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 18px Arial";
+  ctx.fillText(userName||"Your Name", 22, 118);
+
+  // Big score
+  ctx.font = "bold 64px Arial";
+  ctx.fillStyle = theme.score;
+  ctx.fillText((currentScore||30)+"%", 22, 200);
+
+  // Role
+  ctx.font = "bold 17px Arial";
+  ctx.fillStyle = "#fff";
+  ctx.fillText(currentRole||"Career Match", 22, 232);
+
+  // Percentile
+  ctx.font = "13px Arial";
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillText("Ahead of 65%+ professionals exploring this transition", 22, 256);
+
+  // Skills preview
+  const skillPreview = (currentSkills||[]).slice(0,4).join(" · ");
+  ctx.font = "12px Arial";
+  ctx.fillStyle = "#64748b";
+  ctx.fillText("Skills: "+skillPreview, 22, 278);
+
+  // Gold/Diamond border glow effect (simulated with filled rect behind canvas — done via CSS)
+  // Bottom bar
+  ctx.fillStyle = "#1e293b";
+  ctx.fillRect(0,306,600,34);
+
+  // Bottom border line in tier color
+  ctx.fillStyle = theme.border;
+  ctx.fillRect(0,304,600,3);
+
+  ctx.font = "12px Arial";
+  ctx.fillStyle = "#475569";
+  ctx.fillText("tryqbit.com", 22, 328);
+  ctx.textAlign = "right";
+  ctx.fillText("Powered by Qbit AI", 578, 328);
+  ctx.textAlign = "left";
+}
 
 function downloadScorecard(){
-
-let canvas=document.getElementById("scoreCanvas")
-
-let link=document.createElement("a")
-
-link.download="qbit-scorecard.png"
-
-link.href=canvas.toDataURL()
-
-link.click()
-
+  const canvas = document.getElementById("scoreCanvas");
+  const link   = document.createElement("a");
+  link.download = "qbit-"+currentTier+"-score-"+userName.replace(/\s+/g,"-").toLowerCase()+".png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+  gtag('event','scorecard_download',{tier:currentTier,score:currentScore,role:currentRole});
 }
 
-/******** SHARE ********/
+// ====== RESULT RENDER ======
+function renderResult(data){
+  const skills   = (data.skills||[]).map(s=>`<span class="tag skill">✓ ${s}</span>`).join("");
+  const gaps     = (data.gaps||[]).map(s=>`<span class="tag gap">${s}</span>`).join("");
+  const topRoles = (data.careerOptions||[]).slice(0,3).map(r=>`
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #334155;">
+      <span style="font-size:14px">${r.role}</span>
+      <span style="font-size:13px;font-weight:600;color:${r.score>=60?"#22c55e":r.score>=40?"#f59e0b":"#94a3b8"}">${r.score}%</span>
+    </div>`).join("");
+  const projected = Math.min((data.score||30)+20, 92);
 
-function getShareText(){
+  const output = `
+    <h3>${userName}'s Career Alignment Report</h3>
+    <p style="color:#64748b;font-size:13px;margin-top:4px">${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</p>
 
-let text = 
-`I just checked my Career Readiness Score on Qbit 🚀
+    <div class="score-wrap" style="margin-top:20px">
+      <div class="circle">${data.score||30}%</div>
+      <p style="margin-top:10px;font-size:20px;font-weight:700;color:#22c55e">${currentRole}</p>
+      <p style="font-size:13px;color:#64748b;margin-top:4px">${data.percentile||""}</p>
+    </div>
 
-Score: ${currentScore}%  
-Role: ${currentRole}
+    <!-- ============================================================ -->
+    <!-- START CHANGE: portfolio launch button (added after score circle) -->
+    <button onclick="openPortfolio()" style="margin-top:16px;width:100%;padding:13px;background:linear-gradient(135deg,#1e3a8a,#1e1b4b);border:1px solid #3b82f6;border-radius:10px;color:#93c5fd;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s;" onmouseover="this.style.background='linear-gradient(135deg,#1d4ed8,#3730a3)'" onmouseout="this.style.background='linear-gradient(135deg,#1e3a8a,#1e1b4b)'">
+      🪪 View &amp; Share My Career Portfolio →
+    </button>
+    <p style="font-size:11px;color:#475569;text-align:center;margin-top:5px">Public page · QR code · PDF download · Add projects &amp; certificates</p>
+    <!-- END CHANGE -->
+    <!-- ============================================================ -->
 
-Check yours now 👇  
-https://tryqbit.com`;
+    <div class="progressBar" style="margin-top:16px">
+      <div id="scoreProgress" class="progressFill" style="width:0%"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-top:6px">
+      <span>0%</span><span style="color:#f59e0b">80% target</span><span>100%</span>
+    </div>
 
-return encodeURIComponent(text);
+    <div style="margin-top:14px;padding:14px;background:#0f172a;border-radius:8px;font-size:14px;">
+      You are <b style="color:#3b82f6">${Math.max(0,80-(data.score||30))}%</b> away from the 80% career-ready threshold.
+      Estimated: <b>${estimateWeeks(data.score)} weeks</b> of focused learning.
+    </div>
 
-}
+    <h4>Top career matches</h4>
+    <div style="border-top:1px solid #334155">${topRoles}</div>
 
-function shareLinkedIn(){
-window.open(
-"https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com"
-);
-}
+    <h4>Detected skills</h4>
+    <div class="tag-list">${skills||'<span style="color:#64748b;font-size:13px">Describe your work in more detail for better skill detection.</span>'}</div>
 
-function shareWhatsapp(){
-window.open("https://wa.me/?text="+getShareText())
-}
+    <h4>Skill gaps to close</h4>
+    <div class="tag-list">${gaps||'<span style="color:#22c55e;font-size:13px">No major gaps detected for this role.</span>'}</div>
 
-function shareFacebook(){
-window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+getShareText())
-}
+    <h4>Potential score improvement</h4>
+    <div style="padding:12px 14px;background:#0f172a;border-radius:8px;font-size:14px;">
+      Learn these skills → reach <b style="color:#22c55e">${projected}%</b>:
+      <div class="tag-list" style="margin-top:8px">${(data.gaps||[]).slice(0,3).map(s=>`<span class="tag gap">${s}</span>`).join("")}</div>
+    </div>
 
-/******** ROADMAP ********/
+    <h4>Career path</h4>
+    <p style="font-size:14px;color:#94a3b8">${data.career_path||"–"}</p>
 
-function requestGuide(){
+    <h4>Salary insight</h4>
+    <p style="font-size:14px;color:#94a3b8">${data.salary||"–"}</p>
 
-if(confirm("Generate personalized roadmap? It will be emailed shortly.")){
+    <h4>This week's focus</h4>
+    <p style="font-size:14px;color:#94a3b8">${data.weekly||"Practice your core skills with a small project."}</p>
 
-fetch(API,{
-method:"POST",
-body:new URLSearchParams({
+    <h4>Why this score?</h4>
+    <button class="action-btn secondary" id="explainBtn" onclick="explainScore()">Explain my score with AI</button>
+    <div class="ai-box" id="explanationBox"></div>
 
-action:"roadmap",
+    <h4>Compare your score</h4>
+    <button class="action-btn secondary" onclick="compareScore()">How do I compare?</button>
+    <div class="ai-box" id="compareBox"></div>
 
-name:userName,
-email:userEmail,
-score:currentScore,
-role:currentRole,
-skills:(currentSkills || []).join(",")
+    <h4>Ask Qbit about your career</h4>
+    <input class="ai-input" id="careerQuestion" placeholder="e.g. What skill should I learn first? Am I ready to apply?">
+    <button class="action-btn" id="askBtn" onclick="askCareerAI()" style="margin-top:8px">Ask Qbit →</button>
+    <div class="ai-box" id="aiAnswerBox"></div>
 
-})
-})
+    <div style="margin-top:24px">
+      <button class="action-btn secondary" onclick="recheckScore()">↺ Update skills and recheck</button>
+    </div>
+  `;
 
-.then(res=>res.text())
-.then(()=>{
+  const box = document.getElementById("outputBox");
+  box.innerHTML = output;
+  box.style.display = "block";
 
-alert("Your roadmap request has been received. We will send it shortly.");
-
-})
-
-}
-
-}
-
-function explainScore(){
-
-fetch(API+"?explain=true&data="+encodeURIComponent(JSON.stringify({
-
-skills:currentSkills,
-gaps:currentGaps,
-role:currentRole
-
-})))
-
-.then(res=>res.text())
-.then(text=>{
-
-
-if(!text || text.toLowerCase().includes("unavailable")){
-document.getElementById("explanationBox").innerHTML="⚠️ AI temporarily unavailable. Try again.";
-}else{
-document.getElementById("explanationBox").innerHTML=text;
-}
-
-document.getElementById("explanationBox").style.display="block";
-
-})
-.catch(()=>{
-console.log("Explain Error:", err);
-document.getElementById("explanationBox").innerHTML="⚠️ AI error. Please try again.";
-document.getElementById("explanationBox").style.display="block";
-});
-
-}
-
-window.onload=function(){
-
-if(userEmail){
-console.log("Email captured:",userEmail);
-}
-
-}
-
-let cardColor="#2563eb";
-
-function setColor(color){
-
-cardColor=color;
-
-generateScorecard({score:currentScore,role:currentRole});
-
+  setTimeout(()=>{ const bar=document.getElementById("scoreProgress"); if(bar) bar.style.width=(data.score||30)+"%"; },400);
 }
 
 function estimateWeeks(score){
+  score=score||30; const gap=80-score; if(gap<=0) return "1–2";
+  const w=Math.ceil(gap/5); return w+"–"+(w+4);
+}
 
-score=score || 30;
+function recheckScore(){ document.getElementById("userInput").scrollIntoView({behavior:"smooth"}); }
 
-let gap=80-score;
+// ====== REFERRAL PANEL ======
+function loadReferralPanel(){
+  if(!userEmail) return;
+  fetch(API+"?referral_count=true&email="+encodeURIComponent(userEmail))
+    .then(r=>r.json())
+    .then(data=>{
+      referralCode  = data.code||"";
+      referralCount = data.count||0;
+      const url     = data.referral_url||("https://tryqbit.com?ref="+referralCode);
 
-let weeks=Math.ceil(gap/5);
+      document.getElementById("referralLinkInput").value = url;
+      document.getElementById("refCount").textContent    = referralCount;
+      document.getElementById("refNeeded").textContent   = Math.max(0,5-referralCount);
+      document.getElementById("refBar").style.width      = Math.min(referralCount/5*100,100)+"%";
 
-if(weeks<2) weeks=2;
+      if(referralCount>=5){
+        document.getElementById("rewardBadge").style.display = "block";
+      }
 
-return weeks+"–"+(weeks+2);
+      document.getElementById("referralPanel").style.display = "block";
+    })
+    .catch(()=>{
+      // Still show panel with placeholder
+      document.getElementById("referralLinkInput").value = "https://tryqbit.com?ref=LOADING";
+      document.getElementById("referralPanel").style.display = "block";
+    });
+}
 
+function copyReferralLink(){
+  const input = document.getElementById("referralLinkInput");
+  navigator.clipboard.writeText(input.value)
+    .then(()=>{ const btn=document.querySelector(".copy-btn"); btn.textContent="Copied!"; setTimeout(()=>btn.textContent="Copy Link",2000); })
+    .catch(()=>{ input.select(); document.execCommand("copy"); });
+}
+
+function getReferralShareText(){
+  return encodeURIComponent(
+    "I just checked my Career Readiness Score on Qbit — it shows exactly which skills I need to switch careers 🚀\n\nTry it free: "+
+    document.getElementById("referralLinkInput").value
+  );
+}
+function shareReferralWhatsapp(){ window.open("https://wa.me/?text="+getReferralShareText()); }
+function shareReferralLinkedIn(){ window.open("https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(document.getElementById("referralLinkInput").value)); }
+
+// ====== SHARE ======
+function getShareText(){
+  return encodeURIComponent(`I just checked my Career Readiness Score on Qbit 🚀\n\nScore: ${currentScore}% for ${currentRole}\n\nCheck yours free 👇\nhttps://tryqbit.com`);
+}
+// ============================================================
+// START CHANGE: share functions with tracking flag update
+function shareLinkedIn(){
+  gtag('event','share_linkedin');
+  if(window._portfolioData) window._portfolioData.share_clicked = "linkedin";
+  window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
+}
+function shareWhatsapp(){
+  gtag('event','share_whatsapp');
+  if(window._portfolioData) window._portfolioData.share_clicked = "whatsapp";
+  window.open("https://wa.me/?text="+getShareText());
+}
+function shareFacebook(){
+  if(window._portfolioData) window._portfolioData.share_clicked = "facebook";
+  window.open("https://www.facebook.com/sharer/sharer.php?u=https://tryqbit.com&quote="+getShareText());
+}
+// END CHANGE
+// ============================================================
+
+// ====== AI ======
+function explainScore(){
+  const box = document.getElementById("explanationBox");
+  box.textContent = "Analyzing your score..."; box.style.display = "block";
+  fetch(API+"?explain=true&data="+encodeURIComponent(JSON.stringify({skills:currentSkills,gaps:currentGaps,role:currentRole})))
+    .then(r=>r.text())
+    .then(t=>{
+  if(!t || t.toLowerCase().includes("error")){
+    box.textContent = "AI is busy right now. Try again in a moment.";
+  } else {
+    box.textContent = t;
+  }
+})
+    .catch(()=>{ box.textContent="Unable to reach AI. Please try again."; });
 }
 
 function compareScore(){
-
-let percentileText="";
-
-if(currentScore>=70){
-percentileText="You are ahead of 80% of professionals exploring this role.";
-}
-else if(currentScore>=50){
-percentileText="You are ahead of 60% of professionals exploring this role.";
-}
-else{
-percentileText="You are ahead of 30% of professionals exploring this role.";
-}
-
-document.getElementById("compareBox").innerHTML=percentileText;
-
-document.getElementById("compareBox").style.display="block";
-
+  const box = document.getElementById("compareBox");
+  let text = currentScore>=70?"You are ahead of approximately 80% of professionals exploring this career transition. Strong position — focus on closing the remaining gaps.":
+    currentScore>=50?"You are ahead of approximately 60% of professionals exploring this transition. A few key skills will significantly improve your standing.":
+    "You are ahead of approximately 30% of professionals — but that means 70% of people who successfully transitioned were once where you are now.";
+  box.textContent = text; box.style.display = "block";
 }
 
 function askCareerAI(){
+  const question = document.getElementById("careerQuestion").value.trim();
+  if(!question){ alert("Please enter a question."); return; }
 
-let question=document.getElementById("careerQuestion").value;
+  // START CHANGE: track AI query count
+  if(window._portfolioData) window._portfolioData.ai_queries = (window._portfolioData.ai_queries||0) + 1;
+  // END CHANGE
 
-if(!question){
-alert("Please enter a question");
-return;
+  const box = document.getElementById("aiAnswerBox");
+  box.textContent = "Qbit is thinking..."; box.style.display = "block";
+  fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({question,skills:currentSkills,role:currentRole,score:currentScore})))
+    .then(r=>r.text())
+    .then(a=>{ box.textContent = a&&!a.toLowerCase().includes("unavailable")?a:"AI temporarily unavailable. Please try again."; })
+    .catch(()=>{ box.textContent="Unable to reach AI. Please try again."; });
 }
 
-fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
-
-question:question,
-skills:currentSkills,
-role:currentRole,
-score:currentScore
-
-})))
-
-.then(res=>res.text())
-
-.then(answer=>{
-
-if(!answer || answer.toLowerCase().includes("unavailable")){
-answer="⚠️ AI temporarily unavailable. Try again.";
+// ====== ROADMAP ======
+function requestGuide(){
+  if(!confirm("Generate your personalized roadmap and email it to "+userEmail+"?")) return;
+  // START CHANGE: mark roadmap requested
+  if(window._portfolioData) window._portfolioData.roadmap_requested = "yes";
+  // END CHANGE
+  fetch(API,{
+    method:"POST",
+    body:new URLSearchParams({action:"roadmap",name:userName,email:userEmail,score:currentScore,role:currentRole,skills:currentSkills.join(",")})
+  }).then(()=>{ alert("Your roadmap is on the way to "+userEmail+". Check your inbox in a few minutes."); gtag('event','roadmap_requested',{role:currentRole,score:currentScore}); })
+  .catch(()=>alert("Request failed. Please try again."));
 }
 
-document.getElementById("aiAnswerBox").innerHTML=answer;
-document.getElementById("aiAnswerBox").style.display="block";
+// ====== ENTER KEY — works for ALL CTAs ======
+document.addEventListener("keydown", function(e){
+  if(e.key!=="Enter") return;
+  const active = document.activeElement;
+  if(!active) return;
 
-})
-.catch((err)=>{
-console.log("AI Error:", err);
-document.getElementById("aiAnswerBox").innerHTML="⚠️ AI error. Try again.";
-document.getElementById("aiAnswerBox").style.display="block";
+  // Name/Role/Exp fields → trigger analysis
+  if(["name","role","exp","targetRole"].includes(active.id)){
+    e.preventDefault(); runAnalysis();
+  }
+  // Salary/timeline selects → trigger analysis
+  if(["salary","targetSalary","timeline"].includes(active.id)){
+    e.preventDefault(); runAnalysis();
+  }
+  // Career question input → ask AI
+  if(active.id==="careerQuestion"){
+    e.preventDefault(); askCareerAI();
+  }
+  // Referral link input → copy
+  if(active.id==="referralLinkInput"){
+    e.preventDefault(); copyReferralLink();
+  }
+  // Textarea → allow normal newline (don't intercept)
 });
 
+// ============================================================
+// START CHANGE: openPortfolio function — launches portfolio.html
+// with all current analysis data passed via URL params
+function openPortfolio(){
+  const d = window._portfolioData;
+  if(!d){ alert("Please run your analysis first."); return; }
+  const p = new URLSearchParams({
+    name:        d.name,
+    score:       d.score,
+    role:        d.role,
+    skills:      d.skills.join(","),
+    gaps:        d.gaps.join(","),
+    salary:      d.salary,
+    career_path: d.career_path,
+    weekly:      d.weekly,
+    percentile:  d.percentile,
+    email:       d.email,
+    session:     d.session,
+    date:        d.date
+  });
+  if(d.careerOptions && d.careerOptions.length)
+    p.set("careerOptions", JSON.stringify(d.careerOptions));
+  window.open("portfolio.html?" + p.toString(), "_blank");
+  gtag('event','portfolio_opened',{score:d.score,role:d.role});
 }
-
-// START ENTER KEY FIX (CORRECT PLACE)
-document.addEventListener("keydown",function(e){
-
-if(e.key==="Enter"){
-
-e.preventDefault();
-
-if(document.getElementById("userInput") === document.activeElement){
-runAnalysis();
-}
-else if(document.getElementById("careerQuestion") === document.activeElement){
-askCareerAI();
-}
-
-}
-
-});
-// END ENTER KEY FIX
-
+// END CHANGE
+// ============================================================
 </script>
-
 </body>
 </html>

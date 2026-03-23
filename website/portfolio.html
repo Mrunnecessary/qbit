@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" id="og-title" content="Career Intelligence Report — Qbit">
+<title id="page-title">Career Portfolio — Qbit</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0a0f1e;--surface:#111827;--s2:#1e293b;--s3:#0f172a;--b2:#334155;--text:#f1f5f9;--muted:#94a3b8;--dim:#475569;--blue:#3b82f6;--green:#22c55e;--amber:#f59e0b;--purple:#8b5cf6;--red:#ef4444;}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid var(--s2);position:sticky;top:0;background:rgba(10,15,30,.95);backdrop-filter:blur(12px);z-index:100;}
+.logo{font-size:18px;font-weight:800;}.logo span{color:var(--blue);}
+.nav-actions{display:flex;gap:8px;}
+.nav-btn{padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;border:none;transition:all .2s;}
+.nav-btn.primary{background:var(--blue);color:#fff;}.nav-btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--b2);}
+.edit-banner{background:rgba(37,99,235,.1);border-bottom:1px solid rgba(37,99,235,.2);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.edit-banner p{font-size:13px;color:#93c5fd;}
+.save-btn{padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;}
+.hero{max-width:900px;margin:0 auto;padding:36px 24px 20px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:start;}
+.photo-wrap{position:relative;flex-shrink:0;}
+.photo-circle{width:92px;height:92px;border-radius:50%;border:3px solid var(--b2);background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--dim);overflow:hidden;}
+.photo-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.photo-edit-btn{position:absolute;bottom:2px;right:2px;width:24px;height:24px;border-radius:50%;background:var(--blue);border:2px solid var(--bg);cursor:pointer;display:none;align-items:center;justify-content:center;font-size:11px;}
+#photoInput{display:none;}
+.name-input{font-size:clamp(20px,4vw,34px);font-weight:900;letter-spacing:-1px;background:transparent;border:none;color:var(--text);width:100%;outline:none;font-family:Inter,sans-serif;}
+.role-tag{font-size:14px;font-weight:600;color:var(--blue);margin:4px 0 6px;display:block;}
+.hero-meta{font-size:12px;color:var(--dim);}
+.tagline-input{font-size:14px;color:var(--muted);background:transparent;border:none;width:100%;outline:none;font-family:Inter,sans-serif;margin-top:6px;}
+.tagline-input::placeholder{color:var(--dim);}
+.score-ring{width:108px;height:108px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:8px solid var(--blue);flex-shrink:0;}
+.score-ring.gold{border-color:var(--amber);}.score-ring.diamond{border-color:var(--purple);}
+.score-num{font-size:28px;font-weight:900;color:var(--green);line-height:1;}
+.score-lbl{font-size:10px;color:var(--muted);margin-top:2px;}
+.pct-badge{margin-top:8px;font-size:11px;color:var(--green);font-weight:600;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);padding:3px 9px;border-radius:20px;text-align:center;}
+.main{max-width:900px;margin:0 auto;padding:0 24px 60px;}
+.sec{margin-bottom:26px;}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-label::after{content:"";flex:1;height:1px;background:var(--b2);}
+.prog-wrap{background:var(--s2);border-radius:10px;height:12px;overflow:hidden;margin-bottom:6px;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:10px;transition:width 1.2s ease;}
+.prog-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);}
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;}
+.tag{font-size:12px;font-weight:500;padding:4px 11px;border-radius:20px;border:1px solid;}
+.tag.skill{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.25);color:#4ade80;}
+.tag.gap{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.25);color:#f87171;}
+.tag.neutral{background:var(--s2);border-color:var(--b2);color:var(--muted);}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
+.role-card{background:var(--surface);border:1px solid var(--b2);padding:14px;border-radius:10px;}
+.role-card.top{border-color:var(--blue);background:rgba(59,130,246,.06);}
+.role-score{font-size:20px;font-weight:800;margin-bottom:2px;}
+.role-name{font-size:12px;color:var(--muted);}
+.role-bar{height:5px;background:var(--s2);border-radius:3px;margin-top:8px;overflow:hidden;}
+.role-bar-fill{height:100%;border-radius:3px;}
+.timeline{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-top:10px;}
+.tl-step{background:var(--s2);border:1px solid var(--b2);padding:6px 12px;border-radius:7px;font-size:13px;}
+.tl-step.cur{border-color:var(--blue);color:var(--blue);background:rgba(59,130,246,.08);}
+.tl-arrow{color:var(--dim);font-size:14px;margin:0 3px;}
+/* Projects */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+.proj-card{background:var(--surface);border:1px solid var(--b2);border-radius:10px;padding:16px;position:relative;}
+.proj-type-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.proj-type-project{color:var(--blue);}.proj-type-certificate{color:var(--amber);}
+.proj-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.proj-desc{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.proj-link{font-size:12px;color:var(--blue);text-decoration:none;word-break:break-all;}
+.proj-del{position:absolute;top:10px;right:10px;background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:18px;line-height:1;}
+.add-btn{background:transparent;border:1px dashed var(--b2);color:var(--dim);padding:14px;border-radius:10px;cursor:pointer;font-size:13px;width:100%;font-family:Inter,sans-serif;transition:all .2s;margin-top:10px;}
+.add-btn:hover{border-color:var(--blue);color:var(--blue);}
+/* Assessment */
+.assess-wrap{background:var(--surface);border:1px solid var(--b2);border-radius:12px;overflow:hidden;}
+.assess-head{padding:14px 18px;border-bottom:1px solid var(--b2);display:flex;justify-content:space-between;align-items:center;}
+.assess-head h3{font-size:14px;font-weight:700;}
+.assess-body{padding:18px;}
+.q-num{font-size:11px;color:var(--dim);font-weight:600;margin-bottom:5px;}
+.q-text{font-size:14px;font-weight:500;margin-bottom:12px;line-height:1.5;}
+.options{display:flex;flex-direction:column;gap:7px;}
+.opt{padding:10px 13px;border-radius:8px;border:1.5px solid var(--b2);cursor:pointer;font-size:13px;background:var(--s3);color:var(--muted);transition:all .2s;}
+.opt:hover{border-color:var(--blue);color:var(--text);}
+.opt.selected{border-color:var(--blue);background:rgba(59,130,246,.1);color:var(--text);}
+.opt.correct{border-color:var(--green)!important;background:rgba(34,197,94,.1)!important;color:#4ade80!important;}
+.opt.wrong{border-color:var(--red)!important;background:rgba(239,68,68,.1)!important;color:#f87171!important;}
+.assess-nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
+.a-btn{padding:9px 16px;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;}
+.a-btn.primary{background:var(--blue);color:#fff;}.a-btn.sec{background:var(--s2);color:var(--muted);border:1px solid var(--b2);}
+.dots{display:flex;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--b2);}
+.dot.done{background:var(--blue);}.dot.active{background:var(--green);}
+.assess-result{text-align:center;padding:24px;}
+.assess-result .big{font-size:46px;font-weight:900;color:var(--green);}
+/* Misc */
+.focus-card{background:var(--surface);border:1px solid var(--b2);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:13px 15px;font-size:14px;color:var(--muted);line-height:1.7;}
+.salary-card{background:var(--surface);border:1px solid var(--b2);padding:16px;border-radius:10px;display:flex;align-items:center;gap:14px;}
+.salary-num{font-size:22px;font-weight:800;color:var(--green);}
+.salary-lbl{font-size:12px;color:var(--dim);}
+.share-sec{background:var(--surface);border:1px solid var(--b2);border-radius:12px;padding:20px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;}
+.qr-wrap{background:#fff;padding:8px;border-radius:8px;}
+.share-url{background:var(--bg);border:1px solid var(--b2);padding:8px 12px;border-radius:7px;font-size:11px;color:var(--muted);font-family:monospace;margin-bottom:10px;word-break:break-all;}
+.share-btns{display:flex;gap:7px;flex-wrap:wrap;}
+.sh-btn{padding:7px 13px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:Inter,sans-serif;}
+.sh-btn.li{background:#0077b5;color:#fff;}.sh-btn.wa{background:#25d366;color:#fff;}.sh-btn.cp{background:var(--s2);color:var(--muted);border:1px solid var(--b2);}
+.pdf-sec{background:linear-gradient(135deg,rgba(59,130,246,.07),rgba(139,92,246,.07));border:1px solid rgba(59,130,246,.2);border-radius:12px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.pdf-btn{padding:11px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;}
+.pdf-btn:disabled{background:var(--s2);color:var(--dim);cursor:not-allowed;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--b2);border-radius:14px;padding:22px;width:100%;max-width:460px;}
+.modal h3{font-size:15px;font-weight:700;margin-bottom:14px;}
+.m-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);display:block;margin-bottom:4px;margin-top:11px;}
+.m-input,.m-select,.m-textarea{width:100%;padding:9px 11px;border-radius:7px;border:1.5px solid var(--b2);background:var(--s3);color:var(--text);font-size:13px;font-family:Inter,sans-serif;outline:none;}
+.m-input:focus,.m-textarea:focus{border-color:var(--blue);}
+.m-textarea{height:65px;resize:vertical;}
+.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
+.m-btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;border:none;}
+.m-btn.primary{background:var(--blue);color:#fff;}.m-btn.cancel{background:var(--s2);color:var(--muted);border:1px solid var(--b2);}
+.visitor-cta{background:linear-gradient(90deg,rgba(37,99,235,.1),rgba(139,92,246,.1));border-top:1px solid rgba(59,130,246,.15);padding:20px;text-align:center;}
+.visitor-cta p{font-size:15px;color:var(--text);margin-bottom:10px;}
+.visitor-cta a{display:inline-block;background:var(--blue);color:#fff;padding:11px 24px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none;}
+.powered{text-align:center;padding:16px;font-size:12px;color:var(--dim);}
+.powered a{color:var(--blue);text-decoration:none;}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:14px;}
+.spinner{width:36px;height:36px;border:4px solid var(--s2);border-top:4px solid var(--blue);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:640px){.hero{grid-template-columns:auto 1fr;}.score-ring{display:none;}.role-grid{grid-template-columns:1fr 1fr;}.share-sec{grid-template-columns:1fr;}.proj-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="logo">Q<span>bit</span></div>
+  <div class="nav-actions">
+    <button class="nav-btn ghost" onclick="history.back()">← Back</button>
+    <button class="nav-btn ghost" id="editToggleBtn" onclick="toggleEditMode()">✏️ Edit</button>
+    <button class="nav-btn primary" onclick="downloadPDF()" id="pdfNavBtn">⬇ PDF</button>
+  </div>
+</nav>
+<div class="edit-banner" id="editBanner" style="display:none">
+  <p>✏️ Edit mode — update your portfolio and save the link</p>
+  <button class="save-btn" onclick="saveAndShare()">Save & Update Link</button>
+</div>
+<div class="loading" id="loadingState">
+  <div class="spinner"></div>
+  <p style="color:var(--muted);font-size:14px">Loading portfolio...</p>
+</div>
+<div id="portfolioContent" style="display:none">
+  <div class="hero">
+    <div class="photo-wrap">
+      <div class="photo-circle" id="photoCircle">👤</div>
+      <div class="photo-edit-btn" id="photoEditBtn" onclick="document.getElementById('photoInput').click()">📷</div>
+      <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)">
+    </div>
+    <div>
+      <input class="name-input" id="nameInput" value="" readonly>
+      <span class="role-tag" id="roleTag">—</span>
+      <div class="hero-meta" id="heroMeta">—</div>
+      <input class="tagline-input" id="taglineInput" value="" placeholder="Add a one-line bio..." readonly>
+    </div>
+    <div style="text-align:center">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-num" id="scoreNum">—</div>
+        <div class="score-lbl">readiness</div>
+      </div>
+      <div class="pct-badge" id="pctBadge">—</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="sec">
+      <div class="sec-label">Career readiness score</div>
+      <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      <div class="prog-labels"><span>0%</span><span style="color:var(--amber)">80% threshold</span><span>100%</span></div>
+      <div id="scoreInsight" style="margin-top:10px;padding:11px 14px;background:var(--surface);border-radius:8px;font-size:13px;color:var(--muted);border:1px solid var(--b2);"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Top career matches</div>
+      <div class="role-grid" id="roleGrid"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Detected skills</div>
+      <div class="tag-row" id="skillTags"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Skill gaps to close</div>
+      <div class="tag-row" id="gapTags"></div>
+    </div>
+    <!-- ASSESSMENT -->
+    <div class="sec">
+      <div class="sec-label">Skill assessment</div>
+      <div class="assess-wrap" id="assessWrap">
+        <div class="assess-head">
+          <h3 id="assessTitle">5-question knowledge check</h3>
+          <div class="dots" id="progressDots"></div>
+        </div>
+        <div class="assess-body" id="assessBody">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Quick assessment for <span id="assessRole" style="color:var(--blue);font-weight:600">your role</span>. Takes 2 minutes.</p>
+          <button class="a-btn primary" onclick="startAssessment()">Start Assessment →</button>
+        </div>
+      </div>
+    </div>
+    <!-- PROJECTS -->
+    <div class="sec">
+      <div class="sec-label">Projects & certificates</div>
+      <div class="proj-grid" id="projGrid"></div>
+      <div id="addProjWrap" style="display:none">
+        <button class="add-btn" onclick="openModal()">+ Add project or certificate</button>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Career path</div>
+      <div class="timeline" id="careerTimeline"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">This week's focus</div>
+      <div class="focus-card" id="weeklyFocus">—</div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Salary insight</div>
+      <div class="salary-card">
+        <div><div class="salary-num" id="salaryNum">—</div><div class="salary-lbl">Expected for <span id="salaryRole">—</span> in India</div></div>
+        <div style="font-size:12px;color:var(--dim);max-width:200px;line-height:1.5">Varies by city, company and experience.</div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Share this portfolio</div>
+      <div class="share-sec">
+        <div class="qr-wrap" id="qrCode"></div>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:6px">Your public career page</h3>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Share with recruiters, managers, or on LinkedIn. QR code links directly here.</p>
+          <div class="share-url" id="shareUrlDisplay">loading...</div>
+          <div class="share-btns">
+            <button class="sh-btn li" onclick="shareLinkedIn()">LinkedIn</button>
+            <button class="sh-btn wa" onclick="shareWhatsapp()">WhatsApp</button>
+            <button class="sh-btn cp" id="copyBtn" onclick="copyLink()">Copy Link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="pdf-sec">
+        <div><h3 style="font-size:14px;font-weight:700;margin-bottom:4px">Download Career Report PDF</h3><p style="font-size:12px;color:var(--muted)">Score, skills, roadmap, salary, projects. Share with your manager.</p></div>
+        <button class="pdf-btn" onclick="downloadPDF()" id="pdfBtn">⬇ Download PDF</button>
+      </div>
+    </div>
+  </div>
+  <div class="visitor-cta" id="visitorCta" style="display:none">
+    <p>Want to discover your own Career Readiness Score?</p>
+    <a href="https://tryqbit.com">Check My Score Free →</a>
+  </div>
+  <div class="powered">Powered by <a href="https://tryqbit.com">Qbit Career Intelligence Engine</a></div>
+</div>
+<!-- MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h3>Add Project / Certificate</h3>
+    <label class="m-label">Type</label>
+    <select class="m-select" id="projType"><option value="project">Project</option><option value="certificate">Certificate</option></select>
+    <label class="m-label">Title *</label>
+    <input class="m-input" id="projTitle" placeholder="e.g. Sales Dashboard in Excel">
+    <label class="m-label">Description</label>
+    <textarea class="m-textarea" id="projDesc" placeholder="What did you build or earn?"></textarea>
+    <label class="m-label">Link (optional)</label>
+    <input class="m-input" id="projLink" placeholder="https://github.com/... or certificate URL">
+    <div class="modal-actions">
+      <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
+      <button class="m-btn primary" onclick="addProject()">Add</button>
+    </div>
+  </div>
+</div>
+<script>
+window.onerror = function(msg, url, line, col, error){
+  console.error("GLOBAL ERROR:", {msg,url,line,col,error});
+};
+
+const API="https://script.google.com/macros/s/AKfycbzOZgCcF5TMdczAkG_T-lisUvTDHlxxnvIel-a73OS3lLA46aTyGMQ4mj0cbJxhokHG/exec";
+const UP=new URLSearchParams(window.location.search);
+let pD={
+  name:    decodeURIComponent(UP.get("name")||""),
+  score:   parseInt(UP.get("score"))||0,
+  role:    decodeURIComponent(UP.get("role")||""),
+  // START FIX (JSON DECODE)
+
+skills: (() => {
+  try{
+    const s = UP.get("skills");
+    return s ? JSON.parse(decodeURIComponent(s)) : [];
+  }catch(e){
+    console.error("skills parse error", e);
+    return [];
+  }
+})(),
+
+gaps: (() => {
+  try{
+    const g = UP.get("gaps");
+    return g ? JSON.parse(decodeURIComponent(g)) : [];
+  }catch(e){
+    console.error("gaps parse error", e);
+    return [];
+  }
+})(),
+
+// END FIX
+  salary:  decodeURIComponent(UP.get("salary")||""),
+  career_path: decodeURIComponent(UP.get("career_path")||""),
+  weekly:  decodeURIComponent(UP.get("weekly")||""),
+  percentile: decodeURIComponent(UP.get("percentile")||""),
+  email:   decodeURIComponent(UP.get("email")||""),
+  session: UP.get("session")||"",
+  date:    UP.get("date")||new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),
+  tagline: decodeURIComponent(UP.get("tagline")||""),
+  photo:   "",
+  careerOptions:[],
+  projects:[]
+};
+try{
+  const co = UP.get("careerOptions");
+  if(co){
+    pD.careerOptions = JSON.parse(decodeURIComponent(co));
+  }
+}catch(e){
+  console.error("careerOptions parse failed", e);
+  pD.careerOptions = [];
+}
+try{const pr=UP.get("projects");if(pr)pD.projects=JSON.parse(decodeURIComponent(pr));}catch(e){}
+
+let editMode=false, aQs=[], aIdx=0, aAns=[], aStarted=false;
+
+if(!pD.name||!pD.score){
+  document.getElementById("loadingState").innerHTML='<p style="color:var(--muted);font-size:14px;text-align:center;padding:20px">No career data.<br><a href="index.html" style="color:var(--blue);font-weight:600">Get your score →</a></p>';
+}else{ render(pD); }
+
+function render(d){
+  document.getElementById("loadingState").style.display="none";
+  document.getElementById("portfolioContent").style.display="block";
+  document.getElementById("page-title").textContent=d.name+" — Career Portfolio | Qbit";
+  if(d.photo) document.getElementById("photoCircle").innerHTML='<img src="'+d.photo+'" alt="'+d.name+'">';
+  document.getElementById("nameInput").value=d.name;
+  document.getElementById("roleTag").textContent=d.role||"Career Intelligence Report";
+  document.getElementById("heroMeta").textContent="Generated "+d.date;
+  document.getElementById("taglineInput").value=d.tagline||"";
+  const ring=document.getElementById("scoreRing");
+  if(d.score>=90)ring.classList.add("diamond");else if(d.score>=75)ring.classList.add("gold");
+  document.getElementById("scoreNum").textContent=d.score+"%";
+  // START VIRAL BADGE
+
+document.getElementById("pctBadge").textContent =
+d.score >= 80 ? "🏆 Top Performer" :
+d.score >= 60 ? "🔥 Fast Growing" :
+"📈 Emerging Talent";
+
+// END VIRAL BADGE
+  setTimeout(()=>{document.getElementById("progFill").style.width=d.score+"%";},300);
+  const gap=Math.max(0,80-d.score), wks=gap>0?Math.ceil(gap/5)+"–"+(Math.ceil(gap/5)+4)+" weeks":"already career-ready";
+  // START VIRAL SCORE INSIGHT
+
+document.getElementById("scoreInsight").innerHTML = `
+🔥 You are <strong style="color:#22c55e">${d.percentile || "ahead of many professionals"}</strong>
+
+📈 Just <strong style="color:#3b82f6">${gap}%</strong> away from high-demand level
+
+🚀 Most professionals reaching 80% unlock better opportunities within ${wks}
+`;
+
+// END VIRAL SCORE INSIGHT
+  const roles=d.careerOptions.length?d.careerOptions:[{role:d.role,score:d.score}];
+  document.getElementById("roleGrid").innerHTML=roles.slice(0,3).map((r,i)=>'<div class="role-card'+(i===0?" top":"")+'">'+'<div class="role-score" style="color:'+(r.score>=60?"var(--green)":r.score>=40?"var(--amber)":"var(--muted)")+'">'+r.score+'%</div><div class="role-name">'+r.role+'</div><div class="role-bar"><div class="role-bar-fill" style="width:'+r.score+'%;background:'+(r.score>=60?"var(--green)":r.score>=40?"var(--amber)":"var(--blue)")+'"></div></div></div>').join("");
+  document.getElementById("skillTags").innerHTML=d.skills.length?d.skills.map(s=>'<span class="tag skill">✓ '+s+'</span>').join(""):'<span style="color:var(--dim);font-size:13px">No skills detected</span>';
+  document.getElementById("gapTags").innerHTML=d.gaps.length?d.gaps.map(g=>'<span class="tag gap">'+g+'</span>').join(""):'<span style="color:var(--green);font-size:13px">No major gaps</span>';
+  const steps=(d.career_path||"").split("→").map(s=>s.trim()).filter(Boolean);
+  document.getElementById("careerTimeline").innerHTML=steps.length?steps.map((s,i)=>(i>0?'<span class="tl-arrow">→</span>':'')+'<div class="tl-step'+(i===0?" cur":"")+'">' +s+'</div>').join(""):'<div class="tl-step cur">'+d.role+'</div>';
+  document.getElementById("weeklyFocus").textContent=d.weekly||"Practice core skills with a small project.";
+  document.getElementById("salaryNum").textContent=d.salary||"₹6L – ₹16L";
+  document.getElementById("salaryRole").textContent=d.role;
+  document.getElementById("assessRole").textContent=d.role;
+  renderProjects(d.projects||[]);
+  const url=buildUrl(d);
+  document.getElementById("shareUrlDisplay").textContent=url;
+  try{new QRCode(document.getElementById("qrCode"),{text:url,width:108,height:108,colorDark:"#000",colorLight:"#fff",correctLevel:QRCode.CorrectLevel.M});}catch(e){}
+  if(!pD.session) document.getElementById("visitorCta").style.display="block";
+}
+
+function toggleEditMode(){
+  editMode=!editMode;
+  document.getElementById("editBanner").style.display=editMode?"flex":"none";
+  document.getElementById("editToggleBtn").textContent=editMode?"👁 View":"✏️ Edit";
+  document.getElementById("photoEditBtn").style.display=editMode?"flex":"none";
+  document.getElementById("addProjWrap").style.display=editMode?"block":"none";
+  const n=document.getElementById("nameInput"), t=document.getElementById("taglineInput");
+  n.readOnly=!editMode; t.readOnly=!editMode;
+  n.style.borderBottom=editMode?"2px solid var(--blue)":"none";
+  t.style.borderBottom=editMode?"1px solid var(--b2)":"none";
+  renderProjects(pD.projects);
+}
+
+function handlePhoto(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=(ev)=>{
+    pD.photo=ev.target.result;
+    document.getElementById("photoCircle").innerHTML='<img src="'+ev.target.result+'" alt="Photo">';
+  };
+  r.readAsDataURL(file);
+}
+
+function renderProjects(projects){
+  const g=document.getElementById("projGrid");
+  if(!projects||!projects.length){ g.innerHTML='<div style="font-size:13px;color:var(--dim);padding:8px 0">No projects or certificates added yet.</div>'; return; }
+  g.innerHTML=projects.map((p,i)=>'<div class="proj-card">'+(editMode?'<button class="proj-del" onclick="delProj('+i+')">×</button>':'')+
+    '<div class="proj-type-label proj-type-'+p.type+'">'+(p.type==="certificate"?"📜 Certificate":"🔨 Project")+'</div>'+
+    '<div class="proj-title">'+p.title+'</div>'+
+    (p.desc?'<div class="proj-desc">'+p.desc+'</div>':'')+
+    (p.link?'<a class="proj-link" href="'+p.link+'" target="_blank" rel="noopener">🔗 View '+p.type+'</a>':'')+
+    '</div>').join("");
+  document.getElementById("addProjWrap").style.display=editMode?"block":"none";
+}
+
+function openModal(){ document.getElementById("addModal").classList.add("open"); }
+function closeModal(){
+  document.getElementById("addModal").classList.remove("open");
+  ["projTitle","projDesc","projLink"].forEach(id=>document.getElementById(id).value="");
+}
+function addProject(){
+  const t=document.getElementById("projTitle").value.trim(); if(!t){alert("Please enter a title.");return;}
+  pD.projects.push({type:document.getElementById("projType").value,title:t,desc:document.getElementById("projDesc").value.trim(),link:document.getElementById("projLink").value.trim()});
+  renderProjects(pD.projects); closeModal();
+}
+function delProj(i){ pD.projects.splice(i,1); renderProjects(pD.projects); }
+
+function saveAndShare(){
+  pD.name=document.getElementById("nameInput").value.trim()||pD.name;
+  pD.tagline=document.getElementById("taglineInput").value.trim();
+  const url=buildUrl(pD);
+  document.getElementById("shareUrlDisplay").textContent=url;
+  try{document.getElementById("qrCode").innerHTML=""; new QRCode(document.getElementById("qrCode"),{text:url,width:108,height:108,colorDark:"#000",colorLight:"#fff",correctLevel:QRCode.CorrectLevel.M});}catch(e){}
+  navigator.clipboard.writeText(url).then(()=>alert("Link updated and copied!")).catch(()=>alert("Link updated: "+url));
+}
+
+function buildUrl(d){
+  const base=window.location.origin+window.location.pathname+"?";
+  const p=new URLSearchParams({name:d.name,score:d.score,role:d.role,skills: encodeURIComponent(JSON.stringify(d.skills||[])),gaps: encodeURIComponent(JSON.stringify(d.gaps||[])),salary:d.salary,career_path:d.career_path,weekly:d.weekly,percentile:d.percentile,date:d.date,tagline:d.tagline||""});
+  if(d.careerOptions.length)p.set("careerOptions",JSON.stringify(d.careerOptions));
+  if(d.projects&&d.projects.length)p.set("projects",JSON.stringify(d.projects));
+  return base+p.toString();
+}
+
+/* ASSESSMENT */
+async function startAssessment(){
+  if(aStarted)return;
+  document.getElementById("assessBody").innerHTML='<div style="text-align:center;padding:20px"><div class="spinner" style="margin:auto;width:32px;height:32px;border-width:3px"></div><p style="color:var(--muted);margin-top:10px;font-size:13px">Generating questions for '+pD.role+'...</p></div>';
+  try{
+    const prompt='Generate exactly 5 multiple choice questions to assess a candidate for: '+pD.role+'. Test practical knowledge of: '+pD.skills.join(", ")+'. Return ONLY valid JSON array, no markdown: [{"q":"question","options":["A","B","C","D"],"answer":0}] where answer is the index of correct option.';
+    const res=await fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({question:prompt,skills:pD.skills,role:pD.role,score:pD.score})));
+    const text=await res.text();
+    const c=text.replace(/```json|```/g,"").trim();
+    const i1=c.indexOf("["),i2=c.lastIndexOf("]");
+    if(i1===-1)throw new Error("no json");
+    aQs=JSON.parse(c.substring(i1,i2+1));
+    aIdx=0;aAns=[];aStarted=true;renderQ();
+  }catch(e){
+    document.getElementById("assessBody").innerHTML='<p style="color:var(--red);font-size:13px">Could not load questions. Please try again.</p><button class="a-btn primary" onclick="aStarted=false;startAssessment()" style="margin-top:10px">Retry</button>';
+  }
+}
+function renderQ(){
+  if(aIdx>=aQs.length){showResult();return;}
+  const q=aQs[aIdx];
+  document.getElementById("progressDots").innerHTML=aQs.map((_,i)=>'<div class="dot '+(i<aIdx?"done":i===aIdx?"active":"")+'"></div>').join("");
+  document.getElementById("assessTitle").textContent="Question "+(aIdx+1)+" of "+aQs.length;
+  document.getElementById("assessBody").innerHTML='<div class="q-num">Question '+(aIdx+1)+' / '+aQs.length+'</div><div class="q-text">'+q.q+'</div><div class="options" id="opts">'+q.options.map((o,i)=>'<div class="opt" data-i="'+i+'" onclick="pickOpt(this,'+i+')">'+o+'</div>').join("")+'</div><div class="assess-nav"><span style="font-size:12px;color:var(--dim)">'+pD.role+'</span><button class="a-btn primary" id="nxtBtn" onclick="nextQ()" style="display:none">Next →</button></div>';
+}
+function pickOpt(el,idx){
+  if(aAns[aIdx]!==undefined)return;
+  aAns[aIdx]=idx;
+  const correct=aQs[aIdx].answer;
+  document.querySelectorAll(".opt").forEach((o,i)=>{
+    if(i===correct)o.classList.add("correct");
+    else if(i===idx&&idx!==correct)o.classList.add("wrong");
+    else o.style.opacity=".4";
+  });
+  document.getElementById("nxtBtn").style.display="block";
+}
+function nextQ(){aIdx++;renderQ();}
+function showResult(){
+  const correct=aAns.filter((a,i)=>a===aQs[i].answer).length;
+  const pct=Math.round(correct/aQs.length*100);
+  const msg=pct>=80?"Excellent! Strong domain knowledge.":pct>=60?"Good — a few gaps to address.":"Keep practicing — focus on your skill gaps.";
+  document.getElementById("progressDots").innerHTML=aQs.map(()=>'<div class="dot done"></div>').join("");
+  document.getElementById("assessTitle").textContent="Assessment complete";
+  document.getElementById("assessBody").innerHTML='<div class="assess-result"><div class="big">'+pct+'%</div><p>'+correct+'/'+aQs.length+' correct · '+msg+'</p><button class="a-btn primary" onclick="retakeA()" style="margin-top:14px">Retake</button></div>';
+}
+function retakeA(){aStarted=false;aIdx=0;aAns=[];document.getElementById("assessBody").innerHTML='<p style="font-size:13px;color:var(--muted);margin-bottom:12px">Quick assessment for <span style="color:var(--blue);font-weight:600">'+pD.role+'</span>. Takes 2 minutes.</p><button class="a-btn primary" onclick="startAssessment()">Start Again →</button>';document.getElementById("progressDots").innerHTML="";document.getElementById("assessTitle").textContent="5-question knowledge check";}
+
+/* SHARE */
+// START VIRAL LINKEDIN SHARE
+
+function shareLinkedIn(){
+
+const url = document.getElementById("shareUrlDisplay").textContent;
+
+const text = `🚀 I just checked my Career Readiness Score
+
+📊 Score: ${pD.score}%
+🎯 Target Role: ${pD.role}
+
+Apparently I’m ${pD.percentile || "ahead of many professionals"} in this transition.
+
+This gave me clarity on what to improve next.
+
+Check yours → ${url}
+
+#CareerGrowth #AI #Upskilling`;
+
+window.open(
+"https://www.linkedin.com/sharing/share-offsite/?url=" +
+encodeURIComponent(url) +
+"&summary=" + encodeURIComponent(text)
+);
+
+}
+
+// END VIRAL LINKEDIN SHARE
+// START VIRAL WHATSAPP SHARE
+
+function shareWhatsapp(){
+
+const url = document.getElementById("shareUrlDisplay").textContent;
+
+const text = `🔥 I just checked my career score
+
+📊 ${pD.score}% ready for ${pD.role}
+
+Surprisingly accurate 😳
+
+Check yours → ${url}
+`;
+
+window.open("https://wa.me/?text="+encodeURIComponent(text));
+
+}
+
+// END VIRAL WHATSAPP SHARE
+function copyLink(){navigator.clipboard.writeText(document.getElementById("shareUrlDisplay").textContent).then(()=>{const b=document.getElementById("copyBtn");b.textContent="Copied!";setTimeout(()=>b.textContent="Copy Link",2000);}).catch(()=>{});}
+
+/* PDF */
+async function downloadPDF(){
+  const btns=[document.getElementById("pdfBtn"),document.getElementById("pdfNavBtn")];
+  btns.forEach(b=>{if(b){b.disabled=true;b.textContent="Generating...";}});
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+    const W=210,M=18;let y=0;const d=pD;
+    doc.setFillColor(10,15,30);doc.rect(0,0,W,52,"F");
+    doc.setFillColor(37,99,235);doc.rect(0,0,W,4,"F");
+    doc.setTextColor(255,255,255);doc.setFontSize(22);doc.setFont("helvetica","bold");doc.text("Qbit",M,18);
+    doc.setFontSize(10);doc.setFont("helvetica","normal");doc.setTextColor(148,163,184);doc.text("Career Intelligence Engine",M,26);
+    doc.setFillColor(30,41,59);doc.roundedRect(W-M-32,7,32,32,3,3,"F");
+    doc.setTextColor(34,197,94);doc.setFontSize(20);doc.setFont("helvetica","bold");doc.text(d.score+"%",W-M-16,26,{align:"center"});
+    doc.setFontSize(7);doc.setFont("helvetica","normal");doc.setTextColor(148,163,184);doc.text("readiness",W-M-16,33,{align:"center"});
+    y=62;
+    doc.setTextColor(15,23,42);doc.setFontSize(22);doc.setFont("helvetica","bold");doc.text(d.name,M,y);y+=8;
+    doc.setFontSize(13);doc.setTextColor(37,99,235);doc.text(d.role,M,y);y+=6;
+    if(d.tagline){doc.setFontSize(10);doc.setTextColor(100,116,139);doc.text(d.tagline,M,y);y+=6;}
+    doc.setFontSize(9);doc.setTextColor(100,116,139);doc.text("Generated "+d.date+" · tryqbit.com",M,y);y+=10;
+    doc.setDrawColor(226,232,240);doc.setLineWidth(0.3);doc.line(M,y,W-M,y);y+=10;
+    doc.setFontSize(10);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text("Career Readiness Score",M,y);y+=6;
+    doc.setFillColor(226,232,240);doc.roundedRect(M,y,W-2*M,4,2,2,"F");
+    doc.setFillColor(37,99,235);doc.roundedRect(M,y,(W-2*M)*(d.score/100),4,2,2,"F");y+=10;
+    doc.setFontSize(9);doc.setFont("helvetica","normal");doc.setTextColor(100,116,139);doc.text(d.percentile||"Ahead of 50%+ professionals exploring this transition",M,y);y+=12;
+    doc.setFontSize(10);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text("Detected Skills",M,y);y+=7;
+    doc.setFontSize(8);doc.setFont("helvetica","normal");let rx=M,ly=y;
+    d.skills.forEach(s=>{const sw=doc.getTextWidth(s)+6;if(rx+sw>W-M){rx=M;ly+=8;}doc.setFillColor(240,253,244);doc.setDrawColor(187,247,208);doc.roundedRect(rx,ly-4,sw,6,1,1,"FD");doc.setTextColor(22,101,52);doc.text(s,rx+3,ly);rx+=sw+3;});y=ly+12;
+    doc.setFontSize(10);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text("Skill Gaps",M,y);y+=7;
+    doc.setFontSize(8);rx=M;ly=y;
+    d.gaps.forEach(g=>{const gw=doc.getTextWidth(g)+6;if(rx+gw>W-M){rx=M;ly+=8;}doc.setFillColor(254,242,242);doc.setDrawColor(254,202,202);doc.roundedRect(rx,ly-4,gw,6,1,1,"FD");doc.setTextColor(185,28,28);doc.text(g,rx+3,ly);rx+=gw+3;});y=ly+12;
+    doc.setFontSize(10);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text("Career Path",M,y);y+=6;
+    doc.setFontSize(9);doc.setFont("helvetica","normal");doc.setTextColor(71,85,105);doc.text(d.career_path||d.role,M,y,{maxWidth:W-2*M});y+=12;
+    if(d.projects&&d.projects.length){
+      doc.setFontSize(10);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text("Projects & Certificates",M,y);y+=7;
+      d.projects.forEach(p=>{doc.setFontSize(9);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text((p.type==="certificate"?"[Cert] ":"[Project] ")+p.title,M,y);y+=5;if(p.desc){doc.setFont("helvetica","normal");doc.setTextColor(71,85,105);doc.text(p.desc,M,y,{maxWidth:W-2*M});y+=5;}if(p.link){doc.setTextColor(37,99,235);doc.text(p.link,M,y,{maxWidth:W-2*M});y+=5;}y+=3;});y+=4;
+    }
+    doc.setFontSize(10);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text("Salary Insight",M,y);y+=6;
+    doc.setFontSize(14);doc.setFont("helvetica","bold");doc.setTextColor(22,197,94);doc.text(d.salary||"–",M,y);y+=10;
+    doc.setFontSize(10);doc.setFont("helvetica","bold");doc.setTextColor(15,23,42);doc.text("This Week's Focus",M,y);y+=6;
+    doc.setFillColor(239,246,255);const fl=doc.splitTextToSize(d.weekly||"Practice core skills.",W-2*M-8);
+    doc.roundedRect(M,y-4,W-2*M,fl.length*6+8,2,2,"F");doc.setFontSize(9);doc.setFont("helvetica","normal");doc.setTextColor(30,64,175);doc.text(fl,M+4,y+1);
+    const pH=297;doc.setFillColor(10,15,30);doc.rect(0,pH-16,W,16,"F");doc.setFontSize(8);doc.setFont("helvetica","normal");doc.setTextColor(148,163,184);doc.text("Qbit Career Intelligence Engine · tryqbit.com",W/2,pH-6,{align:"center"});
+    doc.save("qbit-career-report-"+d.name.replace(/\s+/g,"-").toLowerCase()+".pdf");
+  }catch(err){console.error(err);alert("PDF failed. Please try again.");}
+  btns.forEach(b=>{if(b){b.disabled=false;b.textContent=b.id==="pdfNavBtn"?"⬇ PDF":"⬇ Download PDF";}});
+}
+</script>
+</body>
+</html>

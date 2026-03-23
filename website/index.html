@@ -1,353 +1,261 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Qbit | Career Intelligence Engine</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+<meta name="description" content="Discover your hidden career skills and get a personalized readiness score in 30 seconds. No resume required.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GA_MEASUREMENT_ID');</script>
 <style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Inter,sans-serif;background:#0f172a;color:#f1f5f9;line-height:1.6;}
+.container{max-width:1100px;margin:auto;padding:20px 24px;}
 
-body{
-margin:0;
-font-family:Inter,sans-serif;
-background:#0f172a;
-color:white;
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 0 10px;}
+.logo{font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;}
+.logo span{color:#3b82f6;}
+nav a{margin-left:20px;color:#94a3b8;text-decoration:none;font-size:14px;transition:color .2s;}
+nav a:hover{color:#fff;}
+
+.hero{text-align:center;padding:80px 0 60px;}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.15;margin-bottom:16px;letter-spacing:-1px;}
+.hero h1 span{color:#3b82f6;}
+.hero p.sub{font-size:18px;color:#94a3b8;margin-bottom:32px;max-width:560px;margin-left:auto;margin-right:auto;}
+.social-proof{font-size:13px;color:#64748b;margin-bottom:28px;}
+.social-proof b{color:#22c55e;}
+
+/* Referral banner */
+.ref-banner{
+  display:none;
+  background:#1c2b1a;border:1px solid #166534;border-radius:8px;
+  padding:12px 16px;font-size:13px;color:#86efac;margin-bottom:20px;
+  text-align:center;
 }
 
-.container{
-max-width:1100px;
-margin:auto;
-padding:20px;
+.email-form{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.email-form input{
+  padding:14px 18px;border:1.5px solid #334155;border-radius:8px;
+  background:#1e293b;color:#fff;font-size:15px;width:280px;outline:none;transition:border-color .2s;
 }
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.logo{
-font-size:22px;
-font-weight:800;
-}
-
-nav a{
-margin-left:20px;
-color:#94a3b8;
-text-decoration:none;
-}
-
-.hero{
-text-align:center;
-padding:80px 0;
-}
-
+.email-form input:focus{border-color:#3b82f6;}
+.email-form input::placeholder{color:#64748b;}
 .btn{
-background:#2563eb;
-padding:12px 20px;
-border:none;
-border-radius:6px;
-color:white;
-cursor:pointer;
+  background:#2563eb;padding:14px 22px;border:none;border-radius:8px;color:white;
+  cursor:pointer;font-size:15px;font-weight:600;transition:background .2s,transform .1s;white-space:nowrap;
 }
+.btn:hover{background:#1d4ed8;}.btn:active{transform:scale(.98);}
+.hint{margin-top:12px;font-size:13px;color:#64748b;}
 
-input{
-padding:12px;
-border:none;
-border-radius:6px;
-width:250px;
-margin-right:10px;
-}
+.section{margin-top:70px;}
+.section h2{font-size:22px;font-weight:700;margin-bottom:20px;}
 
-.section{
-margin-top:60px;
-}
+/* Example card */
+.example-card{background:#1e293b;border:1px solid #334155;padding:28px;border-radius:12px;max-width:540px;margin:auto;text-align:left;}
+.score-big{font-size:28px;font-weight:800;color:#22c55e;margin-bottom:8px;}
+.score-bar-wrap{background:#334155;border-radius:8px;height:10px;margin:12px 0 20px;overflow:hidden;}
+.score-bar-fill{height:100%;width:58%;background:linear-gradient(90deg,#2563eb,#22c55e);border-radius:8px;}
+.tag-list{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px;}
+.tag{background:#0f172a;border:1px solid #334155;color:#94a3b8;font-size:12px;padding:4px 10px;border-radius:20px;}
+.tag.gap{border-color:#ef4444;color:#f87171;}
+.card-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:#64748b;text-transform:uppercase;margin-bottom:6px;}
+.roadmap-text{font-size:14px;color:#94a3b8;border-left:3px solid #2563eb;padding-left:12px;margin-top:8px;}
+.percentile{margin-top:16px;font-size:13px;color:#64748b;background:#0f172a;padding:10px 14px;border-radius:6px;}
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:8px;
-margin-bottom:20px;
-}
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px;}
+.step{background:#1e293b;border:1px solid #334155;padding:24px 20px;border-radius:12px;text-align:center;}
+.step-num{width:36px;height:36px;background:#2563eb;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;margin:0 auto 14px;}
+.step h3{font-size:15px;font-weight:600;margin-bottom:8px;}
+.step p{font-size:13px;color:#94a3b8;}
 
-footer{
-margin-top:80px;
-text-align:center;
-color:#94a3b8;
-font-size:14px;
-}
+/* Benefits */
+.benefits{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px;}
+.benefit{background:#1e293b;border:1px solid #334155;padding:20px;border-radius:10px;display:flex;align-items:flex-start;gap:14px;}
+.benefit-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.benefit h3{font-size:15px;font-weight:600;margin-bottom:4px;}
+.benefit p{font-size:13px;color:#94a3b8;}
 
+/* Upcoming */
+.upcoming-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px;}
+.upcoming-item{background:#1e293b;border:1px solid #334155;padding:14px 16px;border-radius:8px;font-size:13px;color:#94a3b8;display:flex;align-items:center;gap:8px;}
+.upcoming-item::before{content:"→";color:#3b82f6;font-weight:700;flex-shrink:0;}
+
+footer{margin-top:80px;border-top:1px solid #1e293b;padding:30px 0 40px;text-align:center;color:#64748b;font-size:13px;}
+footer a{color:#64748b;text-decoration:none;}.footer-links{margin-bottom:10px;display:flex;justify-content:center;gap:20px;}
+
+@media(max-width:700px){.steps{grid-template-columns:1fr;}.benefits{grid-template-columns:1fr;}.upcoming-grid{grid-template-columns:1fr 1fr;}.hero{padding:50px 0 40px;}}
+@media(max-width:450px){.upcoming-grid{grid-template-columns:1fr;}}
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
 
-<header>
+  <header>
+    <div class="logo">Q<span>bit</span></div>
+    <nav>
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="investors.html">Investors</a>
+    </nav>
+  </header>
 
-<div class="logo">Qbit</div>
+  <section class="hero">
+    <h1>You're closer to a<br><span>better career</span> than you think.</h1>
+    <p class="sub">Find your Career Readiness Score in 30 seconds — no resume needed. Just describe what you do.</p>
 
-<nav>
-<a href="faq.html">FAQ</a>
-<a href="privacy.html">Privacy</a>
-<a href="investors.html">Investor</a>
-</nav>
+    <!-- Referral banner (shown if ?ref= is in URL) -->
+    <div class="ref-banner" id="refBanner">
+      🎉 You were invited by a friend! Complete your career analysis to get started.
+    </div>
 
-</header>
+    <p class="social-proof">Joined by <b id="userCountText">650+</b> professionals exploring career transitions</p>
 
-<section class="hero">
+    <form class="email-form" onsubmit="startAnalysis(event)">
+      <input id="email" type="email" placeholder="Enter your email" required autocomplete="email">
+      <button class="btn" type="submit" id="startBtn">Check My Career Score →</button>
+    </form>
+    <p class="hint">No resume required &nbsp;•&nbsp; Takes 30 seconds &nbsp;•&nbsp; Free</p>
+  </section>
 
-<h1>Find out which career you are secretly qualified for.</h1>
+  <!-- EXAMPLE RESULT -->
+  <section class="section" style="text-align:center;">
+    <h2>What your result looks like</h2>
+    <div class="example-card">
+      <div class="card-label">Career Readiness Score</div>
+      <div class="score-big">58% — Data Analyst</div>
+      <div class="score-bar-wrap"><div class="score-bar-fill"></div></div>
+      <div class="card-label">Detected Skills</div>
+      <div class="tag-list">
+        <span class="tag">Excel</span><span class="tag">KPI Monitoring</span>
+        <span class="tag">Dashboard Reporting</span><span class="tag">Analysis</span>
+      </div>
+      <div class="card-label">Skill Gaps</div>
+      <div class="tag-list">
+        <span class="tag gap">SQL</span><span class="tag gap">Python</span><span class="tag gap">Statistics</span>
+      </div>
+      <div class="card-label">Your Roadmap</div>
+      <div class="roadmap-text">Start with SQL joins → Python for data analysis → Build a reporting dashboard project</div>
+      <div class="percentile">This user is ahead of <b style="color:#22c55e">63%</b> of beginners switching to Data Analyst</div>
+    </div>
+  </section>
 
-<p>
-Describe your daily work and discover your
-<b>Career Readiness Score in 30 seconds</b>
-</p>
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <h2>How Qbit works</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Describe your work</h3><p>Tell Qbit what you do daily — in plain English. No resume needed.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>AI detects your skills</h3><p>Qbit extracts transferable skills from your experience automatically.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Get your score + roadmap</h3><p>See your career readiness score, skill gaps, and a week-by-week growth plan.</p></div>
+    </div>
+  </section>
 
-<p style="margin-top:8px;opacity:0.7;font-size:14px">
-Powered by <b>Qbit AI Career Intelligence Engine</b>
-</p>
+  <!-- WHY QBIT -->
+  <section class="section">
+    <h2>Why professionals use Qbit</h2>
+    <div class="benefits">
+      <div class="benefit"><div class="benefit-icon">🔍</div><div><h3>Discover hidden skills</h3><p>Most people underestimate what they already know. Qbit surfaces transferable skills you didn't know you had.</p></div></div>
+      <div class="benefit"><div class="benefit-icon">🎯</div><div><h3>Know exactly where you stand</h3><p>See a precise readiness score for your target role — not vague advice, real numbers.</p></div></div>
+      <div class="benefit"><div class="benefit-icon">📈</div><div><h3>Close the gap faster</h3><p>Get a week-by-week roadmap focused only on the skills that matter for your target role.</p></div></div>
+      <div class="benefit"><div class="benefit-icon">💼</div><div><h3>Switch careers with confidence</h3><p>Know which roles you're already qualified for and which are just a few skills away.</p></div></div>
+    </div>
+  </section>
 
-<form onsubmit="startAnalysis(event)">
+  <!-- UPCOMING -->
+  <section class="section">
+    <h2>Coming soon</h2>
+    <div class="upcoming-grid">
+      <div class="upcoming-item">Recruiter intelligence dashboard</div>
+      <div class="upcoming-item">Skill demand heatmap</div>
+      <div class="upcoming-item">AI Career Twin discovery</div>
+      <div class="upcoming-item">Salary gap prediction</div>
+      <div class="upcoming-item">Weekly progress tracking</div>
+      <div class="upcoming-item">Mock interview simulator</div>
+      <div class="upcoming-item">AI resume structuring</div>
+      <div class="upcoming-item">Certification & skill mapping</div>
+      <div class="upcoming-item">Enterprise talent analytics</div>
+    </div>
+  </section>
 
-<input id="email" type="email" placeholder="Enter email" required>
-
-<button class="btn">
-Discover My Hidden Career Skills
-</button>
-
-<p style="opacity:0.7;font-size:13px">
-Takes 30 seconds • No resume required
-</p>
-
-</form>
-
-<p style="margin-top:10px;opacity:0.7;font-size:13px">
-Resume uploads are analyzed instantly and never stored.
-</p>
-
-<p style="opacity:0.7;font-size:13px">
-Used by professionals exploring career transitions in tech, analytics, and product roles.
-</p>
-
-</section>
-
-<section class="section">
-
-<h2>Example Career Score</h2>
-
-<div class="card">
-
-<p style="font-size:22px;font-weight:700;">
-58% Ready for Data Analyst
-</p>
-
-<p style="opacity:0.9;">
-Based on work tasks similar to:
-</p>
-
-<ul>
-<li>Excel reporting</li>
-<li>KPI monitoring</li>
-<li>Weekly dashboards</li>
-</ul>
-
-<p><b>Skill Gaps</b></p>
-
-<ul>
-<li>SQL</li>
-<li>Python</li>
-<li>Statistics</li>
-</ul>
-
-<p><b>Learning Roadmap</b></p>
-
-<p>
-Start with SQL joins → Python data analysis → build a simple reporting dashboard.
-</p>
-
-<p style="opacity:0.7;">
-This user was ahead of 63% of beginners switching careers.
-</p>
-
+  <footer>
+    <div class="footer-links">
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="investors.html">Investors</a>
+      <a href="/cdn-cgi/l/email-protection#7119141d1d1e31050308001318055f121e1c"><span class="__cf_email__" data-cfemail="026a676e6e6d4276707b73606b762c616d6f">[email&#160;protected]</span></a>
+    </div>
+    © 2026 Qbit — Career Intelligence Engine
+  </footer>
 </div>
 
-</section>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const API = "https://script.google.com/macros/s/AKfycbzOZgCcF5TMdczAkG_T-lisUvTDHlxxnvIel-a73OS3lLA46aTyGMQ4mj0cbJxhokHG/exec";
 
+// Detect referral code from URL
+const urlParams  = new URLSearchParams(window.location.search);
+const refCode    = urlParams.get("ref") || "";
 
-<!-- sample result display -->
+// Show referral banner if came via referral link
+if(refCode){
+  document.getElementById("refBanner").style.display = "block";
+  // Track referral visit in GA
+  gtag('event','referral_visit',{ref_code:refCode});
+}
 
-<section class="section">
-
-<h2>Example Career Score</h2>
-
-<div class="card">
-
-<p style="font-size:22px;font-weight:700">
-58% Ready for Data Analyst
-</p>
-
-<p style="opacity:0.8">
-Based on daily tasks like:
-</p>
-
-<ul>
-<li>Excel reporting</li>
-<li>Dashboard creation</li>
-<li>KPI analysis</li>
-</ul>
-
-<p><b>Skill Gaps</b></p>
-
-<ul>
-<li>SQL</li>
-<li>Python</li>
-<li>Statistics</li>
-</ul>
-
-<p><b>Learning Path</b></p>
-
-<p>
-Learn SQL → Python data analysis → build dashboard project.
-</p>
-
-<p style="opacity:0.7">
-This user was ahead of 63% of beginners switching careers.
-</p>
-
-</div>
-
-</section>
-
-
-<!-- How qbit  will work -->
-
-<section class="section">
-
-<h2>How Qbit Works</h2>
-
-<div class="card">
-Describe your daily work activities
-</div>
-
-<div class="card">
-AI detects transferable skills from your experience
-</div>
-
-<div class="card">
-See your career readiness score and skill gaps
-</div>
-
-</section>
-
-<section class="section">
-
-<h2>Why Professionals Use Qbit</h2>
-
-<div class="card">
-Discover hidden skills from your daily work
-</div>
-
-<div class="card">
-See which careers you already qualify for
-</div>
-
-<div class="card">
-Identify skill gaps instantly
-</div>
-
-<div class="card">
-Get a roadmap to reach 80% career readiness
-</div>
-
-</section>
-
-<section class="section">
-
-<h2>Upcoming Features</h2>
-
-<div class="card">Recruiter Intelligence Dashboard</div>
-<div class="card">Skill demand heatmap across industries</div>
-<div class="card">Enterprise talent analytics</div>
-<div class="card">AI Career Twin Discovery</div>
-<div class="card">Salary gap prediction engine</div>
-<div class="card">Weekly career progress tracking</div>
-<div class="card">Mock interview simulator</div>
-<div class="card">AI resume structuring assistant</div>
-<div class="card">Certification & skill mapping</div>
-<div class="card">Student career discovery engine</div>
-<div class="card">Government job intelligence platform</div>
-
-</section>
-
-<footer>
-
-© 2026 Qbit
-Career Intelligence Engine
-[hello@tryqbit.com](mailto:hello@tryqbit.com)
-
-</footer>
-
-</div>
-
-<script>
-
-const API="https://script.google.com/macros/s/AKfycbztGdKcWNdFVEyrzNN2dUrcAkvzhUBDwuMpe3m5DAx1ebGrXEMRXaq2xUSml4q8f92L/exec";
-
+// Enter key on email input → submit
+document.getElementById("email").addEventListener("keydown", function(e){
+  if(e.key==="Enter"){ e.preventDefault(); document.getElementById("startBtn").click(); }
+});
 
 function startAnalysis(e){
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  if(!email) return;
 
-e.preventDefault();
+  const btn = document.getElementById("startBtn");
+  btn.textContent = "Starting...";
+  btn.disabled = true;
 
-const email=document.getElementById("email").value;
+  // Build URL with email + referral code
+  let apiUrl = API+"?create_session=true&email="+encodeURIComponent(email);
+  if(refCode) apiUrl += "&referred_by="+encodeURIComponent(refCode);
 
-fetch(API+"?create_session=true&email="+encodeURIComponent(email))
-.then(res=>res.json())
-.then(data=>{
+  fetch(apiUrl)
+  .then(async res=>{
+    try {
+      return await res.json();
+    } catch {
+      const text = await res.text();
+      console.error("Session API error:", text);
+      throw new Error("Invalid response");
+    }
+  })
+  .then(data=>{
+      if(!data.session){
+        alert("Session error. Please try again.");
+        btn.textContent="Check My Career Score →"; btn.disabled=false;
+        return;
+      }
+      gtag('event','session_start',{login_count:data.login_count||0});
 
-console.log("SESSION:", data);
+      // ============================================================
+      // START CHANGE: store referral code + login count in sessionStorage
+      // so dashboard can read them without re-fetching
+      sessionStorage.setItem('qbit_login_count', data.login_count||0);
+      sessionStorage.setItem('qbit_ref_code', data.referral_code||'');
+      sessionStorage.setItem('qbit_ref_url', data.referral_url||'');
+      // END CHANGE
+      // ============================================================
 
-const session = data.session;
+      // Pass email, session, and ref code to dashboard
+      let dashUrl = "dashboard.html?session="+data.session+"&email="+encodeURIComponent(email);
+      if(refCode) dashUrl += "&ref="+encodeURIComponent(refCode);
 
-if(!session){
-alert("Session error. Please try again.");
-return;
-}
-
-window.location.href="dashboard.html?session="+session+"&email="+email;
-
-})
-.catch(err=>{
-console.log(err);
-alert("Network error. Please try again.");
+      window.location.href = dashUrl;
+    })
+    .catch(()=>{
+  alert("Unable to start session. Please retry in a few seconds.");
+  btn.textContent="Check My Career Score →";
+  btn.disabled=false;
 });
-
-}
-
-
-/* dynamic user count */
-
-fetch(API+"?count=true")
-.then(res=>res.json())
-.then(data=>{
-
-let el = document.getElementById("userCountText");
-
-if(el){
-el.innerText =
-data.count+"+ professionals already exploring hidden career skills on Qbit";
-}
-
-});
-
-</script>
-
-</body>
-</html>
