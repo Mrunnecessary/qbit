@@ -6,8 +6,8 @@
 <title>Qbit | Career Intelligence Engine</title>
 <meta name="description" content="Discover your hidden career skills and get a personalized readiness score in 30 seconds. No resume required.">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-24B2PVFE1Q'"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GA_MEASUREMENT_ID');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-24B2PVFE1Q');</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Inter,sans-serif;background:#0f172a;color:#f1f5f9;line-height:1.6;}
@@ -183,7 +183,7 @@ footer a{color:#64748b;text-decoration:none;}.footer-links{margin-bottom:10px;di
       <a href="faq.html">FAQ</a>
       <a href="privacy.html">Privacy</a>
       <a href="investors.html">Investors</a>
-      <a href="mailto:hello@tryqbit.com" style="color:#64748b;text-decoration:none;">hello@tryqbit.com</a>
+      <a href="/cdn-cgi/l/email-protection#7119141d1d1e31050308001318055f121e1c"><span class="__cf_email__" data-cfemail="026a676e6e6d4276707b73606b762c616d6f">[email&#160;protected]</span></a>
     </div>
     © 2026 Qbit — Career Intelligence Engine
   </footer>
@@ -255,10 +255,12 @@ function startAnalysis(e){
       window.location.href = dashUrl;
     })
     .catch(()=>{
-  alert("Unable to start session. Please retry in a few seconds.");
-  btn.textContent="Check My Career Score →";
-  btn.disabled=false;
-});
+      alert("Unable to start session. Please retry in a few seconds.");
+      btn.textContent="Check My Career Score \u2192";
+      btn.disabled=false;
+    });
+}
+
 // Dynamic user count
 fetch(API+"?count=true")
   .then(r=>r.json())
