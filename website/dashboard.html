@@ -342,16 +342,21 @@ async function runAnalysis(){
   };
 
   try{
-    const res = await fetch(API, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    action: "analyze",
-    data: payload
-  })
-});
+    const url = API + "?analyze=true&data=" + encodeURIComponent(JSON.stringify(payload));
+
+// ⬇️ ADD THIS BLOCK
+const controller = new AbortController();
+setTimeout(() => controller.abort(), 10000);
+
+let res;
+
+try {
+  res = await fetch(url, { signal: controller.signal });
+} catch (err) {
+  console.error("Fetch failed:", err);
+  alert("Server is slow or not responding. Please try again.");
+  return;
+}
 
 let data;
 const raw = await res.text();
