@@ -318,7 +318,7 @@ async function runAnalysis(){
     session_id:       sessionId,
     email:            userEmail,
     referred_by:      referredBy,
-    referral_code:    referredBy,                          // code they used to sign up
+    referral_code: "",                          // code they used to sign up
     name:             userName,
     text,
     role:             document.getElementById("role").value,
@@ -726,11 +726,19 @@ function getShareText(){
 }
 // ============================================================
 // START CHANGE: share functions with tracking flag update
+// ===== START FIX: Share LinkedIn =====
 function shareLinkedIn(){
-  gtag('event','share_linkedin');
-  if(window._portfolioData) window._portfolioData.share_clicked = "linkedin";
-  window.open("https://www.linkedin.com/sharing/share-offsite/?url=https://tryqbit.com");
+  const d = window._portfolioData;
+  if(!d){ alert("Run analysis first"); return; }
+
+  const shareUrl = "https://tryqbit.com/portfolio.html?" +
+    "name="+encodeURIComponent(d.name)+
+    "&score="+d.score+
+    "&role="+encodeURIComponent(d.role);
+
+  window.open("https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(shareUrl));
 }
+// ===== END FIX =====
 function shareWhatsapp(){
   gtag('event','share_whatsapp');
   if(window._portfolioData) window._portfolioData.share_clicked = "whatsapp";
@@ -748,19 +756,31 @@ function explainScore(){
   const box = document.getElementById("explanationBox");
   box.textContent = "Analyzing your score..."; box.style.display = "block";
   fetch(API+"?explain=true&data="+encodeURIComponent(JSON.stringify({skills:currentSkills,gaps:currentGaps,role:currentRole})))
-    .then(async r=>{
-  const t = await r.text();
-  return t;
+    // ===== START FIX: Explain =====
+// ===== START FIX: EXPLAIN SCORE =====
+.then(async r=>{
+  const text = await r.text();
+
+  try{
+    const json = JSON.parse(text);
+    return json.answer || text;
+  }catch(e){
+    return text;
+  }
 })
-    .then(t=>{
-  if(!t || t.toLowerCase().includes("error")){
-    box.textContent = "AI is busy right now. Try again in a moment.";
+.then(t=>{
+  if(!t || t.toLowerCase().includes("error") || t.toLowerCase().includes("unavailable")){
+    box.textContent = 
+      "Your score is calculated based on:\n\n" +
+      "• Skills you currently have\n" +
+      "• Skills required for your target role\n\n" +
+      "Improve missing skills to increase your score.";
   } else {
     box.textContent = t;
   }
 })
-    .catch(()=>{ box.textContent="Unable to reach AI. Please try again."; });
-}
+// ===== END FIX =====
+// ===== END FIX =====
 
 function compareScore(){
   const box = document.getElementById("compareBox");
@@ -780,14 +800,44 @@ function askCareerAI(){
 
   const box = document.getElementById("aiAnswerBox");
   box.textContent = "Qbit is thinking..."; box.style.display = "block";
-  fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({question,skills:currentSkills,role:currentRole,score:currentScore})))
-    .then(async r=>{
-  const t = await r.text();
-  return t;
+  // ===== START FIX: Ask Qbit =====
+// ===== START FIX: ASK QBIT AI =====
+fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
+  question,
+  skills: currentSkills,
+  role: currentRole,
+  score: currentScore
+})))
+.then(async r=>{
+  const text = await r.text();
+
+  try{
+    const json = JSON.parse(text);
+    return json.answer || text;
+  }catch(e){
+    return text;
+  }
 })
-    .then(a=>{ box.textContent = a&&!a.toLowerCase().includes("unavailable")?a:"AI temporarily unavailable. Please try again."; })
-    .catch(()=>{ box.textContent="Unable to reach AI. Please try again."; });
-}
+.then(answer=>{
+  if(!answer || answer.toLowerCase().includes("error") || answer.toLowerCase().includes("unavailable")){
+    box.textContent = 
+      "Here’s what you should do next:\n\n" +
+      "• Focus on 1 core skill (SQL / Excel / Domain)\n" +
+      "• Build 1 real project\n" +
+      "• Start applying to roles weekly\n";
+  } else {
+    box.textContent = answer;
+  }
+})
+.catch(()=>{
+  box.textContent =
+    "AI is busy right now.\n\n" +
+    "Fallback advice:\n" +
+    "• Learn one core skill\n" +
+    "• Build project\n" +
+    "• Apply consistently";
+});
+// ===== END FIX =====
 
 // ====== ROADMAP ======
 function requestGuide(){
@@ -795,11 +845,24 @@ function requestGuide(){
   // START CHANGE: mark roadmap requested
   if(window._portfolioData) window._portfolioData.roadmap_requested = "yes";
   // END CHANGE
-  fetch(API,{
-    method:"POST",
-    body:new URLSearchParams({action:"roadmap",name:userName,email:userEmail,score:currentScore,role:currentRole,skills:currentSkills.join(",")})
-  }).then(()=>{ alert("Your roadmap is on the way to "+userEmail+". Check your inbox in a few minutes."); gtag('event','roadmap_requested',{role:currentRole,score:currentScore}); })
-  .catch(()=>alert("Request failed. Please try again."));
+  // ===== START FIX: Roadmap (GET instead of POST) =====
+const url = API + "?roadmap=true&data=" + encodeURIComponent(JSON.stringify({
+  name: userName,
+  email: userEmail,
+  score: currentScore,
+  role: currentRole,
+  skills: currentSkills
+}));
+
+fetch(url)
+  .then(()=>{
+    alert("Your roadmap is on the way to "+userEmail+". Check your inbox in a few minutes.");
+    gtag('event','roadmap_requested',{role:currentRole,score:currentScore});
+  })
+  .catch(()=>{
+    alert("Request failed. Please try again.");
+  });
+// ===== END FIX =====
 }
 
 // ====== ENTER KEY — works for ALL CTAs ======
@@ -830,30 +893,36 @@ document.addEventListener("keydown", function(e){
 // ============================================================
 // START CHANGE: openPortfolio function — launches portfolio.html
 // with all current analysis data passed via URL params
+// ===== START FIX: PORTFOLIO =====
 function openPortfolio(){
   const d = window._portfolioData;
-  if(!d){ alert("Please run your analysis first."); return; }
-  const p = new URLSearchParams({
-    name:        d.name,
-    score:       d.score,
-    role:        d.role,
-    skills:      d.skills.join(","),
-    gaps:        d.gaps.join(","),
-    salary:      d.salary,
-    career_path: d.career_path,
-    weekly:      d.weekly,
-    percentile:  d.percentile,
-    email:       d.email,
-    session:     d.session,
-    date:        d.date
-  });
-  if(d.careerOptions && d.careerOptions.length)
-    p.set("careerOptions", JSON.stringify(d.careerOptions));
-  window.open("portfolio.html?" + p.toString(), "_blank");
-  gtag('event','portfolio_opened',{score:d.score,role:d.role});
+  if(!d){ 
+    alert("Please run your analysis first."); 
+    return; 
+  }
+
+  const params = new URLSearchParams();
+
+  params.set("name", d.name);
+  params.set("score", d.score);
+  params.set("role", d.role);
+  params.set("skills", encodeURIComponent(JSON.stringify(d.skills)));
+  params.set("gaps", encodeURIComponent(JSON.stringify(d.gaps)));
+  params.set("salary", d.salary);
+  params.set("career_path", d.career_path);
+  params.set("weekly", d.weekly);
+  params.set("percentile", d.percentile);
+  params.set("email", d.email);
+  params.set("session", d.session);
+  params.set("date", d.date);
+
+  if(d.careerOptions && d.careerOptions.length){
+    params.set("careerOptions", encodeURIComponent(JSON.stringify(d.careerOptions)));
+  }
+
+  window.open("portfolio.html?" + params.toString(), "_blank");
 }
-// END CHANGE
-// ============================================================
+// ===== END FIX =====
 </script>
 </body>
 </html>
