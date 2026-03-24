@@ -665,24 +665,22 @@ function estimateWeeks(score){
 function recheckScore(){ document.getElementById("userInput").scrollIntoView({behavior:"smooth"}); }
 
 // ====== REFERRAL PANEL ======
-// START SAFE REFERRAL FETCH (REPLACE OLD BLOCK)
+function loadReferralPanel(){
 
-fetch(API+"?referral_count=true&email="+encodeURIComponent(userEmail))
-  .then(async r=>{
-    const text = await r.text();
-    try {
-      return JSON.parse(text);
-    } catch (err) {
-      console.error("Referral API invalid response:", text);
-      return {};
-    }
-  })
-  .then(data=>{
-    referralCode  = data.code || "";
-    referralCount = data.count || 0;
-    const url     = data.referral_url || ("https://tryqbit.com?ref="+referralCode);
-
-// END SAFE REFERRAL FETCH
+  fetch(API+"?referral_count=true&email="+encodeURIComponent(userEmail))
+    .then(async r=>{
+      const text = await r.text();
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        console.error("Referral API invalid response:", text);
+        return {};
+      }
+    })
+    .then(data=>{
+      referralCode  = data.code || "";
+      referralCount = data.count || 0;
+      const url     = data.referral_url || ("https://tryqbit.com?ref="+referralCode);
 
       document.getElementById("referralLinkInput").value = url;
       document.getElementById("refCount").textContent    = referralCount;
@@ -696,7 +694,6 @@ fetch(API+"?referral_count=true&email="+encodeURIComponent(userEmail))
       document.getElementById("referralPanel").style.display = "block";
     })
     .catch(()=>{
-      // Still show panel with placeholder
       document.getElementById("referralLinkInput").value = "https://tryqbit.com?ref=LOADING";
       document.getElementById("referralPanel").style.display = "block";
     });
