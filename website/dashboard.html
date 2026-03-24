@@ -239,7 +239,11 @@ const sessionId  = params.get("session") || "";
 const userEmail  = decodeURIComponent(params.get("email") || "");
 const referredBy = params.get("ref") || "";
 
-if(!sessionId){ window.location.href = "index.html"; }
+if(!sessionId){
+  console.error("Session missing in URL");
+  alert("Session missing. Please restart.");
+  window.location.href = "index.html";
+}
 
 let currentScore   = 0;
 let currentRole    = "";
@@ -350,11 +354,12 @@ async function runAnalysis(){
 });
 
 let data;
+const raw = await res.text();
+
 try {
-  data = await res.json();
+  data = JSON.parse(raw);
 } catch (err) {
-  const text = await res.text();
-  console.error("Invalid JSON response:", text);
+  console.error("Invalid JSON response:", raw);
   alert("Server error. Please try again.");
   return;
 }
@@ -660,14 +665,24 @@ function estimateWeeks(score){
 function recheckScore(){ document.getElementById("userInput").scrollIntoView({behavior:"smooth"}); }
 
 // ====== REFERRAL PANEL ======
-function loadReferralPanel(){
-  if(!userEmail) return;
-  fetch(API+"?referral_count=true&email="+encodeURIComponent(userEmail))
-    .then(r=>r.json())
-    .then(data=>{
-      referralCode  = data.code||"";
-      referralCount = data.count||0;
-      const url     = data.referral_url||("https://tryqbit.com?ref="+referralCode);
+// START SAFE REFERRAL FETCH (REPLACE OLD BLOCK)
+
+fetch(API+"?referral_count=true&email="+encodeURIComponent(userEmail))
+  .then(async r=>{
+    const text = await r.text();
+    try {
+      return JSON.parse(text);
+    } catch (err) {
+      console.error("Referral API invalid response:", text);
+      return {};
+    }
+  })
+  .then(data=>{
+    referralCode  = data.code || "";
+    referralCount = data.count || 0;
+    const url     = data.referral_url || ("https://tryqbit.com?ref="+referralCode);
+
+// END SAFE REFERRAL FETCH
 
       document.getElementById("referralLinkInput").value = url;
       document.getElementById("refCount").textContent    = referralCount;
@@ -731,7 +746,10 @@ function explainScore(){
   const box = document.getElementById("explanationBox");
   box.textContent = "Analyzing your score..."; box.style.display = "block";
   fetch(API+"?explain=true&data="+encodeURIComponent(JSON.stringify({skills:currentSkills,gaps:currentGaps,role:currentRole})))
-    .then(r=>r.text())
+    .then(async r=>{
+  const t = await r.text();
+  return t;
+})
     .then(t=>{
   if(!t || t.toLowerCase().includes("error")){
     box.textContent = "AI is busy right now. Try again in a moment.";
@@ -761,7 +779,10 @@ function askCareerAI(){
   const box = document.getElementById("aiAnswerBox");
   box.textContent = "Qbit is thinking..."; box.style.display = "block";
   fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({question,skills:currentSkills,role:currentRole,score:currentScore})))
-    .then(r=>r.text())
+    .then(async r=>{
+  const t = await r.text();
+  return t;
+})
     .then(a=>{ box.textContent = a&&!a.toLowerCase().includes("unavailable")?a:"AI temporarily unavailable. Please try again."; })
     .catch(()=>{ box.textContent="Unable to reach AI. Please try again."; });
 }
