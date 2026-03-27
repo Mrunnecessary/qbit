@@ -276,9 +276,9 @@ window.onerror = function(msg, url, line, col, error){
 const API="https://script.google.com/macros/s/AKfycbyBFqMP07yUlPOCYTefNOVCxxsK9fEtq07KO0FtujIVKc-etKOj456O-4Ll3bPNl86F/exec";
 const UP=new URLSearchParams(window.location.search);
 let pD={
-  name:    decodeURIComponent(UP.get("name")||""),
+  name: UP.get("name") || "",
   score:   parseInt(UP.get("score"))||0,
-  role:    decodeURIComponent(UP.get("role")||""),
+  role: UP.get("role") || "",
   // START FIX (JSON DECODE)
 
 skills: (() => {
@@ -302,29 +302,26 @@ gaps: (() => {
 })(),
 
 // END FIX
-  salary:  decodeURIComponent(UP.get("salary")||""),
-  career_path: decodeURIComponent(UP.get("career_path")||""),
-  weekly:  decodeURIComponent(UP.get("weekly")||""),
-  percentile: decodeURIComponent(UP.get("percentile")||""),
-  email:   decodeURIComponent(UP.get("email")||""),
-  session: UP.get("session")||"",
-  date:    UP.get("date")||new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),
-  tagline: decodeURIComponent(UP.get("tagline")||""),
-  photo:   "",
-  careerOptions:[],
-  projects:[]
+ salary:  UP.get("salary") || "",
+career_path: UP.get("career_path") || "",
+weekly:  UP.get("weekly") || "",
+percentile: UP.get("percentile") || "",
+email:   UP.get("email") || "",
+session: UP.get("session") || "",
+date:    UP.get("date") || new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),
+tagline: UP.get("tagline") || "",
+photo:   "",
+careerOptions: [],
+projects: []
 };
-try{
-  const co = UP.get("careerOptions");
-  if(co){
-    pD.careerOptions = JSON.parse(co);
-  }
-}catch(e){
-  console.error("careerOptions parse failed", e);
-  pD.careerOptions = [];
-}
 
-try{const pr=UP.get("projects");if(pr)pD.projects=JSON.parse(decodeURIComponent(pr));}catch(e){}
+try{
+  const pr = UP.get("projects");
+  if(pr) pD.projects = JSON.parse(pr);
+}catch(e){
+  console.error("projects parse failed", e);
+  pD.projects = [];
+}
 
 let editMode=false, aQs=[], aIdx=0, aAns=[], aStarted=false;
 
@@ -356,12 +353,13 @@ d.score >= 60 ? "🔥 Fast Growing" :
   const gap=Math.max(0,80-d.score), wks=gap>0?Math.ceil(gap/5)+"–"+(Math.ceil(gap/5)+4)+" weeks":"already career-ready";
   // START VIRAL SCORE INSIGHT
 
-document.getElementById("scoreInsight").innerHTML = `
-🔥 You are <strong style="color:#22c55e">${d.percentile || "ahead of many professionals"}</strong>
-
-📈 Just <strong style="color:#3b82f6">${gap}%</strong> away from high-demand level
-
-🚀 Most professionals reaching 80% unlock better opportunities within ${wks}
+document.getElementById("scoreInsight").innerHTML = 
+d.score >= 80
+? `🏆 You're already career-ready. Focus on applications, real-world projects, and growth.`
+: `
+🔥 You are <strong style="color:#22c55e">${d.percentile || "ahead of many professionals"}</strong><br>
+📈 Just <strong style="color:#3b82f6">${gap}%</strong> away from high-demand level<br>
+🚀 Most professionals reach this in ${wks}
 `;
 
 // END VIRAL SCORE INSIGHT
