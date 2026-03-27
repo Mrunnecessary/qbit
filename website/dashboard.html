@@ -314,6 +314,21 @@ async function runAnalysis(){
   // END CHANGE
   // ============================================================
 
+// ===== START FIX: Smart Salary Suggestion =====
+let suggestedTargetSalary = document.getElementById("targetSalary").value;
+
+if(!suggestedTargetSalary && document.getElementById("salary").value){
+  const salaryMap = {
+    "Below 5L": "5L - 10L",
+    "5L - 10L": "10L - 20L",
+    "10L - 20L": "20L+",
+    "20L+": "20L+"
+  };
+
+  suggestedTargetSalary = salaryMap[document.getElementById("salary").value];
+}
+// ===== END FIX =====
+
   const payload = {
     session_id:       sessionId,
     email:            userEmail,
@@ -324,7 +339,7 @@ async function runAnalysis(){
     role:             document.getElementById("role").value,
     exp:              document.getElementById("exp").value,
     salary:           document.getElementById("salary").value,
-    targetSalary:     document.getElementById("targetSalary").value,
+    targetSalary: suggestedTargetSalary,
     targetRole:       document.getElementById("targetRole").value,
     timeline:         document.getElementById("timeline").value,
     device:           /Mobi/.test(navigator.userAgent) ? "mobile" : "desktop",
@@ -609,7 +624,9 @@ function renderResult(data){
     </div>
 
     <div style="margin-top:14px;padding:14px;background:#0f172a;border-radius:8px;font-size:14px;">
-      You are <b style="color:#3b82f6">${Math.max(0,80-(data.score||30))}%</b> away from the 80% career-ready threshold.
+     ${data.score >= 80 
+  ? "You're already above the career-ready threshold. Focus on applications and real-world projects."
+  : `You are <b style="color:#3b82f6">${80-(data.score||30)}%</b> away from the 80% career-ready threshold.`}
       Estimated: <b>${estimateWeeks(data.score)} weeks</b> of focused learning.
     </div>
 
@@ -663,8 +680,15 @@ function renderResult(data){
 }
 
 function estimateWeeks(score){
-  score=score||30; const gap=80-score; if(gap<=0) return "1–2";
-  const w=Math.ceil(gap/5); return w+"–"+(w+4);
+  score = score || 30;
+
+  if(score >= 80){
+    return "You're already career-ready. Focus on applying & refining your profile.";
+  }
+
+  const gap = 80 - score;
+  const w = Math.ceil(gap / 5);
+  return w + "–" + (w+4) + " weeks";
 }
 
 function recheckScore(){ document.getElementById("userInput").scrollIntoView({behavior:"smooth"}); }
@@ -924,7 +948,6 @@ function openPortfolio(){
   window.open("portfolio.html?" + params.toString(), "_blank");
 }
 // ===== END FIX =====
-}
 </script>
 </body>
 </html>
