@@ -9,6 +9,33 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GA_MEASUREMENT_ID');</script>
 <style>
+.portfolio-btn{
+  width:100%;
+  padding:16px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:700;
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  transition: all .25s ease;
+  box-shadow: 0 10px 25px rgba(37,99,235,.35);
+  letter-spacing:.2px;
+}
+
+.portfolio-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(124,58,237,.4);
+}
+
+.portfolio-subtext{
+  font-size:11px;
+  color:#64748b;
+  text-align:center;
+  margin-top:6px;
+}
+
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Inter,sans-serif;background:#0f172a;color:#f1f5f9;line-height:1.6;}
 .container{max-width:900px;margin:auto;padding:24px;}
@@ -610,9 +637,12 @@ function renderResult(data){
 
     <!-- ============================================================ -->
     <!-- START CHANGE: portfolio launch button (added after score circle) -->
-    <button onclick="openPortfolio()" style="margin-top:16px;width:100%;padding:13px;background:linear-gradient(135deg,#1e3a8a,#1e1b4b);border:1px solid #3b82f6;border-radius:10px;color:#93c5fd;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s;" onmouseover="this.style.background='linear-gradient(135deg,#1d4ed8,#3730a3)'" onmouseout="this.style.background='linear-gradient(135deg,#1e3a8a,#1e1b4b)'">
-      🪪 View &amp; Share My Career Portfolio →
-    </button>
+    <button onclick="openPortfolio()" class="portfolio-btn">
+  🚀 View & Share My Career Portfolio
+</button>
+<p class="portfolio-subtext">
+  Public page · QR · PDF · Recruiter-ready
+</p>
     <p style="font-size:11px;color:#475569;text-align:center;margin-top:5px">Public page · QR code · PDF download · Add projects &amp; certificates</p>
     <!-- END CHANGE -->
     <!-- ============================================================ -->
@@ -842,22 +872,34 @@ fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
 })
 .then(answer=>{
   if(!answer || answer.toLowerCase().includes("error") || answer.toLowerCase().includes("unavailable")){
-    box.textContent = 
-      "Here’s what you should do next:\n\n" +
-      "• Focus on 1 core skill (SQL / Excel / Domain)\n" +
-      "• Build 1 real project\n" +
-      "• Start applying to roles weekly\n";
+    box.textContent = `
+Based on your profile:
+
+• Your strongest skill: ${currentSkills[0] || "core skill"}
+• Biggest gap: ${currentGaps[0] || "advanced skill"}
+
+Next steps:
+1. Focus on ${currentGaps[0] || "one key skill"}
+2. Build 1 real project using ${currentSkills[0] || "your skill"}
+3. Start applying within 2–4 weeks
+
+You're closer than you think — execution matters now.
+`;
   } else {
     box.textContent = answer;
   }
 })
 .catch(()=>{
-  box.textContent =
-    "AI is busy right now.\n\n" +
-    "Fallback advice:\n" +
-    "• Learn one core skill\n" +
-    "• Build project\n" +
-    "• Apply consistently";
+  box.textContent = `
+AI is busy right now.
+
+Based on your profile:
+• Focus on ${currentGaps[0] || "one key skill"}
+• Build 1 real project
+• Apply consistently
+
+Momentum > perfection.
+`;
 });
 // ===== END FIX =====
 }

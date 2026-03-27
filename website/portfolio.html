@@ -316,6 +316,16 @@ projects: []
 };
 
 try{
+  const co = UP.get("careerOptions");
+  if(co){
+    pD.careerOptions = JSON.parse(co);
+  }
+}catch(e){
+  console.error("careerOptions parse failed", e);
+  pD.careerOptions = [];
+}
+
+try{
   const pr = UP.get("projects");
   if(pr) pD.projects = JSON.parse(pr);
 }catch(e){
@@ -445,22 +455,60 @@ function buildUrl(d){
 }
 
 /* ASSESSMENT */
+
 async function startAssessment(){
   if(aStarted)return;
-  document.getElementById("assessBody").innerHTML='<div style="text-align:center;padding:20px"><div class="spinner" style="margin:auto;width:32px;height:32px;border-width:3px"></div><p style="color:var(--muted);margin-top:10px;font-size:13px">Generating questions for '+pD.role+'...</p></div>';
+
+  document.getElementById("assessBody").innerHTML =
+  '<div style="text-align:center;padding:20px">Loading questions...</div>';
+
   try{
-    const prompt='Generate exactly 5 multiple choice questions to assess a candidate for: '+pD.role+'. Test practical knowledge of: '+pD.skills.join(", ")+'. Return ONLY valid JSON array, no markdown: [{"q":"question","options":["A","B","C","D"],"answer":0}] where answer is the index of correct option.';
-    const res=await fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({question:prompt,skills:pD.skills,role:pD.role,score:pD.score})));
-    const text=await res.text();
-    const c=text.replace(/```json|```/g,"").trim();
-    const i1=c.indexOf("["),i2=c.lastIndexOf("]");
-    if(i1===-1)throw new Error("no json");
-    aQs=JSON.parse(c.substring(i1,i2+1));
-    aIdx=0;aAns=[];aStarted=true;renderQ();
+    const res = await fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
+      role:pD.role,
+      skills:pD.skills
+    })));
+
+    const text = await res.text();
+
+    let parsed;
+
+    try{
+      parsed = JSON.parse(text);
+    }catch{
+      const clean = text.replace(/```json|```/g,"");
+      const i1 = clean.indexOf("[");
+      const i2 = clean.lastIndexOf("]");
+      parsed = JSON.parse(clean.substring(i1,i2+1));
+    }
+
+    if(!parsed || !parsed.length) throw "Invalid";
+
+    aQs = parsed;
+    aIdx = 0;
+    aAns = [];
+    aStarted = true;
+
+    renderQ();
+
   }catch(e){
-    document.getElementById("assessBody").innerHTML='<p style="color:var(--red);font-size:13px">Could not load questions. Please try again.</p><button class="a-btn primary" onclick="aStarted=false;startAssessment()" style="margin-top:10px">Retry</button>';
+
+    // ✅ FALLBACK (VERY IMPORTANT)
+    aQs = [
+      {q:"What does SQL JOIN do?",options:["Merge tables","Delete data","Create DB","None"],answer:0},
+      {q:"Which tool is used for dashboards?",options:["Excel","Word","Paint","Notepad"],answer:0},
+      {q:"What is a KPI?",options:["Metric","Database","Language","Tool"],answer:0},
+      {q:"Which is used for data analysis?",options:["Excel","Photoshop","Word","Paint"],answer:0},
+      {q:"Primary key is?",options:["Unique ID","Duplicate","Optional","None"],answer:0}
+    ];
+
+    aIdx = 0;
+    aAns = [];
+    aStarted = true;
+
+    renderQ();
   }
 }
+
 function renderQ(){
   if(aIdx>=aQs.length){showResult();return;}
   const q=aQs[aIdx];
