@@ -284,7 +284,7 @@ let pD={
 skills: (() => {
   try{
     const s = UP.get("skills");
-    return s ? JSON.parse(decodeURIComponent(s)) : [];
+    return s ? JSON.parse(s) : [];
   }catch(e){
     console.error("skills parse error", e);
     return [];
@@ -294,7 +294,7 @@ skills: (() => {
 gaps: (() => {
   try{
     const g = UP.get("gaps");
-    return g ? JSON.parse(decodeURIComponent(g)) : [];
+    return g ? JSON.parse(g) : [];
   }catch(e){
     console.error("gaps parse error", e);
     return [];
@@ -317,12 +317,13 @@ gaps: (() => {
 try{
   const co = UP.get("careerOptions");
   if(co){
-    pD.careerOptions = JSON.parse(decodeURIComponent(co));
+    pD.careerOptions = JSON.parse(co);
   }
 }catch(e){
   console.error("careerOptions parse failed", e);
   pD.careerOptions = [];
 }
+
 try{const pr=UP.get("projects");if(pr)pD.projects=JSON.parse(decodeURIComponent(pr));}catch(e){}
 
 let editMode=false, aQs=[], aIdx=0, aAns=[], aStarted=false;
@@ -439,7 +440,7 @@ function saveAndShare(){
 
 function buildUrl(d){
   const base=window.location.origin+window.location.pathname+"?";
-  const p=new URLSearchParams({name:d.name,score:d.score,role:d.role,skills: encodeURIComponent(JSON.stringify(d.skills||[])),gaps: encodeURIComponent(JSON.stringify(d.gaps||[])),salary:d.salary,career_path:d.career_path,weekly:d.weekly,percentile:d.percentile,date:d.date,tagline:d.tagline||""});
+  const p=new URLSearchParams({name:d.name,score:d.score,role:d.role,skills: JSON.stringify(d.skills||[]),gaps: JSON.stringify(d.gaps||[]),salary:d.salary,career_path:d.career_path,weekly:d.weekly,percentile:d.percentile,date:d.date,tagline:d.tagline||""});
   if(d.careerOptions.length)p.set("careerOptions",JSON.stringify(d.careerOptions));
   if(d.projects&&d.projects.length)p.set("projects",JSON.stringify(d.projects));
   return base+p.toString();

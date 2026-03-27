@@ -340,6 +340,7 @@ if(!suggestedTargetSalary && document.getElementById("salary").value){
     exp:              document.getElementById("exp").value,
     salary:           document.getElementById("salary").value,
     targetSalary: suggestedTargetSalary,
+expectedSalaryUpgrade: true,
     targetRole:       document.getElementById("targetRole").value,
     timeline:         document.getElementById("timeline").value,
     device:           /Mobi/.test(navigator.userAgent) ? "mobile" : "desktop",
@@ -625,9 +626,8 @@ function renderResult(data){
 
     <div style="margin-top:14px;padding:14px;background:#0f172a;border-radius:8px;font-size:14px;">
      ${data.score >= 80 
-  ? "You're already above the career-ready threshold. Focus on applications and real-world projects."
-  : `You are <b style="color:#3b82f6">${80-(data.score||30)}%</b> away from the 80% career-ready threshold.`}
-      Estimated: <b>${estimateWeeks(data.score)} weeks</b> of focused learning.
+  ? "You're already career-ready. Focus on applying, real-world projects, and refining your profile."
+  : `You are <b style="color:#3b82f6">${80-(data.score||30)}%</b> away from the 80% career-ready threshold. Estimated: ${estimateWeeks(data.score)} of focused learning.`}
     </div>
 
     <h4>Top career matches</h4>
@@ -680,15 +680,12 @@ function renderResult(data){
 }
 
 function estimateWeeks(score){
-  score = score || 30;
-
   if(score >= 80){
-    return "You're already career-ready. Focus on applying & refining your profile.";
+    return ""; // ✅ IMPORTANT (no duplicate text)
   }
-
   const gap = 80 - score;
   const w = Math.ceil(gap / 5);
-  return w + "–" + (w+4) + " weeks";
+  return `${w}-${w+4} weeks`;
 }
 
 function recheckScore(){ document.getElementById("userInput").scrollIntoView({behavior:"smooth"}); }
@@ -931,8 +928,8 @@ function openPortfolio(){
   params.set("name", d.name);
   params.set("score", d.score);
   params.set("role", d.role);
-  params.set("skills", encodeURIComponent(JSON.stringify(d.skills)));
-  params.set("gaps", encodeURIComponent(JSON.stringify(d.gaps)));
+  params.set("skills", JSON.stringify(d.skills));
+  params.set("gaps", JSON.stringify(d.gaps));
   params.set("salary", d.salary);
   params.set("career_path", d.career_path);
   params.set("weekly", d.weekly);
@@ -942,7 +939,7 @@ function openPortfolio(){
   params.set("date", d.date);
 
   if(d.careerOptions && d.careerOptions.length){
-    params.set("careerOptions", encodeURIComponent(JSON.stringify(d.careerOptions)));
+    params.set("careerOptions", JSON.stringify(d.careerOptions));
   }
 
   window.open("portfolio.html?" + params.toString(), "_blank");
