@@ -266,7 +266,8 @@ fetch(API+"?count=true")
   .then(r=>r.json())
   .then(d=>{ const el=document.getElementById("userCountText"); if(el&&d.count) el.textContent=d.count+"+"; })
   .catch(()=>{});
-</script>
 <script src="qbit-agent.js"></script>
+</script>
+
 </body>
 </html>
