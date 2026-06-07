@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qbit Interview & Study — AI-Powered Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f172a;--s1:#1e293b;--s2:#0f172a;--s3:#162032;
+  --b1:#334155;--b2:#475569;
+  --text:#f1f5f9;--muted:#94a3b8;--dim:#64748b;
+  --blue:#3b82f6;--dblue:#2563eb;--green:#22c55e;
+  --amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;}
+
+/* NAV */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid var(--s1);position:sticky;top:0;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);z-index:100;flex-wrap:wrap;gap:10px;}
+.logo{font-size:18px;font-weight:800;}.logo span{color:var(--blue);}
+.nav-tabs{display:flex;gap:4px;}
+.nav-tab{padding:7px 14px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:Inter,sans-serif;transition:all .2s;}
+.nav-tab:hover,.nav-tab.active{background:var(--s1);color:var(--text);font-weight:600;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;border:none;transition:all .2s;}
+.nav-btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--b1);}
+.nav-btn.primary{background:var(--dblue);color:#fff;}
+.nav-btn.primary:hover{background:#1d4ed8;}
+.score-badge{background:var(--s1);border:1px solid var(--b1);padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);}
+
+/* LAYOUT */
+.page{max-width:920px;margin:0 auto;padding:32px 24px 80px;}
+
+/* SETUP SCREEN */
+.setup-card{background:var(--s1);border:1px solid var(--b1);border-radius:16px;padding:36px;max-width:600px;margin:0 auto;}
+.setup-card h1{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px;}
+.setup-card p{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.field-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);display:block;margin-bottom:6px;}
+.field-group{margin-bottom:18px;}
+.input,.select{width:100%;padding:11px 14px;border-radius:8px;border:1.5px solid var(--b1);background:var(--s2);color:var(--text);font-size:14px;font-family:Inter,sans-serif;outline:none;transition:border-color .2s;}
+.input:focus,.select:focus{border-color:var(--blue);}
+.select option{background:var(--s1);}
+.textarea{width:100%;height:90px;padding:12px 14px;border-radius:8px;border:1.5px solid var(--b1);background:var(--s2);color:var(--text);font-size:14px;font-family:Inter,sans-serif;outline:none;resize:vertical;transition:border-color .2s;}
+.textarea:focus{border-color:var(--blue);}
+.textarea::placeholder{color:var(--dim);}
+.start-btn{width:100%;padding:14px;background:var(--dblue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:background .2s;margin-top:8px;}
+.start-btn:hover{background:#1d4ed8;}
+.start-btn:disabled{background:var(--b1);cursor:not-allowed;}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.mode-card{padding:14px 16px;border-radius:10px;border:2px solid var(--b1);cursor:pointer;transition:all .2s;background:var(--s2);}
+.mode-card:hover{border-color:var(--b2);}
+.mode-card.selected{border-color:var(--blue);background:rgba(59,130,246,.06);}
+.mode-card h3{font-size:14px;font-weight:600;margin-bottom:3px;}
+.mode-card p{font-size:12px;color:var(--muted);line-height:1.4;}
+.mode-icon{font-size:18px;margin-bottom:6px;}
+
+/* INTERVIEW SCREEN */
+.interview-layout{display:grid;grid-template-columns:280px 1fr;gap:24px;}
+@media(max-width:700px){.interview-layout{grid-template-columns:1fr;}}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:14px;}
+.info-card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:18px;}
+.info-card h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:10px;}
+.info-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:7px;}
+.info-row:last-child{margin-bottom:0;}
+.info-label{color:var(--muted);}
+.info-val{font-weight:600;color:var(--text);}
+.progress-list{display:flex;flex-direction:column;gap:6px;}
+.prog-item{display:flex;align-items:center;gap:8px;font-size:13px;padding:8px 10px;border-radius:7px;background:var(--s2);}
+.prog-item.done{background:rgba(34,197,94,.07);color:var(--green);}
+.prog-item.active{background:rgba(59,130,246,.08);color:var(--blue);font-weight:600;}
+.prog-item.pending{color:var(--dim);}
+.prog-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.prog-item.done .prog-num{background:rgba(34,197,94,.2);color:var(--green);}
+.prog-item.active .prog-num{background:rgba(59,130,246,.2);color:var(--blue);}
+.prog-item.pending .prog-num{background:var(--s1);color:var(--dim);}
+.score-ring-sm{text-align:center;padding:16px 0 8px;}
+.score-circle{width:80px;height:80px;border-radius:50%;border:6px solid var(--blue);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 8px;}
+.score-circle .num{font-size:22px;font-weight:800;color:var(--green);line-height:1;}
+.score-circle .lbl{font-size:9px;color:var(--muted);}
+.tip-card{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:14px;}
+.tip-card p{font-size:12px;color:var(--muted);line-height:1.6;}
+.tip-card strong{color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;}
+
+/* MAIN INTERVIEW */
+.main-interview{display:flex;flex-direction:column;gap:16px;}
+.question-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;}
+.q-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.q-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:4px 10px;border-radius:20px;}
+.q-badge.behavioral{background:rgba(139,92,246,.15);color:var(--purple);}
+.q-badge.technical{background:rgba(59,130,246,.15);color:var(--blue);}
+.q-badge.situational{background:rgba(245,158,11,.15);color:var(--amber);}
+.q-badge.hr{background:rgba(34,197,94,.15);color:var(--green);}
+.q-timer{font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums;}
+.q-timer.warning{color:var(--amber);}
+.q-timer.urgent{color:var(--red);}
+.q-text{font-size:18px;font-weight:600;line-height:1.5;margin-bottom:8px;}
+.q-hint{font-size:13px;color:var(--muted);border-left:3px solid var(--b1);padding-left:10px;}
+.answer-area{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;}
+.answer-area h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:10px;}
+.answer-textarea{width:100%;min-height:160px;padding:14px;border-radius:10px;border:1.5px solid var(--b1);background:var(--s2);color:var(--text);font-size:15px;font-family:Inter,sans-serif;line-height:1.7;resize:vertical;outline:none;transition:border-color .2s;}
+.answer-textarea:focus{border-color:var(--blue);}
+.answer-textarea::placeholder{color:var(--dim);}
+.word-count{font-size:12px;color:var(--dim);text-align:right;margin-top:6px;}
+.word-count.good{color:var(--green);}
+.action-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.action-btn{padding:11px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s;}
+.action-btn.primary{background:var(--dblue);color:#fff;}
+.action-btn.primary:hover{background:#1d4ed8;}
+.action-btn.secondary{background:var(--s1);color:var(--muted);border:1px solid var(--b1);}
+.action-btn.secondary:hover{border-color:var(--b2);color:var(--text);}
+.action-btn.danger{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.25);}
+.action-btn:disabled{opacity:.4;cursor:not-allowed;}
+.thinking-badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);padding:8px 14px;background:var(--s2);border-radius:20px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+/* FEEDBACK */
+.feedback-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.score-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
+.score-pill{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;}
+.score-pill.overall{background:var(--dblue);color:#fff;}
+.score-pill.good{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.score-pill.warn{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.25);}
+.score-pill.bad{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25);}
+.feedback-section{margin-bottom:16px;}
+.feedback-section h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:8px;}
+.feedback-text{font-size:14px;color:var(--muted);line-height:1.75;}
+.highlight{background:rgba(34,197,94,.08);border-left:3px solid var(--green);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0;font-size:13px;color:var(--text);}
+.improve{background:rgba(245,158,11,.08);border-left:3px solid var(--amber);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0;font-size:13px;color:var(--text);}
+.model-answer{background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:16px;font-size:14px;color:var(--muted);line-height:1.75;}
+
+/* RESULTS SCREEN */
+.results-header{text-align:center;padding:32px 0 24px;}
+.final-score{font-size:64px;font-weight:900;color:var(--green);line-height:1;}
+.final-label{font-size:16px;color:var(--muted);margin-top:6px;}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0;}
+@media(max-width:600px){.results-grid{grid-template-columns:1fr;}}
+.result-card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:18px;text-align:center;}
+.result-card .num{font-size:28px;font-weight:800;margin-bottom:4px;}
+.result-card .lbl{font-size:12px;color:var(--dim);}
+.qna-list{display:flex;flex-direction:column;gap:14px;margin:24px 0;}
+.qna-item{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:18px;}
+.qna-q{font-size:14px;font-weight:600;margin-bottom:8px;}
+.qna-score-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.tag{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.tag.green{background:rgba(34,197,94,.12);color:var(--green);}
+.tag.amber{background:rgba(245,158,11,.12);color:var(--amber);}
+.tag.red{background:rgba(239,68,68,.12);color:var(--red);}
+.qna-feedback{font-size:13px;color:var(--muted);line-height:1.6;}
+.action-row-center{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px;}
+
+/* LOADING */
+.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:14px;}
+.spinner{width:36px;height:36px;border:4px solid var(--s1);border-top:4px solid var(--blue);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ══ STUDY MODE ══ */
+.study-page{max-width:860px;margin:0 auto;padding:24px 24px 80px;}
+.study-hero{background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(59,130,246,.06));border:1px solid rgba(139,92,246,.2);border-radius:14px;padding:24px;margin-bottom:20px;}
+.study-hero h1{font-size:20px;font-weight:800;margin-bottom:4px;}
+.study-hero p{font-size:13px;color:var(--muted);}
+.topic-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;}
+.topic-card{background:var(--s1);border:1px solid var(--b1);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;text-align:center;}
+.topic-card:hover,.topic-card.selected{border-color:var(--purple);background:rgba(139,92,246,.06);}
+.topic-icon{font-size:24px;margin-bottom:6px;}
+.topic-name{font-size:13px;font-weight:600;}
+.topic-count{font-size:11px;color:var(--dim);margin-top:2px;}
+.study-layout{display:grid;grid-template-columns:240px 1fr;gap:18px;}
+@media(max-width:700px){.study-layout{grid-template-columns:1fr;}.topic-grid{grid-template-columns:repeat(2,1fr);}}
+.study-sidebar{}
+.study-nav-list{display:flex;flex-direction:column;gap:4px;}
+.study-nav-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .2s;border:1px solid transparent;}
+.study-nav-item:hover{background:var(--s1);color:var(--text);}
+.study-nav-item.active{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.25);color:var(--purple);font-weight:600;}
+.study-nav-item.done{color:var(--green);}
+.study-nav-item.done::before{content:"✓ ";}
+.study-main{}
+.concept-card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:22px;margin-bottom:14px;}
+.concept-card h2{font-size:18px;font-weight:700;margin-bottom:6px;}
+.concept-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:14px;}
+.cb-beginner{background:rgba(34,197,94,.1);color:var(--green);}
+.cb-intermediate{background:rgba(245,158,11,.1);color:var(--amber);}
+.cb-advanced{background:rgba(239,68,68,.1);color:var(--red);}
+.concept-body{font-size:14px;color:var(--muted);line-height:1.8;white-space:pre-wrap;}
+.code-block{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:16px;font-family:monospace;font-size:13px;color:#e6edf3;line-height:1.6;overflow-x:auto;margin:12px 0;white-space:pre;}
+.interview-qs{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:18px;margin-bottom:14px;}
+.iq-item{padding:12px 0;border-bottom:1px solid var(--s2);font-size:14px;}
+.iq-item:last-child{border-bottom:none;}
+.iq-q{font-weight:600;margin-bottom:4px;display:flex;align-items:flex-start;gap:8px;}
+.iq-num{width:22px;height:22px;background:rgba(139,92,246,.15);color:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.iq-hint{font-size:12px;color:var(--dim);padding-left:30px;}
+.study-chat{background:var(--s1);border:1px solid var(--b1);border-radius:12px;overflow:hidden;}
+.chat-header{padding:14px 18px;border-bottom:1px solid var(--b1);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.chat-messages{height:320px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.msg{max-width:85%;font-size:14px;line-height:1.6;}
+.msg.ai{align-self:flex-start;}
+.msg.user{align-self:flex-end;}
+.msg-bubble{padding:10px 14px;border-radius:10px;line-height:1.7;white-space:pre-wrap;}
+.msg.ai .msg-bubble{background:var(--s2);border:1px solid var(--b1);color:var(--text);}
+.msg.user .msg-bubble{background:var(--dblue);color:#fff;}
+.msg-label{font-size:11px;color:var(--dim);margin-bottom:4px;}
+.msg.user .msg-label{text-align:right;}
+.chat-input-row{display:flex;gap:8px;padding:12px;border-top:1px solid var(--b1);}
+.chat-inp{flex:1;padding:10px 13px;border-radius:8px;border:1.5px solid var(--b1);background:var(--s2);color:var(--text);font-size:14px;font-family:Inter,sans-serif;outline:none;}
+.chat-inp:focus{border-color:var(--purple);}
+.chat-inp::placeholder{color:var(--dim);}
+.chat-send{padding:10px 18px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:background .2s;white-space:nowrap;}
+.chat-send:hover{background:#7c3aed;}
+.chat-send:disabled{background:var(--b1);cursor:not-allowed;}
+.progress-bar-sm{height:4px;background:var(--s2);border-radius:2px;overflow:hidden;margin-top:6px;}
+.progress-bar-fill{height:100%;background:var(--purple);border-radius:2px;transition:width .4s ease;}
+.study-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.study-btn{padding:10px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s;}
+.study-btn.primary{background:var(--purple);color:#fff;}
+.study-btn.primary:hover{background:#7c3aed;}
+.study-btn.secondary{background:var(--s1);color:var(--muted);border:1px solid var(--b1);}
+.study-btn.secondary:hover{color:var(--text);}
+.dot-typing{display:flex;gap:4px;padding:10px 14px;background:var(--s2);border-radius:10px;border:1px solid var(--b1);width:fit-content;}
+.dt{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:dt .8s infinite;}.dt:nth-child(2){animation-delay:.15s;}.dt:nth-child(3){animation-delay:.3s;}
+@keyframes dt{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo">Q<span>bit</span> <span style="font-size:13px;font-weight:400;color:var(--muted);margin-left:6px;">Prep</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-interview-btn" onclick="switchMainTab('interview',this)">🎤 Mock Interview</button>
+    <button class="nav-tab" id="tab-study-btn" onclick="switchMainTab('study',this)">📚 Study Mode</button>
+  </div>
+  <div class="nav-right">
+    <span class="score-badge" id="navScore" style="display:none">Score: <span id="navScoreVal">—</span></span>
+    <a href="index.html" class="nav-btn ghost">← Home</a>
+  </div>
+</nav>
+
+<div id="interviewTab">
+<div class="page" id="pageRoot">
+  <!-- Setup screen shown by default -->
+  <div id="setupScreen">
+    <div class="setup-card">
+      <h1>AI Mock Interview</h1>
+      <p>Practice with AI-powered questions tailored to your target role. Get instant feedback on every answer.</p>
+
+      <div class="field-group">
+        <label class="field-label">Interview mode</label>
+        <div class="mode-grid">
+          <div class="mode-card selected" id="mode-quick" onclick="selectMode('quick')">
+            <div class="mode-icon">⚡</div>
+            <h3>Quick practice</h3>
+            <p>5 questions · 15 min · focused on gaps</p>
+          </div>
+          <div class="mode-card" id="mode-full" onclick="selectMode('full')">
+            <div class="mode-icon">🎯</div>
+            <h3>Full interview</h3>
+            <p>10 questions · 30 min · all categories</p>
+          </div>
+          <div class="mode-card" id="mode-hr" onclick="selectMode('hr')">
+            <div class="mode-icon">🤝</div>
+            <h3>HR round</h3>
+            <p>8 questions · 20 min · behavioral only</p>
+          </div>
+          <div class="mode-card" id="mode-technical" onclick="selectMode('technical')">
+            <div class="mode-icon">💻</div>
+            <h3>Technical round</h3>
+            <p>8 questions · 25 min · role-specific skills</p>
+          </div>
+          <div class="mode-card" id="mode-personal" onclick="selectMode('personal')" style="grid-column:1/-1;border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.04);">
+            <div class="mode-icon">🧠</div>
+            <h3>Personal Prep <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px">Most powerful</span></h3>
+            <p>You set the context — your real JD, your real background, your real weak areas. AI acts as your personal interview coach. Unlimited questions, brutally honest feedback.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Target role *</label>
+        <select class="select" id="targetRole">
+          <option value="">Select your target role</option>
+          <option>Data Analyst</option>
+          <option>Data Scientist</option>
+          <option>Machine Learning Engineer</option>
+          <option>Product Manager</option>
+          <option>Business Analyst</option>
+          <option>DevOps Engineer</option>
+          <option>Cloud Engineer</option>
+          <option>Backend Developer</option>
+          <option>Frontend Developer</option>
+          <option>Full Stack Developer</option>
+          <option>UI UX Designer</option>
+          <option>Digital Marketing Specialist</option>
+          <option>HR Specialist</option>
+          <option>Financial Analyst</option>
+          <option>Operations Manager</option>
+          <option>Cyber Security Analyst</option>
+          <option>Project Manager</option>
+          <option>Sales Manager</option>
+          <option>Customer Success Manager</option>
+          <option>Content Strategist</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Experience level</label>
+        <select class="select" id="expLevel">
+          <option value="fresher">Fresher / 0–1 years</option>
+          <option value="junior" selected>Junior / 1–3 years</option>
+          <option value="mid">Mid-level / 3–6 years</option>
+          <option value="senior">Senior / 6+ years</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Your background (optional — improves question relevance)</label>
+        <textarea class="textarea" id="background" placeholder="e.g. I currently work in marketing and want to switch to data analysis. I know Excel well but am learning SQL."></textarea>
+      </div>
+
+      <!-- PERSONAL PREP EXTRA FIELDS — shown only in personal mode -->
+      <div id="personalFields" style="display:none">
+        <div class="field-group">
+          <label class="field-label">Paste the actual Job Description you are interviewing for *</label>
+          <textarea class="textarea" id="actualJD" style="height:120px" placeholder="Paste the full JD here. Qbit will generate questions directly from it — not generic ones."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Your weak areas / what you are most nervous about</label>
+          <textarea class="textarea" id="weakAreas" placeholder="e.g. I struggle with SQL joins, system design questions, salary negotiation, explaining gaps in my resume..."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Any specific question you want to practice</label>
+          <input type="text" class="textarea" id="specificQ" style="height:auto;padding:11px 14px" placeholder="e.g. Tell me about a time you failed. Why should we hire you?">
+        </div>
+        <div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:10px;padding:14px;font-size:13px;color:var(--muted);line-height:1.6;">
+          🧠 <b style="color:var(--text)">Personal Prep mode</b> — AI generates questions directly from your JD, targets your weak areas, and gives coaching-level feedback. Like having a senior interviewer prepare you personally.
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Company type (optional)</label>
+        <select class="select" id="companyType">
+          <option value="">Any company</option>
+          <option value="startup">Startup</option>
+          <option value="mnc">MNC / Large company</option>
+          <option value="product">Product company</option>
+          <option value="service">IT services company</option>
+          <option value="govt">Government / PSU</option>
+        </select>
+      </div>
+
+      <button class="start-btn" id="startBtn" onclick="startInterview()">Start Interview →</button>
+    </div>
+  </div>
+
+  <!-- Interview screen (hidden initially) -->
+  <div id="interviewScreen" style="display:none">
+    <div class="interview-layout">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="info-card">
+          <h4>Session info</h4>
+          <div class="info-row"><span class="info-label">Role</span><span class="info-val" id="sideRole">—</span></div>
+          <div class="info-row"><span class="info-label">Mode</span><span class="info-val" id="sideMode">—</span></div>
+          <div class="info-row"><span class="info-label">Level</span><span class="info-val" id="sideLevel">—</span></div>
+          <div class="info-row"><span class="info-label">Time left</span><span class="info-val" id="sideTime">—</span></div>
+        </div>
+
+        <div class="info-card">
+          <h4>Questions</h4>
+          <div class="progress-list" id="progressList"></div>
+        </div>
+
+        <div class="info-card score-ring-sm" id="liveSidebar" style="display:none">
+          <h4>Live score</h4>
+          <div class="score-circle">
+            <div class="num" id="liveScore">—</div>
+            <div class="lbl">avg</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);text-align:center">Based on answers so far</div>
+        </div>
+
+        <div class="tip-card" id="tipCard">
+          <strong>Interview tip</strong>
+          <p id="tipText">Use the STAR method for behavioral questions: Situation, Task, Action, Result.</p>
+        </div>
+      </div>
+
+      <!-- Main area -->
+      <div class="main-interview" id="mainArea">
+        <div class="loader">
+          <div class="spinner"></div>
+          <p style="color:var(--muted);font-size:14px">Generating your interview questions...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results screen (hidden initially) -->
+  <div id="resultsScreen" style="display:none">
+    <div class="results-header">
+      <div class="final-score" id="finalScore">—</div>
+      <div class="final-label">Overall interview score</div>
+    </div>
+    <div class="results-grid">
+      <div class="result-card"><div class="num" id="resStrength" style="color:var(--green)">—</div><div class="lbl">Strongest area</div></div>
+      <div class="result-card"><div class="num" id="resImprove" style="color:var(--amber)">—</div><div class="lbl">Needs work</div></div>
+      <div class="result-card"><div class="num" id="resTime">—</div><div class="lbl">Avg answer time</div></div>
+    </div>
+    <h3 style="font-size:16px;font-weight:700;margin-bottom:4px">Question-by-question breakdown</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Review every answer and what you could improve</p>
+    <div class="qna-list" id="qnaList"></div>
+    <div class="action-row-center">
+      <button class="action-btn primary" onclick="restartInterview()">Practice Again</button>
+      <button class="action-btn secondary" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyBFqMP07yUlPOCYTefNOVCxxsK9fEtq07KO0FtujIVKc-etKOj456O-4Ll3bPNl86F/exec";
+
+// ── STATE ──────────────────────────────────────────────────────
+let state = {
+  mode:        "quick",
+  role:        "",
+  level:       "junior",
+  background:  "",
+  company:     "",
+  questions:   [],
+  answers:     [],
+  feedbacks:   [],
+  scores:      [],
+  currentQ:    0,
+  totalQ:      5,
+  sessionTime: 0,
+  timer:       null,
+  qTimer:      null,
+  qTimeLeft:   120,
+  answerTimes: [],
+  qStartTime:  0,
+};
+
+const TIPS = [
+  "Use STAR method: Situation, Task, Action, Result.",
+  "Quantify your answers — numbers make your impact concrete.",
+  "Take 10 seconds to think before answering. It shows confidence.",
+  "For technical questions, explain your thinking out loud.",
+  "If you don't know something, say what you do know and how you'd find out.",
+  "Research the company before the real interview — it shows initiative.",
+  "End behavioral answers with what you learned from the experience.",
+  "Be specific — avoid vague phrases like 'I'm a team player'.",
+  "For HR questions, show enthusiasm for growth, not just the salary.",
+  "Practice until your answers feel natural, not memorized.",
+];
+
+const MODE_CONFIG = {
+  quick:     { label:"Quick practice",  count:5,  time:15, categories:["behavioral","technical","situational"] },
+  full:      { label:"Full interview",  count:10, time:30, categories:["behavioral","technical","situational","hr"] },
+  hr:        { label:"HR round",        count:8,  time:20, categories:["hr","behavioral"] },
+  technical: { label:"Technical round", count:8,  time:25, categories:["technical","situational"] },
+  personal:  { label:"Personal Prep",   count:8,  time:40, categories:["behavioral","technical","situational","hr"] },
+};
+
+// ── SETUP ─────────────────────────────────────────────────────
+function selectMode(mode){
+  state.mode = mode;
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('mode-'+mode).classList.add('selected');
+  // Show/hide personal prep fields
+  document.getElementById('personalFields').style.display = mode==='personal'?'block':'none';
+  // Adjust question count label
+  const counts = {quick:'5 questions',full:'10 questions',hr:'8 questions',technical:'8 questions',personal:'Unlimited'};
+  document.getElementById('startBtn').textContent = mode==='personal'?'Start Personal Prep →':'Start Interview →';
+}
+
+async function startInterview(){
+  const role = document.getElementById('targetRole').value;
+  if(!role){ alert("Please select a target role."); return; }
+
+  state.role       = role;
+  state.level      = document.getElementById('expLevel').value;
+  state.background = document.getElementById('background').value;
+  state.company    = document.getElementById('companyType').value;
+  state.totalQ     = MODE_CONFIG[state.mode].count;
+  state.questions  = [];
+  state.answers    = [];
+  state.feedbacks  = [];
+  state.scores     = [];
+  state.currentQ   = 0;
+
+  // Switch to interview screen
+  document.getElementById('setupScreen').style.display    = 'none';
+  document.getElementById('interviewScreen').style.display = 'block';
+
+  // Fill sidebar
+  document.getElementById('sideRole').textContent  = role;
+  document.getElementById('sideMode').textContent  = MODE_CONFIG[state.mode].label;
+  document.getElementById('sideLevel').textContent = capitalize(state.level);
+
+  // Start session timer
+  state.sessionTime = 0;
+  state.timer = setInterval(()=>{
+    state.sessionTime++;
+    const m = String(Math.floor(state.sessionTime/60)).padStart(2,'0');
+    const s = String(state.sessionTime%60).padStart(2,'0');
+    document.getElementById('sideTime').textContent = m+':'+s;
+  }, 1000);
+
+  // Generate all questions upfront
+  await generateQuestions();
+}
+
+async function generateQuestions(){
+  const cfg  = MODE_CONFIG[state.mode];
+  const cats = cfg.categories;
+
+  // Personal prep: use actual JD + weak areas
+  const actualJD   = document.getElementById('actualJD')  ? document.getElementById('actualJD').value.trim()   : '';
+  const weakAreas  = document.getElementById('weakAreas') ? document.getElementById('weakAreas').value.trim()  : '';
+  const specificQ  = document.getElementById('specificQ') ? document.getElementById('specificQ').value.trim()  : '';
+  state.actualJD   = actualJD;
+  state.weakAreas  = weakAreas;
+
+  const isPersonal = state.mode === 'personal';
+
+  const prompt = isPersonal
+  ? `You are a senior interview coach preparing a candidate for a REAL interview.
+Role: ${state.role}
+Experience level: ${state.level}
+Candidate background: ${state.background || 'Not specified'}
+ACTUAL JOB DESCRIPTION: "${actualJD || 'Not provided — use role knowledge'}"
+Candidate weak areas: "${weakAreas || 'Not specified'}"
+Specific question they want to practice: "${specificQ || 'None'}"
+
+Generate exactly ${state.totalQ} highly targeted interview questions.
+IMPORTANT: 
+- Base questions directly on the JD requirements if provided
+- Include 1-2 questions targeting their stated weak areas
+- Include the specific question they requested if any
+- Make difficulty match a real interview for this role
+- Be brutally specific — no generic questions
+
+Return ONLY valid JSON array:
+[{"question":"...","type":"behavioral|technical|situational|hr","hint":"coaching tip specific to this question","time_limit":120}]`
+  : `You are an expert interviewer for ${state.role} positions at ${state.company||'tech companies'}.
+
+Generate exactly ${state.totalQ} interview questions for a ${state.level}-level ${state.role} candidate.
+${state.background ? 'Candidate background: '+state.background : ''}
+
+Return ONLY a valid JSON array, no markdown, no explanation:
+[
+  {
+    "question": "...",
+    "type": "behavioral|technical|situational|hr",
+    "hint": "one sentence tip on how to approach this",
+    "time_limit": 120
+  }
+]
+
+Mix question types from: ${cats.join(', ')}.
+Make questions progressively harder. Be specific to the ${state.role} role, not generic.`;
+
+  try{
+    const res  = await callGemini(prompt);
+    const clean = res.replace(/```json|```/g,'').trim();
+    const i1 = clean.indexOf('['), i2 = clean.lastIndexOf(']');
+    if(i1===-1) throw new Error('no array');
+    state.questions = JSON.parse(clean.substring(i1,i2+1)).slice(0,state.totalQ);
+    buildProgressList();
+    setTip(0);
+    renderQuestion(0);
+  }catch(e){
+    // Fallback questions if AI fails
+    state.questions = getFallbackQuestions(state.role, state.totalQ);
+    buildProgressList();
+    renderQuestion(0);
+  }
+}
+
+function getFallbackQuestions(role, count){
+  const bank = [
+    {question:`Tell me about yourself and why you want to become a ${role}.`,type:"hr",hint:"Keep it under 2 minutes. Focus on your journey and why this role.",time_limit:120},
+    {question:`What do you consider your biggest strength relevant to a ${role} role?`,type:"behavioral",hint:"Use a specific example from your work experience.",time_limit:90},
+    {question:`Describe a time you had to learn a new skill quickly. What was your approach?`,type:"behavioral",hint:"STAR method: Situation, Task, Action, Result.",time_limit:120},
+    {question:`Where do you see yourself in 3 years as a ${role}?`,type:"hr",hint:"Show ambition but be realistic. Align with the company's growth.",time_limit:90},
+    {question:`Tell me about a time you disagreed with a team member. How did you resolve it?`,type:"situational",hint:"Focus on the resolution and what you learned, not the conflict.",time_limit:120},
+    {question:`What is your biggest weakness and what are you doing to improve it?`,type:"hr",hint:"Be honest. Show self-awareness and the steps you're taking.",time_limit:90},
+    {question:`Why do you want to leave your current role?`,type:"hr",hint:"Be positive. Focus on growth opportunities, not negatives.",time_limit:90},
+    {question:`How do you prioritize tasks when you have multiple deadlines?`,type:"situational",hint:"Give a specific example with tools or frameworks you use.",time_limit:120},
+    {question:`What do you know about our company and why do you want to work here?`,type:"hr",hint:"Research the company. Show genuine interest in their mission.",time_limit:90},
+    {question:`Do you have any questions for us?`,type:"hr",hint:"Always ask 2-3 thoughtful questions. Avoid asking about salary first.",time_limit:60},
+  ];
+  return bank.slice(0,count);
+}
+
+// ── QUESTION RENDERING ────────────────────────────────────────
+function buildProgressList(){
+  const list = document.getElementById('progressList');
+  list.innerHTML = state.questions.map((q,i)=>`
+    <div class="prog-item ${i===0?'active':'pending'}" id="prog-${i}">
+      <div class="prog-num">${i+1}</div>
+      <span style="font-size:12px">${capitalize(q.type)} Q${i+1}</span>
+    </div>`).join('');
+}
+
+function updateProgress(idx){
+  document.querySelectorAll('.prog-item').forEach((el,i)=>{
+    el.className = 'prog-item '+(i<idx?'done':i===idx?'active':'pending');
+    el.querySelector('.prog-num').textContent = i<idx ? '✓' : i+1;
+  });
+}
+
+function renderQuestion(idx){
+  if(idx >= state.questions.length){ showResults(); return; }
+
+  const q = state.questions[idx];
+  state.currentQ = idx;
+  state.qStartTime = Date.now();
+  state.qTimeLeft  = q.time_limit || 120;
+  updateProgress(idx);
+  setTip(idx);
+
+  clearInterval(state.qTimer);
+  state.qTimer = setInterval(()=>{
+    state.qTimeLeft--;
+    const el = document.getElementById('qTimerEl');
+    if(el){
+      el.textContent = formatTime(state.qTimeLeft);
+      el.className = 'q-timer'+(state.qTimeLeft<30?' urgent':state.qTimeLeft<60?' warning':'');
+    }
+    if(state.qTimeLeft<=0){ clearInterval(state.qTimer); submitAnswer(true); }
+  },1000);
+
+  const main = document.getElementById('mainArea');
+  main.innerHTML = `
+    <div class="question-card">
+      <div class="q-header">
+        <span class="q-badge ${q.type}">${capitalize(q.type)}</span>
+        <span class="q-timer" id="qTimerEl">${formatTime(state.qTimeLeft)}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${q.hint?`<div class="q-hint">${q.hint}</div>`:''}
+    </div>
+
+    <div class="answer-area">
+      <h3>Your answer (Question ${idx+1} of ${state.totalQ})</h3>
+      <textarea class="answer-textarea" id="answerInput"
+        placeholder="Type your answer here. Think about structure — use STAR for behavioral questions, be specific for technical ones..."
+        oninput="updateWordCount(this)"></textarea>
+      <div class="word-count" id="wordCount">0 words · aim for 80–200</div>
+      <div class="action-row" style="margin-top:14px">
+        <button class="action-btn primary" id="submitBtn" onclick="submitAnswer(false)">
+          ${idx===state.totalQ-1?'Finish Interview →':'Submit &amp; Next →'}
+        </button>
+        <button class="action-btn secondary" onclick="skipQuestion()">Skip</button>
+        ${idx>0?`<button class="action-btn danger" onclick="restartInterview()" style="margin-left:auto">End early</button>`:''}
+      </div>
+    </div>`;
+
+  // Focus textarea
+  setTimeout(()=>{ const t=document.getElementById('answerInput'); if(t) t.focus(); },100);
+}
+
+function updateWordCount(el){
+  const words = el.value.trim().split(/\s+/).filter(Boolean).length;
+  const wc    = document.getElementById('wordCount');
+  wc.textContent = words+' words · aim for 80–200';
+  wc.className   = 'word-count'+(words>=80&&words<=300?' good':'');
+}
+
+// ── SUBMIT & FEEDBACK ─────────────────────────────────────────
+async function submitAnswer(timeout=false){
+  clearInterval(state.qTimer);
+
+  const answerEl = document.getElementById('answerInput');
+  const answer   = answerEl ? answerEl.value.trim() : '';
+  const timeTaken = Math.round((Date.now()-state.qStartTime)/1000);
+
+  state.answers.push(answer||'[No answer given]');
+  state.answerTimes.push(timeTaken);
+
+  // Show thinking indicator
+  const main = document.getElementById('mainArea');
+  const existing = main.innerHTML;
+  main.innerHTML += `<div class="thinking-badge" id="thinkingBadge">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    AI is reviewing your answer...
+  </div>`;
+
+  // Get AI feedback
+  const q = state.questions[state.currentQ];
+  const feedback = await getAIFeedback(q, answer, timeout);
+  state.feedbacks.push(feedback);
+  state.scores.push(feedback.score||50);
+
+  // Update live score
+  const avg = Math.round(state.scores.reduce((a,b)=>a+b,0)/state.scores.length);
+  document.getElementById('liveScore').textContent = avg+'%';
+  document.getElementById('navScoreVal').textContent = avg+'%';
+  document.getElementById('liveSidebar').style.display = 'block';
+  document.getElementById('navScore').style.display = 'block';
+
+  renderFeedback(feedback, q, answer);
+}
+
+async function getAIFeedback(question, answer, timeout){
+  const isPersonal = state.mode === 'personal';
+  const prompt = `You are an expert interview coach evaluating a ${state.role} candidate.
+
+Question: "${question.question}"
+Question type: ${question.type}
+Candidate answer: "${answer||'No answer provided'}"
+${timeout?'Note: candidate ran out of time.':''}
+${isPersonal&&state.actualJD?'Job Description context: '+state.actualJD.substring(0,400):''}
+${isPersonal&&state.weakAreas?'Known weak areas: '+state.weakAreas:''}
+
+Evaluate this answer. ${isPersonal?'Be a tough but fair coach — point out exactly what a real interviewer would think.':'Be honest but constructive.'}
+Return ONLY valid JSON, no markdown:
+{
+  "score": 75,
+  "verdict": "Good answer",
+  "strengths": "What they did well (2-3 sentences)",
+  "improvements": "What they should improve (2-3 sentences)${isPersonal?' — be specific and direct':' '}",
+  "model_answer": "A better version of this answer in 3-4 sentences",
+  "coaching_tip": "${isPersonal?'One specific coaching insight for this person':''}",
+  "keywords_used": ["keyword1","keyword2"],
+  "keywords_missed": ["keyword3","keyword4"]
+}
+
+Score 0-100. 0-40=poor, 40-70=average, 70-85=good, 85-100=excellent.`;
+
+  try{
+    const res   = await callGemini(prompt);
+    const clean = res.replace(/```json|```/g,'').trim();
+    const i1    = clean.indexOf('{'), i2 = clean.lastIndexOf('}');
+    if(i1===-1) throw new Error('no json');
+    return JSON.parse(clean.substring(i1,i2+1));
+  }catch(e){
+    return {
+      score:50,
+      verdict:"Answer received",
+      strengths:"Your answer touched on relevant points.",
+      improvements:"Try to be more specific with examples from your experience.",
+      model_answer:"For this type of question, structure your answer using STAR method with specific metrics and outcomes.",
+      keywords_used:[],
+      keywords_missed:[]
+    };
+  }
+}
+
+function renderFeedback(fb, q, answer){
+  const scoreColor = fb.score>=70?'good':fb.score>=40?'warn':'bad';
+  const isLast     = state.currentQ === state.totalQ-1;
+
+  const main = document.getElementById('mainArea');
+  main.innerHTML = `
+    <div class="question-card">
+      <div class="q-header">
+        <span class="q-badge ${q.type}">${capitalize(q.type)}</span>
+        <span style="font-size:13px;color:var(--dim)">Question ${state.currentQ+1} of ${state.totalQ}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+    </div>
+
+    <div class="feedback-card">
+      <div class="score-row">
+        <span class="score-pill overall">${fb.score}/100</span>
+        <span class="score-pill ${scoreColor}">${fb.verdict||'Reviewed'}</span>
+        ${(fb.keywords_used||[]).slice(0,3).map(k=>`<span class="score-pill good">✓ ${k}</span>`).join('')}
+      </div>
+
+      <div class="feedback-section">
+        <h4>What you did well</h4>
+        <div class="highlight">${fb.strengths}</div>
+      </div>
+
+      <div class="feedback-section">
+        <h4>How to improve</h4>
+        <div class="improve">${fb.improvements}</div>
+      </div>
+
+      ${(fb.keywords_missed||[]).length>0?`
+      <div class="feedback-section">
+        <h4>Keywords to include next time</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+          ${fb.keywords_missed.map(k=>`<span style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);padding:3px 10px;border-radius:20px;font-size:12px">${k}</span>`).join('')}
+        </div>
+      </div>`:''}
+
+      <div class="feedback-section">
+        <h4>Model answer</h4>
+        <div class="model-answer">${fb.model_answer}</div>
+      </div>
+
+      <div class="action-row" style="margin-top:18px">
+        <button class="action-btn primary" onclick="${isLast?'showResults()':'nextQuestion()'}">
+          ${isLast?'See Full Results →':'Next Question →'}
+        </button>
+        <button class="action-btn secondary" onclick="toggleMyAnswer(this)">Show my answer</button>
+      </div>
+      <div id="myAnswerBox" style="display:none;margin-top:12px;padding:14px;background:var(--s2);border-radius:8px;font-size:14px;color:var(--muted);line-height:1.7">${answer||'No answer given'}</div>
+    </div>`;
+}
+
+function toggleMyAnswer(btn){
+  const box = document.getElementById('myAnswerBox');
+  box.style.display = box.style.display==='none'?'block':'none';
+  btn.textContent = box.style.display==='none'?'Show my answer':'Hide my answer';
+}
+
+function nextQuestion(){
+  renderQuestion(state.currentQ+1);
+}
+
+function skipQuestion(){
+  if(!confirm('Skip this question? It will count as unanswered.')) return;
+  state.answers.push('[Skipped]');
+  state.answerTimes.push(0);
+  state.feedbacks.push({score:0,verdict:'Skipped',strengths:'',improvements:'Practice answering this type of question.',model_answer:'',keywords_used:[],keywords_missed:[]});
+  state.scores.push(0);
+  if(state.currentQ < state.totalQ-1) renderQuestion(state.currentQ+1);
+  else showResults();
+}
+
+// ── RESULTS ───────────────────────────────────────────────────
+function showResults(){
+  clearInterval(state.timer);
+  clearInterval(state.qTimer);
+
+  document.getElementById('interviewScreen').style.display = 'none';
+  document.getElementById('resultsScreen').style.display   = 'block';
+
+  const avg = Math.round(state.scores.reduce((a,b)=>a+b,0)/Math.max(state.scores.length,1));
+  document.getElementById('finalScore').textContent = avg+'%';
+  document.getElementById('finalScore').style.color = avg>=70?'var(--green)':avg>=40?'var(--amber)':'var(--red)';
+
+  // Category scores
+  const byType = {};
+  state.questions.forEach((q,i)=>{
+    if(!byType[q.type]) byType[q.type]={total:0,count:0};
+    byType[q.type].total  += state.scores[i]||0;
+    byType[q.type].count  += 1;
+  });
+  const typeAvgs = Object.entries(byType).map(([t,d])=>({type:t,avg:Math.round(d.total/d.count)}));
+  typeAvgs.sort((a,b)=>b.avg-a.avg);
+  document.getElementById('resStrength').textContent = typeAvgs[0]?capitalize(typeAvgs[0].type):'—';
+  document.getElementById('resImprove').textContent  = typeAvgs[typeAvgs.length-1]?capitalize(typeAvgs[typeAvgs.length-1].type):'—';
+
+  const avgTime = Math.round(state.answerTimes.reduce((a,b)=>a+b,0)/Math.max(state.answerTimes.length,1));
+  document.getElementById('resTime').textContent = avgTime+'s';
+
+  // Q&A list
+  const list = document.getElementById('qnaList');
+  list.innerHTML = state.questions.map((q,i)=>{
+    const fb    = state.feedbacks[i]||{};
+    const score = state.scores[i]||0;
+    const cls   = score>=70?'green':score>=40?'amber':'red';
+    return `<div class="qna-item">
+      <div class="qna-q">Q${i+1}: ${q.question}</div>
+      <div class="qna-score-row">
+        <span class="tag ${cls}">${score}/100</span>
+        <span class="tag" style="background:var(--s2);color:var(--muted)">${capitalize(q.type)}</span>
+        <span class="tag" style="background:var(--s2);color:var(--muted)">${state.answerTimes[i]||0}s</span>
+      </div>
+      <div class="qna-feedback">${fb.improvements||'Keep practicing.'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── UTILITIES ─────────────────────────────────────────────────
+function setTip(idx){
+  const tip = document.getElementById('tipText');
+  if(tip) tip.textContent = TIPS[idx % TIPS.length];
+}
+
+function formatTime(sec){
+  const m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+function capitalize(str){ return str ? str.charAt(0).toUpperCase()+str.slice(1) : ''; }
+
+function restartInterview(){
+  clearInterval(state.timer);
+  clearInterval(state.qTimer);
+  document.getElementById('setupScreen').style.display    = 'block';
+  document.getElementById('interviewScreen').style.display = 'none';
+  document.getElementById('resultsScreen').style.display  = 'none';
+  document.getElementById('navScore').style.display       = 'none';
+}
+
+// ── GEMINI API ─────────────────────────────────────────────────
+async function callGemini(prompt){
+  try{
+    // Route through App Script to avoid CORS and key exposure
+    const res  = await fetch(API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
+      question: prompt,
+      skills:   [],
+      role:     state.role,
+      score:    0
+    })));
+    const text = await res.text();
+    return text || "";
+  }catch(e){
+    console.error("Gemini call failed:", e);
+    return "";
+  }
+}
+
+// Enter key in answer textarea → Ctrl+Enter submits
+document.addEventListener('keydown', function(e){
+  if(e.key==='Enter' && (e.ctrlKey||e.metaKey)){
+    const btn = document.getElementById('submitBtn');
+    if(btn && !btn.disabled) submitAnswer(false);
+  }
+});
+</script>
+</div><!-- /interviewTab -->
+
+<!-- ══════════════ STUDY MODE ══════════════ -->
+<div id="studyTab" style="display:none">
+<div class="study-page">
+
+  <!-- Topic picker -->
+  <div id="studyHome">
+    <div class="study-hero">
+      <h1>📚 Study Mode — Concept Coach</h1>
+      <p>Pick a topic. Qbit explains it, shows real code examples, quiz you, and tells you exactly what interviewers ask. Like a personal tutor.</p>
+    </div>
+    <div class="topic-grid" id="topicGrid"></div>
+  </div>
+
+  <!-- Study workspace -->
+  <div id="studyWorkspace" style="display:none">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+      <button class="study-btn secondary" onclick="showStudyHome()" style="padding:8px 14px;font-size:12px">← All Topics</button>
+      <h2 id="studyTopicTitle" style="font-size:18px;font-weight:800;"></h2>
+      <div style="margin-left:auto;font-size:13px;color:var(--muted)">
+        Progress: <span id="studyProgress">0</span>/<span id="studyTotal">0</span>
+      </div>
+    </div>
+    <div class="progress-bar-sm" style="margin-bottom:20px;">
+      <div class="progress-bar-fill" id="studyProgressBar" style="width:0%"></div>
+    </div>
+
+    <div class="study-layout">
+      <!-- Left: concept nav -->
+      <div class="study-sidebar">
+        <div class="panel" style="background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:10px;">Concepts</div>
+          <div class="study-nav-list" id="studyNavList"></div>
+        </div>
+      </div>
+
+      <!-- Right: content -->
+      <div class="study-main">
+        <div id="studyContent">
+          <div class="concept-card" style="text-align:center;padding:40px;">
+            <div style="font-size:36px;margin-bottom:12px;">📖</div>
+            <p style="color:var(--muted);font-size:14px">Select a concept from the left to start learning.</p>
+          </div>
+        </div>
+
+        <!-- Chat with tutor -->
+        <div class="study-chat" style="margin-top:14px;">
+          <div class="chat-header">
+            🤖 Ask Qbit Tutor
+            <span style="font-size:12px;font-weight:400;color:var(--dim);margin-left:4px">— any question about this topic</span>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="msg ai">
+              <div class="msg-label">Qbit Tutor</div>
+              <div class="msg-bubble">Hi! Select a topic and concept above, then ask me anything — explain it differently, show more code, quiz me, compare concepts, anything. I'm here to help you understand, not just memorize. 🧠</div>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-inp" id="chatInput" placeholder="Ask anything... e.g. 'Explain event loop with a simple example' or 'Quiz me on this'">
+            <button class="chat-send" id="chatSendBtn" onclick="sendChat()">Send →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /studyTab -->
+
+<script>
+// ══════════════════════════════════════════════
+// STUDY MODE — TOPIC DATABASE
+// ══════════════════════════════════════════════
+const STUDY_API = "https://script.google.com/macros/s/AKfycbyBFqMP07yUlPOCYTefNOVCxxsK9fEtq07KO0FtujIVKc-etKOj456O-4Ll3bPNl86F/exec";
+
+const TOPICS = [
+  { id:"nodejs",    name:"Node.js",         icon:"🟢", count:10,
+    concepts:["Event Loop","Callbacks & Promises","Async/Await","Streams & Buffers","Express.js Basics","REST API Design","Middleware","Error Handling","Authentication (JWT)","Clustering & PM2"] },
+  { id:"sql",       name:"SQL",             icon:"🗄️", count:10,
+    concepts:["SELECT & WHERE","JOINs (INNER/LEFT/RIGHT)","GROUP BY & HAVING","Subqueries","Indexes","Transactions","Stored Procedures","Window Functions","Query Optimization","Normalization"] },
+  { id:"python",    name:"Python",          icon:"🐍", count:10,
+    concepts:["Data Types & OOP","List Comprehensions","Decorators","Generators","Error Handling","File I/O","Libraries (Pandas/NumPy)","APIs with Requests","Virtual Envs","Testing with Pytest"] },
+  { id:"dsa",       name:"DSA",             icon:"🧮", count:10,
+    concepts:["Arrays & Strings","Linked Lists","Stacks & Queues","Trees & Graphs","Recursion","Sorting Algorithms","Binary Search","Dynamic Programming","Hash Maps","Big O Notation"] },
+  { id:"system",    name:"System Design",   icon:"🏗️", count:8,
+    concepts:["Scalability Basics","Load Balancing","Caching","Database Sharding","CAP Theorem","Microservices","API Gateway","Message Queues"] },
+  { id:"react",     name:"React",           icon:"⚛️", count:8,
+    concepts:["JSX & Components","State & Props","Hooks (useState/useEffect)","Context API","React Router","Performance Optimization","Custom Hooks","Testing"] },
+  { id:"devops",    name:"DevOps",          icon:"⚙️", count:8,
+    concepts:["Docker Basics","Kubernetes","CI/CD Pipelines","Linux Commands","Nginx","Git Advanced","Monitoring","Cloud (AWS basics)"] },
+  { id:"hr",        name:"HR & Soft Skills",icon:"🤝", count:8,
+    concepts:["Tell Me About Yourself","Strengths & Weaknesses","STAR Method","Salary Negotiation","Why This Company","Career Goals","Conflict Resolution","Leadership Examples"] },
+];
+
+let studyState = {
+  topic: null,
+  conceptIdx: 0,
+  doneConcepts: new Set(),
+  chatHistory: [],
+};
+
+// ── MAIN TAB SWITCHER ─────────────────────────────────────────
+function switchMainTab(tab, btn){
+  document.getElementById('interviewTab').style.display = tab==='interview'?'block':'none';
+  document.getElementById('studyTab').style.display     = tab==='study'?'block':'none';
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  if(tab==='study' && !document.getElementById('topicGrid').children.length) renderTopicGrid();
+}
+
+// ── TOPIC GRID ────────────────────────────────────────────────
+function renderTopicGrid(){
+  document.getElementById('topicGrid').innerHTML = TOPICS.map(t=>`
+    <div class="topic-card" onclick="selectTopic('${t.id}')">
+      <div class="topic-icon">${t.icon}</div>
+      <div class="topic-name">${t.name}</div>
+      <div class="topic-count">${t.count} concepts</div>
+    </div>`).join('');
+}
+
+function selectTopic(id){
+  studyState.topic      = TOPICS.find(t=>t.id===id);
+  studyState.conceptIdx = 0;
+  studyState.doneConcepts = new Set();
+  studyState.chatHistory  = [];
+
+  document.getElementById('studyHome').style.display      = 'none';
+  document.getElementById('studyWorkspace').style.display = 'block';
+  document.getElementById('studyTopicTitle').textContent  = studyState.topic.icon+' '+studyState.topic.name;
+  document.getElementById('studyTotal').textContent       = studyState.topic.concepts.length;
+
+  renderStudyNav();
+  loadConcept(0);
+
+  // Welcome message in chat
+  const t = studyState.topic;
+  addChatMsg('ai', `Let's master ${t.name}! I'll explain each concept clearly with real examples and code. Ask me anything — "explain this differently", "show more code", "quiz me", "compare with X". Ready? Start with the first concept on the left. 💪`);
+}
+
+function showStudyHome(){
+  document.getElementById('studyHome').style.display      = 'block';
+  document.getElementById('studyWorkspace').style.display = 'none';
+  document.getElementById('chatMessages').innerHTML = `
+    <div class="msg ai"><div class="msg-label">Qbit Tutor</div>
+    <div class="msg-bubble">Hi! Select a topic and concept above, then ask me anything. 🧠</div></div>`;
+  studyState.chatHistory = [];
+  renderTopicGrid();
+}
+
+// ── CONCEPT NAV ───────────────────────────────────────────────
+function renderStudyNav(){
+  const t = studyState.topic;
+  document.getElementById('studyNavList').innerHTML = t.concepts.map((c,i)=>`
+    <div class="study-nav-item ${i===studyState.conceptIdx?'active':''} ${studyState.doneConcepts.has(i)?'done':''}"
+      onclick="loadConcept(${i})" id="nav-concept-${i}">${c}</div>`).join('');
+}
+
+// ── LOAD CONCEPT ─────────────────────────────────────────────
+async function loadConcept(idx){
+  studyState.conceptIdx = idx;
+  renderStudyNav();
+
+  const t       = studyState.topic;
+  const concept = t.concepts[idx];
+
+  document.getElementById('studyContent').innerHTML = `
+    <div class="concept-card" style="text-align:center;padding:32px;">
+      <div class="spinner" style="margin:0 auto 14px;width:32px;height:32px;border-width:3px;"></div>
+      <p style="color:var(--muted);font-size:14px">Loading ${concept}...</p>
+    </div>`;
+
+  const prompt = `You are an expert coding/career tutor. Explain this concept clearly for an interview candidate.
+
+Topic: ${t.name}
+Concept: ${concept}
+
+Return a JSON object (no markdown, no code fences):
+{
+  "title": "${concept}",
+  "difficulty": "Beginner|Intermediate|Advanced",
+  "one_liner": "One sentence summary",
+  "explanation": "Clear explanation in 3-4 paragraphs. Use simple language. Build from basics.",
+  "code_example": "A real, runnable code example (if applicable to this topic). Use proper indentation.",
+  "code_language": "javascript|python|sql|bash|none",
+  "key_points": ["point 1","point 2","point 3","point 4","point 5"],
+  "interview_questions": [
+    {"q":"Common interview question 1","hint":"How to approach it"},
+    {"q":"Common interview question 2","hint":"How to approach it"},
+    {"q":"Common interview question 3","hint":"How to approach it"},
+    {"q":"Tricky follow-up question","hint":"What interviewer is really testing"}
+  ],
+  "common_mistakes": "What most candidates get wrong about this",
+  "remember_this": "The single most important thing to remember"
+}`;
+
+  try{
+    const res   = await fetch(STUDY_API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
+      question:prompt, skills:[], role:t.name, score:0
+    })));
+    const text  = await res.text();
+    const clean = text.replace(/```json|```/g,'').trim();
+    const i1=clean.indexOf('{'), i2=clean.lastIndexOf('}');
+    const data  = JSON.parse(clean.substring(i1,i2+1));
+    renderConcept(data, idx, t);
+    studyState.doneConcepts.add(idx);
+    renderStudyNav();
+    updateStudyProgress();
+  }catch(e){
+    document.getElementById('studyContent').innerHTML = `
+      <div class="concept-card">
+        <h2>${concept}</h2>
+        <p style="color:var(--red);font-size:14px">Could not load content. Check your internet and try again.</p>
+        <button class="study-btn primary" onclick="loadConcept(${idx})" style="margin-top:12px">Retry</button>
+      </div>`;
+  }
+}
+
+function renderConcept(data, idx, topic){
+  const diffCls = data.difficulty==='Beginner'?'cb-beginner':data.difficulty==='Advanced'?'cb-advanced':'cb-intermediate';
+  const isLast  = idx === topic.concepts.length-1;
+
+  const codeSection = (data.code_example && data.code_language!=='none') ? `
+    <div style="margin:16px 0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:6px;">Code Example</div>
+      <div class="code-block">${escHtml(data.code_example)}</div>
+    </div>` : '';
+
+  const keyPoints = (data.key_points||[]).map(p=>`
+    <div style="display:flex;gap:10px;margin-bottom:8px;font-size:14px;">
+      <span style="color:var(--purple);flex-shrink:0;font-weight:700;">→</span>
+      <span style="color:var(--muted)">${p}</span>
+    </div>`).join('');
+
+  const iqHTML = (data.interview_questions||[]).map((q,i)=>`
+    <div class="iq-item">
+      <div class="iq-q"><span class="iq-num">${i+1}</span>${q.q}</div>
+      <div class="iq-hint">💡 ${q.hint}</div>
+    </div>`).join('');
+
+  document.getElementById('studyContent').innerHTML = `
+    <div class="concept-card">
+      <h2>${data.title}</h2>
+      <span class="concept-badge ${diffCls}">${data.difficulty}</span>
+      <div style="background:rgba(139,92,246,.06);border-left:3px solid var(--purple);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px;color:var(--text);margin-bottom:16px;">
+        ${data.one_liner}
+      </div>
+      <div class="concept-body">${data.explanation}</div>
+      ${codeSection}
+      <div style="margin-top:16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:8px;">Key Points</div>
+        ${keyPoints}
+      </div>
+      ${data.common_mistakes?`<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px;color:var(--muted);">
+        ⚠️ <b style="color:var(--text)">Common mistake:</b> ${data.common_mistakes}
+      </div>`:''}
+      ${data.remember_this?`<div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:13px;color:var(--muted);">
+        🎯 <b style="color:var(--green)">Remember:</b> ${data.remember_this}
+      </div>`:''}
+    </div>
+
+    <div class="interview-qs">
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;">🎤 Interview Questions on ${data.title}</div>
+      ${iqHTML}
+    </div>
+
+    <div class="study-actions">
+      <button class="study-btn primary" onclick="quizMe('${escAttr(data.title)}','${escAttr(topic.name)}')">🧠 Quiz Me on This</button>
+      ${!isLast?`<button class="study-btn secondary" onclick="loadConcept(${idx+1})">Next: ${escHtml(topic.concepts[idx+1]||'')} →</button>`:''}
+      <button class="study-btn secondary" onclick="practiceInterviewQ('${escAttr(data.title)}','${escAttr(topic.name)}')">🎤 Practice Interview Qs</button>
+    </div>`;
+}
+
+function updateStudyProgress(){
+  const done  = studyState.doneConcepts.size;
+  const total = studyState.topic ? studyState.topic.concepts.length : 1;
+  document.getElementById('studyProgress').textContent     = done;
+  document.getElementById('studyProgressBar').style.width  = Math.round(done/total*100)+'%';
+}
+
+// ── QUICK ACTIONS ─────────────────────────────────────────────
+function quizMe(concept, topic){
+  const q = `Quiz me on "${concept}" in ${topic}. Ask me 3 questions one by one. Start with question 1 now.`;
+  document.getElementById('chatInput').value = q;
+  sendChat();
+}
+
+function practiceInterviewQ(concept, topic){
+  const q = `Ask me a tough interview question about "${concept}" as if you're a real interviewer. After I answer, give me honest feedback.`;
+  document.getElementById('chatInput').value = q;
+  sendChat();
+}
+
+// ── CHAT ─────────────────────────────────────────────────────
+function addChatMsg(role, text){
+  const msgs   = document.getElementById('chatMessages');
+  const label  = role==='ai'?'Qbit Tutor':'You';
+  const div    = document.createElement('div');
+  div.className= 'msg '+role;
+  div.innerHTML= `<div class="msg-label">${label}</div><div class="msg-bubble">${escHtml(text)}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Store in history
+  studyState.chatHistory.push({role:role==='ai'?'assistant':'user', content:text});
+  if(studyState.chatHistory.length>20) studyState.chatHistory=studyState.chatHistory.slice(-20);
+}
+
+function addTypingIndicator(){
+  const msgs = document.getElementById('chatMessages');
+  const div  = document.createElement('div');
+  div.className='msg ai'; div.id='typing-indicator';
+  div.innerHTML='<div class="msg-label">Qbit Tutor</div><div class="dot-typing"><div class="dt"></div><div class="dt"></div><div class="dt"></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function sendChat(){
+  const inp = document.getElementById('chatInput');
+  const msg = inp.value.trim();
+  if(!msg) return;
+
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled=true; inp.value='';
+
+  addChatMsg('user', msg);
+  addTypingIndicator();
+
+  const topic   = studyState.topic;
+  const concept = topic ? topic.concepts[studyState.conceptIdx] : 'general';
+
+  // Build context-aware prompt
+  const context = studyState.chatHistory.slice(-6).map(m=>`${m.role}: ${m.content}`).join('
+');
+  const prompt  = `You are Qbit Tutor — a patient, expert coding and career interview coach.
+Current topic: ${topic?topic.name:'General'}
+Current concept being studied: ${concept}
+
+Conversation so far:
+${context}
+
+User's latest message: "${msg}"
+
+Respond as a tutor — explain clearly, use examples and code when helpful, be encouraging but honest.
+If they want to be quizzed, ask one question at a time and wait for their answer before giving the next.
+If they answer a quiz question, evaluate it and give feedback.
+Keep responses focused and practical. Use code blocks when showing code (wrap in triple backticks).`;
+
+  try{
+    const res  = await fetch(STUDY_API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
+      question:prompt, skills:[], role:topic?topic.name:'General', score:0
+    })));
+    const text = await res.text();
+    document.getElementById('typing-indicator')?.remove();
+    addChatMsg('ai', text||"I couldn't generate a response. Please try again.");
+  }catch(e){
+    document.getElementById('typing-indicator')?.remove();
+    addChatMsg('ai','Sorry, I had trouble connecting. Please try again.');
+  }
+
+  btn.disabled=false;
+  inp.focus();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return (s||'').replace(/'/g,"\'").replace(/"/g,'&quot;'); }
+
+// Enter key in chat → send
+document.getElementById('chatInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); }
+});
+</script>
+<script src="qbit-agent.js"></script>
+</body>
+</html>

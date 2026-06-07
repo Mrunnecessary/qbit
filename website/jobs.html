@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qbit Jobs — Find Jobs You're Actually Ready For</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f172a;--s1:#1e293b;--s2:#0f172a;--b1:#334155;--b2:#475569;
+  --text:#f1f5f9;--muted:#94a3b8;--dim:#64748b;
+  --blue:#3b82f6;--dblue:#2563eb;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;}
+
+/* NAV */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-bottom:1px solid var(--s1);position:sticky;top:0;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);z-index:100;gap:12px;flex-wrap:wrap;}
+.logo{font-size:18px;font-weight:800;color:var(--text);text-decoration:none;flex-shrink:0;}.logo span{color:var(--blue);}
+.nav-tabs{display:flex;gap:4px;flex-wrap:wrap;}
+.nav-tab{padding:7px 14px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:Inter,sans-serif;transition:all .2s;}
+.nav-tab:hover,.nav-tab.active{background:var(--s1);color:var(--text);font-weight:600;}
+.nav-right{display:flex;gap:8px;flex-shrink:0;}
+.nbtn{padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;border:none;text-decoration:none;transition:all .2s;display:inline-block;}
+.nbtn.ghost{background:transparent;color:var(--muted);border:1px solid var(--b1);}
+.nbtn.primary{background:var(--dblue);color:#fff;}
+.nbtn.primary:hover{background:#1d4ed8;}
+
+/* PAGE */
+.page{max-width:1100px;margin:0 auto;padding:24px 20px 80px;}
+.tab-content{display:none;}.tab-content.active{display:block;}
+
+/* SEARCH HERO */
+.search-hero{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(139,92,246,.06));border:1px solid rgba(59,130,246,.18);border-radius:14px;padding:24px;margin-bottom:20px;}
+.search-hero h1{font-size:20px;font-weight:800;margin-bottom:4px;}
+.search-hero p{font-size:13px;color:var(--muted);margin-bottom:16px;}
+.search-row{display:flex;gap:8px;flex-wrap:wrap;}
+.inp{padding:11px 14px;border-radius:8px;border:1.5px solid var(--b1);background:var(--s1);color:var(--text);font-size:14px;font-family:Inter,sans-serif;outline:none;transition:border-color .2s;}
+.inp:focus{border-color:var(--blue);}
+.inp::placeholder{color:var(--dim);}
+.inp.grow{flex:1;min-width:180px;}
+.sel{padding:11px 12px;border-radius:8px;border:1.5px solid var(--b1);background:var(--s1);color:var(--text);font-size:14px;font-family:Inter,sans-serif;outline:none;cursor:pointer;}
+.sel option{background:var(--s1);}
+.sbtn{padding:11px 22px;background:var(--dblue);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;transition:background .2s;}
+.sbtn:hover{background:#1d4ed8;}
+.sbtn:disabled{background:var(--b1);cursor:not-allowed;}
+.filter-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center;}
+.chip{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--b1);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;font-family:Inter,sans-serif;}
+.chip.active{background:rgba(59,130,246,.1);border-color:var(--blue);color:var(--blue);}
+.chip-label{font-size:11px;color:var(--dim);padding:5px 2px;}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:1fr 360px;gap:18px;}
+@media(max-width:860px){.main-grid{grid-template-columns:1fr;}}
+
+/* JOBS */
+.jobs-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.jobs-hdr h2{font-size:14px;font-weight:600;}
+.jobs-count{font-size:12px;color:var(--muted);}
+.jcard{background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all .2s;position:relative;}
+.jcard:hover{border-color:var(--b2);transform:translateY(-1px);}
+.jcard.selected{border-color:var(--blue);}
+.jcard.hi{border-color:rgba(34,197,94,.4);}
+.fit-tag{position:absolute;top:12px;right:12px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.ft-hi{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.ft-md{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.25);}
+.ft-lo{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25);}
+.ft-uk{background:var(--s2);color:var(--dim);border:1px solid var(--b1);}
+.jtitle{font-size:15px;font-weight:700;margin-bottom:3px;padding-right:85px;line-height:1.3;}
+.jco{font-size:13px;color:var(--blue);font-weight:500;margin-bottom:7px;}
+.jmeta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted);}
+.jtags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
+.jtag{padding:3px 8px;border-radius:20px;font-size:11px;background:var(--s2);border:1px solid var(--b1);color:var(--muted);}
+.jtag.m{border-color:rgba(34,197,94,.3);color:var(--green);background:rgba(34,197,94,.05);}
+
+/* PANEL */
+.panel{background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:16px;margin-bottom:14px;}
+.panel h3{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.ptxt{font-size:13px;color:var(--muted);}
+
+/* JD ANALYSER */
+.jtextarea{width:100%;height:110px;padding:11px 13px;border-radius:8px;border:1.5px solid var(--b1);background:var(--s2);color:var(--text);font-size:13px;font-family:Inter,sans-serif;resize:vertical;outline:none;line-height:1.6;}
+.jtextarea:focus{border-color:var(--blue);}
+.jtextarea::placeholder{color:var(--dim);}
+.abtn{width:100%;padding:10px;background:var(--dblue);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;margin-top:8px;transition:background .2s;}
+.abtn:hover{background:#1d4ed8;}
+.abtn:disabled{background:var(--b1);cursor:not-allowed;}
+.abtn.sec{background:var(--s2);color:var(--muted);border:1px solid var(--b1);}
+.abtn.sec:hover{border-color:var(--b2);color:var(--text);}
+
+/* FIT METER */
+.fit-wrap{text-align:center;margin:12px 0 10px;}
+.fit-circle{width:72px;height:72px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 6px;border:5px solid var(--b1);}
+.fit-circle .pct{font-size:20px;font-weight:800;line-height:1;}
+.fit-circle .lb{font-size:9px;color:var(--muted);}
+
+/* DECISION */
+.dec{padding:12px 14px;border-radius:9px;margin-top:10px;font-size:13px;line-height:1.6;}
+.dec.go{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);}
+.dec.wait{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);}
+.dec.upskill{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);}
+.dec-v{font-size:14px;font-weight:700;margin-bottom:4px;}
+.dec-r{font-size:12px;color:var(--muted);}
+
+/* SMART APPLY */
+.apply-box{background:rgba(37,99,235,.07);border:1px solid rgba(59,130,246,.18);border-radius:9px;padding:14px;margin-top:10px;}
+.apply-box h4{font-size:13px;font-weight:700;margin-bottom:4px;}
+.apply-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.apbtn{padding:8px 13px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:Inter,sans-serif;transition:all .2s;}
+.apbtn.p{background:var(--dblue);color:#fff;}
+.apbtn.s{background:var(--s1);color:var(--muted);border:1px solid var(--b1);}
+.apbtn.s:hover{color:var(--text);}
+
+/* LOCATION */
+.loc-item{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--s2);font-size:13px;}
+.loc-item:last-child{border-bottom:none;}
+.loc-bar{height:4px;background:var(--s2);border-radius:3px;overflow:hidden;margin-top:5px;}
+.loc-fill{height:100%;background:var(--blue);border-radius:3px;}
+.loc-cnt{font-size:12px;font-weight:600;color:var(--blue);white-space:nowrap;}
+
+/* RESUME */
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+@media(max-width:600px){.res-grid{grid-template-columns:1fr;}}
+.rlabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);display:block;margin-bottom:4px;}
+.res-out{white-space:pre-wrap;font-size:12px;color:var(--muted);line-height:1.8;font-family:monospace;background:var(--s2);padding:14px;border-radius:8px;border:1px solid var(--b1);max-height:500px;overflow-y:auto;}
+
+/* EMPTY / LOADER */
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;}
+.empty .ei{font-size:36px;margin-bottom:10px;}
+.spinner{width:30px;height:30px;border:3px solid var(--s1);border-top:3px solid var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin:30px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* PROFILE BANNER */
+.pbanner{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:9px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--amber);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.pbanner a{color:var(--blue);text-decoration:none;font-weight:600;white-space:nowrap;}
+
+/* LOC RECS */
+.rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+@media(max-width:600px){.rec-grid{grid-template-columns:1fr;}}
+.rec-card{border-radius:10px;padding:14px;text-align:center;}
+.rec-card .ri{font-size:24px;margin-bottom:4px;}
+.rec-card .rn{font-size:14px;font-weight:700;margin-bottom:2px;}
+.rec-card .rd{font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo">Q<span>bit</span></a>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('jobs',this)">🔍 Jobs</button>
+    <button class="nav-tab" onclick="switchTab('location',this)">📍 Location Intel</button>
+    <button class="nav-tab" onclick="switchTab('resume',this)">📄 Resume Builder</button>
+  </div>
+  <div class="nav-right">
+    <a href="dashboard.html" class="nbtn ghost">My Score</a>
+    <a href="interview.html" class="nbtn primary">Mock Interview</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ═══════════════ JOBS TAB ═══════════════ -->
+  <div class="tab-content active" id="tab-jobs">
+
+    <div class="pbanner" id="profileBanner">
+      ⚡ Get your Qbit score first — then see AI fit scores on every job listing.
+      <a href="dashboard.html">Get career score →</a>
+    </div>
+
+    <div class="search-hero">
+      <h1>Find jobs you're actually ready for</h1>
+      <p>Search real jobs · AI fit score on each role · Paste any JD to get a decision in seconds</p>
+      <div class="search-row">
+        <input class="inp grow" id="jobQuery" placeholder="Data Analyst, DevOps, Product Manager...">
+        <select class="sel" id="jobLocation">
+          <option value="">All India</option>
+          <option>Mumbai</option><option>Bangalore</option><option>Delhi</option>
+          <option>Hyderabad</option><option>Pune</option><option>Chennai</option>
+          <option>Kolkata</option><option>Ahmedabad</option>
+        </select>
+        <select class="sel" id="salaryMin">
+          <option value="">Any salary</option>
+          <option value="300000">₹3L+</option><option value="500000">₹5L+</option>
+          <option value="800000">₹8L+</option><option value="1000000">₹10L+</option>
+          <option value="1500000">₹15L+</option><option value="2000000">₹20L+</option>
+        </select>
+        <button class="sbtn" id="searchBtn" onclick="searchJobs()">Search →</button>
+      </div>
+      <div class="filter-row">
+        <span class="chip-label">Type:</span>
+        <button class="chip active" data-filter="type" data-val="full_time" onclick="setFilter(this)">Full Time</button>
+        <button class="chip" data-filter="type" data-val="part_time" onclick="setFilter(this)">Part Time</button>
+        <button class="chip" data-filter="type" data-val="contract" onclick="setFilter(this)">Contract</button>
+        <span class="chip-label" style="margin-left:8px">Sort:</span>
+        <button class="chip active" data-filter="sort" data-val="date" onclick="setFilter(this)">Latest</button>
+        <button class="chip" data-filter="sort" data-val="salary" onclick="setFilter(this)">Salary</button>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <!-- LEFT: Job results -->
+      <div>
+        <div class="jobs-hdr">
+          <h2 id="jobsTitle">Search for jobs above</h2>
+          <span class="jobs-count" id="jobsCount"></span>
+        </div>
+        <div id="jobsList">
+          <div class="empty"><div class="ei">🔍</div>
+            <p>Enter a job title above to find real listings.<br>
+            <span style="font-size:12px;color:var(--dim)">Powered by Adzuna · Updated daily</span></p>
+          </div>
+        </div>
+        <div id="loadMoreWrap" style="display:none;text-align:center;margin-top:10px;">
+          <button class="chip" onclick="loadMoreJobs()" style="padding:10px 20px;font-size:13px">Load more jobs</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Sidebar -->
+      <div>
+        <!-- JD FIT ANALYSER -->
+        <div class="panel">
+          <h3>🎯 JD Fit Analyser</h3>
+          <p class="ptxt" style="margin-bottom:8px">Paste any job description — get your fit % and a Go / Wait / Upskill decision.</p>
+          <textarea class="jtextarea" id="jdInput"
+            placeholder="Paste job description here...&#10;e.g. 'We are looking for a Data Analyst with 3+ years experience in SQL, Python, Tableau...'"></textarea>
+          <button class="abtn" id="analyseBtn" onclick="analyseJD()">Analyse My Fit →</button>
+          <div id="fitResult" style="display:none;margin-top:14px;">
+            <div class="fit-wrap">
+              <div class="fit-circle" id="fitCircle">
+                <div class="pct" id="fitPct">—</div>
+                <div class="lb">fit</div>
+              </div>
+              <div style="font-size:13px;font-weight:600" id="fitVerdict"></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:5px">Skills you have</div>
+            <div class="jtags" id="matchedSkills" style="margin-bottom:10px"></div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:5px">Gaps to close</div>
+            <div class="jtags" id="missingSkills" style="margin-bottom:10px"></div>
+            <div id="decisionBox"></div>
+            <div class="apply-box">
+              <h4>Smart Apply</h4>
+              <p class="ptxt" style="font-size:12px" id="applyStatus">Qbit prepares your materials — you click apply.</p>
+              <div class="apply-row">
+                <button class="apbtn p" onclick="genCoverLetter()">Cover Letter</button>
+                <button class="apbtn s" onclick="goToResume()">Tailor Resume</button>
+                <button class="apbtn s" id="applyBtn" onclick="applyToJob()" style="display:none">Apply →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILL PROFILE -->
+        <div class="panel">
+          <h3>⚡ Your Skill Profile</h3>
+          <div id="userSkillsDisplay">
+            <p class="ptxt"><a href="dashboard.html" style="color:var(--blue);font-weight:600">Get your score →</a> to unlock AI fit matching on every job.</p>
+          </div>
+        </div>
+
+        <!-- MARKET SNAPSHOT -->
+        <div class="panel">
+          <h3>📊 Market Snapshot</h3>
+          <div id="marketStats"><p class="ptxt">Search for a role to see live market data.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ LOCATION INTEL TAB ═══════════════ -->
+  <div class="tab-content" id="tab-location">
+    <div class="search-hero">
+      <h1>📍 Location Intelligence</h1>
+      <p>See where the jobs are, what they pay, and which city gives you the best career-to-cost ratio.</p>
+      <div class="search-row">
+        <input class="inp grow" id="locQuery" placeholder="Enter role e.g. Data Analyst, DevOps Engineer...">
+        <button class="sbtn" onclick="searchLocationIntel()">Get Location Data →</button>
+      </div>
+    </div>
+    <div id="locationContent">
+      <div class="empty"><div class="ei">🗺️</div>
+        <p>Enter a role above to see job counts, salaries, and<br>cost-of-living adjusted pay across Indian cities.</p></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ RESUME BUILDER TAB ═══════════════ -->
+  <div class="tab-content" id="tab-resume">
+    <div class="search-hero">
+      <h1>📄 AI Resume Builder</h1>
+      <p>Your profile + target role = ATS-optimised resume in 60 seconds. No templates, no fluff.</p>
+    </div>
+    <div style="max-width:680px;margin:0 auto;">
+      <div class="panel">
+        <h3>✍️ Build your resume</h3>
+        <div class="res-grid">
+          <div><label class="rlabel">Full Name *</label><input class="inp" id="rName" placeholder="Priya Sharma" style="width:100%"></div>
+          <div><label class="rlabel">Target Role *</label><input class="inp" id="rRole" placeholder="Data Analyst" style="width:100%"></div>
+          <div><label class="rlabel">Email</label><input class="inp" id="rEmail" placeholder="priya@gmail.com" style="width:100%"></div>
+          <div><label class="rlabel">Phone</label><input class="inp" id="rPhone" placeholder="+91 98765 43210" style="width:100%"></div>
+          <div><label class="rlabel">Experience (years)</label><input class="inp" id="rExp" type="number" placeholder="4" style="width:100%"></div>
+          <div><label class="rlabel">Current Company</label><input class="inp" id="rCompany" placeholder="Infosys" style="width:100%"></div>
+        </div>
+        <label class="rlabel">Your key skills (comma separated)</label>
+        <input class="inp" id="rSkills" placeholder="Excel, SQL, Python, Data Analysis, Reporting" style="width:100%;margin-bottom:12px;">
+        <label class="rlabel">Work experience summary</label>
+        <textarea class="jtextarea" id="rExp2" style="height:90px;margin-bottom:12px;"
+          placeholder="- Created monthly dashboards for 50+ stakeholders&#10;- Automated reporting saving 8 hours/week&#10;- Led team of 3 analysts for Q3 reporting"></textarea>
+        <label class="rlabel">Education</label>
+        <input class="inp" id="rEdu" placeholder="B.Com, Mumbai University, 2018" style="width:100%;margin-bottom:12px;">
+        <label class="rlabel">Target JD (optional — makes resume more relevant)</label>
+        <textarea class="jtextarea" id="rJD" style="height:70px;margin-bottom:12px;"
+          placeholder="Paste the job description you're applying to..."></textarea>
+        <button class="sbtn" onclick="buildResume()" id="resumeBtn" style="width:100%">Generate My Resume →</button>
+      </div>
+
+      <div id="resumeOutput" style="display:none;">
+        <div class="panel">
+          <h3>📄 Your Resume <span style="font-size:11px;font-weight:400;color:var(--dim);margin-left:6px">ATS-optimised</span></h3>
+          <div class="res-out" id="resumeContent"></div>
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+            <button class="sbtn" onclick="downloadResumePDF()" style="width:auto;padding:10px 20px;">⬇ Download PDF</button>
+            <button class="abtn sec" onclick="copyResume()" style="width:auto;padding:10px 20px;margin-top:0;">Copy Text</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+const QBIT_API    = "https://script.google.com/macros/s/AKfycbyBFqMP07yUlPOCYTefNOVCxxsK9fEtq07KO0FtujIVKc-etKOj456O-4Ll3bPNl86F/exec";
+
+// Register free at developer.adzuna.com → get app_id + app_key
+const ADZUNA_ID   = "YOUR_ADZUNA_APP_ID";
+const ADZUNA_KEY  = "YOUR_ADZUNA_APP_KEY";
+const ADZUNA_BASE = "https://api.adzuna.com/v1/api/jobs/in";
+
+// Cost of living index — Mumbai=100 baseline
+const COL = {Bangalore:92,Mumbai:100,Delhi:88,Hyderabad:78,Pune:80,Chennai:82,Kolkata:72,Ahmedabad:68};
+const SAL = {Bangalore:1.15,Mumbai:1.12,Delhi:1.05,Hyderabad:1.08,Pune:1.0,Chennai:1.02,Kolkata:0.88,Ahmedabad:0.85};
+const CITIES = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai','Kolkata','Ahmedabad'];
+
+// ── STATE ───────────────────────────────────────────────────
+const S = {
+  skills:[],role:'',score:0,
+  jobs:[],selectedJob:null,
+  page:1,lastQuery:'',lastLoc:'',lastSalary:'',lastType:'full_time',lastSort:'date',
+  resumeText:'',resumeName:''
+};
+
+// Load Qbit profile from session
+(function(){
+  try{
+    const sk = sessionStorage.getItem('qbit_skills');
+    const ro = sessionStorage.getItem('qbit_role');
+    const sc = sessionStorage.getItem('qbit_score');
+    if(sk){ S.skills=JSON.parse(sk); }
+    if(ro){ S.role=ro; }
+    if(sc){ S.score=parseInt(sc)||0; }
+    if(S.skills.length){ showSkillProfile(); document.getElementById('profileBanner').style.display='none'; }
+    // Pre-fill resume fields if profile exists
+    if(ro) document.getElementById('rRole').value = ro;
+    if(sk) document.getElementById('rSkills').value = JSON.parse(sk).join(', ');
+  }catch(e){}
+})();
+
+function showSkillProfile(){
+  document.getElementById('userSkillsDisplay').innerHTML =`
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">
+      ${S.role?`<b style="color:var(--blue)">${S.role}</b> · `:''}
+      ${S.score?S.score+'% readiness · ':''}
+      ${S.skills.length} skills detected
+    </div>
+    <div class="jtags">${S.skills.slice(0,10).map(s=>`<span class="jtag m">${s}</span>`).join('')}</div>
+    <a href="dashboard.html" style="font-size:12px;color:var(--blue);text-decoration:none;display:block;margin-top:8px">Update profile →</a>`;
+}
+
+// ── TABS ────────────────────────────────────────────────────
+function switchTab(tab, btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ── FILTERS ─────────────────────────────────────────────────
+function setFilter(btn){
+  const filter = btn.dataset.filter;
+  const val    = btn.dataset.val;
+  document.querySelectorAll(`.chip[data-filter="${filter}"]`).forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  if(filter==='type') S.lastType=val;
+  if(filter==='sort') S.lastSort=val;
+}
+
+// ── JOB SEARCH ──────────────────────────────────────────────
+async function searchJobs(page=1){
+  const query = document.getElementById('jobQuery').value.trim();
+  const loc   = document.getElementById('jobLocation').value;
+  const sal   = document.getElementById('salaryMin').value;
+  if(!query){ alert('Please enter a job title.'); return; }
+
+  S.lastQuery=query; S.lastLoc=loc; S.lastSalary=sal; S.page=page;
+
+  const btn=document.getElementById('searchBtn');
+  btn.textContent='Searching...'; btn.disabled=true;
+  if(page===1){
+    document.getElementById('jobsList').innerHTML='<div class="spinner"></div>';
+    document.getElementById('jobsTitle').textContent=`"${query}"${loc?' in '+loc:''}`;
+    document.getElementById('loadMoreWrap').style.display='none';
+  }
+
+  try{
+    let url=`${ADZUNA_BASE}/search/${page}?app_id=${ADZUNA_ID}&app_key=${ADZUNA_KEY}`;
+    url+=`&results_per_page=15&what=${encodeURIComponent(query)}`;
+    if(loc)  url+=`&where=${encodeURIComponent(loc)}`;
+    if(sal)  url+=`&salary_min=${sal}`;
+    if(S.lastSort==='salary') url+=`&sort_by=salary`;
+    else url+=`&sort_by=date`;
+    url+=`&content-type=application/json`;
+
+    const res  = await fetch(url);
+    const data = await res.json();
+    const jobs = data.results||[];
+
+    if(page===1) S.jobs=jobs;
+    else S.jobs=[...S.jobs,...jobs];
+
+    document.getElementById('jobsCount').textContent=`${(data.count||0).toLocaleString()} total`;
+    renderJobs(page===1);
+    updateMarketStats(data,query,loc);
+    document.getElementById('loadMoreWrap').style.display=jobs.length===15?'block':'none';
+
+  }catch(err){
+    document.getElementById('jobsList').innerHTML=`
+      <div class="empty"><div class="ei">⚠️</div>
+      <p>Could not load jobs.<br>
+      <b>Register free at <a href="https://developer.adzuna.com" target="_blank" style="color:var(--blue)">developer.adzuna.com</a></b><br>
+      then replace ADZUNA_ID and ADZUNA_KEY in this file.</p></div>`;
+  }
+
+  btn.textContent='Search →'; btn.disabled=false;
+}
+
+function loadMoreJobs(){ searchJobs(S.page+1); }
+
+function renderJobs(clear=true){
+  const list = document.getElementById('jobsList');
+  const html = S.jobs.map((job,i)=>{
+    const fit    = calcFit(job);
+    const ftCls  = fit>=70?'ft-hi':fit>=40?'ft-md':fit>0?'ft-lo':'ft-uk';
+    const ftLbl  = S.skills.length>0?(fit>0?fit+'% fit':'Analyse fit'):'Score first';
+    const salary = fmtSalary(job.salary_min,job.salary_max);
+    const matched= getMatched(job);
+    return `<div class="jcard ${fit>=70?'hi':''} ${S.selectedJob===i?'selected':''}" onclick="selectJob(${i})">
+      <div class="fit-tag ${ftCls}">${ftLbl}</div>
+      <div class="jtitle">${esc(job.title)}</div>
+      <div class="jco">${esc(job.company?.display_name||'Company')}</div>
+      <div class="jmeta">
+        <span>📍 ${esc(job.location?.display_name||'India')}</span>
+        ${salary?`<span>💰 ${salary}</span>`:''}
+        <span>📅 ${ago(job.created)}</span>
+        ${job.contract_type?`<span>${cap(job.contract_type)}</span>`:''}
+      </div>
+      ${matched.length?`<div class="jtags">${matched.slice(0,5).map(t=>`<span class="jtag m">✓ ${t}</span>`).join('')}</div>`:''}
+    </div>`;
+  }).join('');
+  if(clear) list.innerHTML=html||'<div class="empty"><div class="ei">😕</div><p>No jobs found. Try different keywords.</p></div>';
+  else list.innerHTML+=html;
+}
+
+function selectJob(i){
+  S.selectedJob=i;
+  const job=S.jobs[i];
+  if(!job) return;
+  // Pre-fill JD analyser
+  document.getElementById('jdInput').value=(job.title+'\n\n'+(job.description||'').replace(/<[^>]*>/g,'')).substring(0,2000);
+  // Show apply button
+  document.getElementById('applyBtn').style.display='inline-block';
+  document.getElementById('applyBtn').dataset.url=job.redirect_url||'#';
+  renderJobs(true);
+  analyseJD();
+}
+
+function applyToJob(){
+  const url=document.getElementById('applyBtn').dataset.url;
+  if(url&&url!=='#') window.open(url,'_blank');
+}
+
+function calcFit(job){
+  if(!S.skills.length) return 0;
+  const text=((job.title||'')+(job.description||'')).toLowerCase();
+  const matched=S.skills.filter(s=>text.includes(s.toLowerCase())).length;
+  return Math.min(100,Math.round(matched/Math.max(S.skills.length,5)*100));
+}
+function getMatched(job){
+  if(!S.skills.length) return [];
+  const text=((job.title||'')+(job.description||'')).toLowerCase();
+  return S.skills.filter(s=>text.includes(s.toLowerCase()));
+}
+function fmtSalary(mn,mx){
+  if(!mn&&!mx) return '';
+  const f=n=>n>=100000?'₹'+(n/100000).toFixed(1)+'L':'₹'+n.toLocaleString();
+  if(mn&&mx) return f(mn)+' – '+f(mx);
+  if(mn) return f(mn)+'+';
+  return '';
+}
+function ago(d){
+  if(!d) return '';
+  const days=Math.floor((Date.now()-new Date(d))/(864e5));
+  if(days===0) return 'Today';
+  if(days===1) return 'Yesterday';
+  if(days<7)   return days+'d ago';
+  if(days<30)  return Math.floor(days/7)+'w ago';
+  return Math.floor(days/30)+'mo ago';
+}
+function updateMarketStats(data,query,loc){
+  const avg=data.mean_salary?'₹'+(data.mean_salary/100000).toFixed(1)+'L avg':'—';
+  document.getElementById('marketStats').innerHTML=`
+    <div class="loc-item"><span>${query} jobs in India</span><span class="loc-cnt">${(data.count||0).toLocaleString()}</span></div>
+    <div class="loc-item"><span>Average salary</span><span class="loc-cnt">${avg}</span></div>
+    <div class="loc-item"><span>Showing</span><span class="loc-cnt">${S.jobs.length}</span></div>
+    ${loc?`<div class="loc-item"><span>Location filter</span><span class="loc-cnt">${loc}</span></div>`:''}
+    <p style="font-size:11px;color:var(--dim);margin-top:6px">Adzuna · Updated daily</p>`;
+}
+
+// ── JD FIT ANALYSER ─────────────────────────────────────────
+async function analyseJD(){
+  const jd=document.getElementById('jdInput').value.trim();
+  if(!jd||jd.length<30){ alert('Paste a job description first.'); return; }
+
+  const btn=document.getElementById('analyseBtn');
+  btn.textContent='Analysing...'; btn.disabled=true;
+  document.getElementById('fitResult').style.display='none';
+
+  const skillStr=S.skills.length?`User skills: ${S.skills.join(', ')}`:'User has not set skill profile yet.';
+  const prompt=`You are a career fit analyser.
+${skillStr}
+Job Description: "${jd.substring(0,1500)}"
+Return ONLY valid JSON:
+{"fit_score":72,"verdict":"Strong match","matched_skills":["excel","sql"],"missing_skills":["python","tableau"],"decision":"go","decision_reason":"You match 7/10 requirements. The 2 gaps are learnable in 4 weeks.","salary_range":"₹8L–₹14L","time_to_ready":"Ready now"}
+decision must be: go | wait | upskill`;
+
+  try{
+    const res  = await callGemini(prompt);
+    const clean= res.replace(/```json|```/g,'').trim();
+    const i1=clean.indexOf('{'),i2=clean.lastIndexOf('}');
+    const data = JSON.parse(clean.substring(i1,i2+1));
+    showFitResult(data);
+  }catch(e){
+    const jdl=jd.toLowerCase();
+    const matched=S.skills.filter(s=>jdl.includes(s.toLowerCase()));
+    const fit=S.skills.length?Math.round(matched.length/S.skills.length*100):50;
+    showFitResult({fit_score:fit,verdict:fit>=70?'Good match':fit>=40?'Partial match':'Low match',
+      matched_skills:matched,missing_skills:[],
+      decision:fit>=70?'go':fit>=40?'wait':'upskill',
+      decision_reason:`You match ${matched.length} of your ${S.skills.length} profile skills.`,
+      salary_range:'—',time_to_ready:fit>=70?'Ready now':'Needs upskilling'});
+  }
+  btn.textContent='Analyse My Fit →'; btn.disabled=false;
+}
+
+function showFitResult(data){
+  const score=data.fit_score||0;
+  const col  =score>=70?'var(--green)':score>=40?'var(--amber)':'var(--red)';
+  document.getElementById('fitCircle').style.borderColor=col;
+  document.getElementById('fitPct').style.color=col;
+  document.getElementById('fitPct').textContent=score+'%';
+  document.getElementById('fitVerdict').textContent=data.verdict||'';
+  document.getElementById('matchedSkills').innerHTML=(data.matched_skills||[]).map(s=>`<span class="jtag m">✓ ${s}</span>`).join('')||'<span style="font-size:12px;color:var(--dim)">None detected</span>';
+  document.getElementById('missingSkills').innerHTML=(data.missing_skills||[]).map(s=>`<span class="jtag" style="border-color:rgba(239,68,68,.3);color:var(--red)">✗ ${s}</span>`).join('')||'<span style="font-size:12px;color:var(--green)">No major gaps!</span>';
+
+  const dec=data.decision||'wait';
+  const emj=dec==='go'?'✅':dec==='wait'?'⏳':'📚';
+  const lbl=dec==='go'?'Apply now — you are ready':dec==='wait'?'Apply after quick prep':'Upskill first, then apply';
+  document.getElementById('decisionBox').innerHTML=`
+    <div class="dec ${dec}">
+      <div class="dec-v">${emj} ${lbl}</div>
+      <div class="dec-r">${data.decision_reason||''}</div>
+      ${data.salary_range&&data.salary_range!=='—'?`<div class="dec-r" style="margin-top:4px">💰 Expected: ${data.salary_range}</div>`:''}
+      ${data.time_to_ready?`<div class="dec-r">⏱ ${data.time_to_ready}</div>`:''}
+    </div>`;
+  document.getElementById('fitResult').style.display='block';
+}
+
+// ── SMART APPLY ─────────────────────────────────────────────
+async function genCoverLetter(){
+  const jd  = document.getElementById('jdInput').value.trim();
+  const job  = S.selectedJob!==null?S.jobs[S.selectedJob]:null;
+  const role = job?job.title:S.role||'professional';
+  const company=job?job.company?.display_name||'the company':'the company';
+
+  document.getElementById('applyStatus').textContent='Generating cover letter...';
+
+  const prompt=`Write a professional cover letter.
+Role: ${role} at ${company}
+Candidate skills: ${S.skills.join(', ')||'professional skills'}
+JD summary: ${jd.substring(0,600)}
+3 paragraphs. Professional, specific, quantified. Do NOT start with "I am writing to express my interest".`;
+
+  const letter=await callGemini(prompt);
+  if(letter&&!letter.includes('unavailable')){
+    const blob=new Blob([letter],{type:'text/plain'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='cover-letter-qbit.txt';
+    a.click();
+    document.getElementById('applyStatus').textContent='✅ Cover letter downloaded!';
+    setTimeout(()=>document.getElementById('applyStatus').textContent='Qbit prepares your materials — you click apply.',3000);
+  }
+}
+
+function goToResume(){
+  const jd=document.getElementById('jdInput').value;
+  const job=S.selectedJob!==null?S.jobs[S.selectedJob]:null;
+  switchTab('resume', document.querySelectorAll('.nav-tab')[2]);
+  if(jd) document.getElementById('rJD').value=jd;
+  if(job) document.getElementById('rRole').value=job.title;
+  if(S.skills.length) document.getElementById('rSkills').value=S.skills.join(', ');
+  document.getElementById('rJD').scrollIntoView({behavior:'smooth'});
+}
+
+// ── LOCATION INTEL ──────────────────────────────────────────
+async function searchLocationIntel(){
+  const query=document.getElementById('locQuery').value.trim();
+  if(!query){ alert('Please enter a role.'); return; }
+
+  document.getElementById('locationContent').innerHTML=
+    '<div class="spinner"></div><p style="text-align:center;color:var(--muted);font-size:13px;margin-top:8px">Fetching data for '+CITIES.length+' cities...</p>';
+
+  try{
+    const results=await Promise.all(CITIES.map(city=>
+      fetch(`${ADZUNA_BASE}/search/1?app_id=${ADZUNA_ID}&app_key=${ADZUNA_KEY}&results_per_page=1&what=${encodeURIComponent(query)}&where=${encodeURIComponent(city)}&content-type=application/json`)
+        .then(r=>r.json())
+        .then(d=>({city,count:d.count||0,avg:d.mean_salary||0}))
+        .catch(()=>({city,count:0,avg:0}))
+    ));
+    results.sort((a,b)=>b.count-a.count);
+    const max=Math.max(...results.map(r=>r.count),1);
+    renderLocationIntel(results,query,max);
+  }catch(e){
+    document.getElementById('locationContent').innerHTML=
+      '<div class="empty"><div class="ei">⚠️</div><p>Add your Adzuna API keys to enable location data.</p></div>';
+  }
+}
+
+function renderLocationIntel(results,query,max){
+  const bestCount=results[0];
+  const bestVal=results.slice().sort((a,b)=>{
+    return ((b.avg||500000)/(COL[b.city]||80))-((a.avg||500000)/(COL[a.city]||80));
+  })[0];
+
+  document.getElementById('locationContent').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div class="panel">
+        <h3>📊 Job Density — ${query}</h3>
+        ${results.map(r=>`
+          <div style="margin-bottom:10px;">
+            <div class="loc-item" style="padding:3px 0;">
+              <span style="font-weight:600">${r.city}</span>
+              <span class="loc-cnt">${r.count.toLocaleString()} jobs</span>
+            </div>
+            <div class="loc-bar"><div class="loc-fill" style="width:${Math.round(r.count/max*100)}%"></div></div>
+          </div>`).join('')}
+        <p style="font-size:11px;color:var(--dim);margin-top:6px">Source: Adzuna · Live</p>
+      </div>
+
+      <div class="panel">
+        <h3>💰 Salary vs Cost of Living</h3>
+        ${results.map(r=>{
+          const col=COL[r.city]||80;
+          const rawSal=r.avg||(600000*(SAL[r.city]||1));
+          const realVal=Math.round(rawSal/col*100);
+          return `<div class="loc-item">
+            <div>
+              <span style="font-weight:600">${r.city}</span>
+              <span style="font-size:11px;color:var(--dim);margin-left:6px">COL ${col}</span>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;font-weight:600;color:var(--green)">₹${(rawSal/1e5).toFixed(1)}L avg</div>
+              <div style="font-size:11px;color:var(--dim)">Real: ₹${(realVal/1e5).toFixed(1)}L</div>
+            </div>
+          </div>`;}).join('')}
+        <p style="font-size:11px;color:var(--dim);margin-top:6px">Real = salary adjusted vs Mumbai baseline</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>🎯 Qbit Recommendation for ${query}</h3>
+      <div class="rec-grid">
+        <div class="rec-card" style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2)">
+          <div class="ri">🏆</div>
+          <div class="rn" style="color:var(--green)">${bestCount.city}</div>
+          <div class="rd">Most opportunities<br>${bestCount.count.toLocaleString()} jobs</div>
+        </div>
+        <div class="rec-card" style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2)">
+          <div class="ri">💎</div>
+          <div class="rn" style="color:var(--blue)">${bestVal.city}</div>
+          <div class="rd">Best salary value<br>High pay, lower cost</div>
+        </div>
+        <div class="rec-card" style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.2)">
+          <div class="ri">🚀</div>
+          <div class="rn" style="color:var(--purple)">Remote</div>
+          <div class="rd">Best of all worlds<br>Apply from anywhere</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── RESUME BUILDER ───────────────────────────────────────────
+async function buildResume(){
+  const name=document.getElementById('rName').value.trim();
+  const role=document.getElementById('rRole').value.trim();
+  if(!name||!role){ alert('Please enter your name and target role.'); return; }
+
+  const btn=document.getElementById('resumeBtn');
+  btn.textContent='Generating...'; btn.disabled=true;
+
+  const prompt=`Create a professional ATS-optimised resume in plain text.
+Name: ${name}
+Role: ${role}
+Email: ${document.getElementById('rEmail').value}
+Phone: ${document.getElementById('rPhone').value}
+Experience: ${document.getElementById('rExp').value} years
+Company: ${document.getElementById('rCompany').value}
+Skills: ${document.getElementById('rSkills').value}
+Work summary: ${document.getElementById('rExp2').value}
+Education: ${document.getElementById('rEdu').value}
+${document.getElementById('rJD').value?'Target JD: '+document.getElementById('rJD').value.substring(0,500):''}
+
+Sections: HEADER | PROFESSIONAL SUMMARY (3 lines, keyword-rich for ${role}) | SKILLS (grouped) | EXPERIENCE (action verbs, quantified) | EDUCATION | CERTIFICATIONS.
+ATS-friendly. Keywords from JD if provided. Be specific and quantified. Plain text only, no markdown symbols.`;
+
+  const resume=await callGemini(prompt);
+  if(resume&&!resume.includes('unavailable')){
+    document.getElementById('resumeContent').textContent=resume;
+    document.getElementById('resumeOutput').style.display='block';
+    document.getElementById('resumeOutput').scrollIntoView({behavior:'smooth'});
+    S.resumeText=resume; S.resumeName=name;
+  } else {
+    alert('Resume generation temporarily unavailable. Please try again.');
+  }
+  btn.textContent='Generate My Resume →'; btn.disabled=false;
+}
+
+async function downloadResumePDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const lines=doc.splitTextToSize(S.resumeText,170);
+  let y=20;
+  lines.forEach(line=>{
+    if(y>280){doc.addPage();y=20;}
+    const isHeader=line===line.toUpperCase()&&line.trim().length>2&&line.trim().length<40;
+    doc.setFont('helvetica',isHeader?'bold':'normal');
+    doc.setFontSize(isHeader?11:10);
+    doc.text(line,20,y);
+    y+=isHeader?7:5;
+  });
+  doc.save(`${S.resumeName.replace(/\s+/g,'-').toLowerCase()}-qbit-resume.pdf`);
+}
+
+function copyResume(){
+  navigator.clipboard.writeText(S.resumeText)
+    .then(()=>alert('Resume copied to clipboard!'))
+    .catch(()=>{ const el=document.getElementById('resumeContent'); const r=document.createRange(); r.selectNode(el); window.getSelection().removeAllRanges(); window.getSelection().addRange(r); });
+}
+
+// ── GEMINI VIA QBIT API ─────────────────────────────────────
+async function callGemini(prompt){
+  try{
+    const res=await fetch(QBIT_API+"?careerAI=true&data="+encodeURIComponent(JSON.stringify({
+      question:prompt, skills:S.skills, role:S.role, score:S.score
+    })));
+    return await res.text();
+  }catch(e){ return ""; }
+}
+
+// ── HELPERS ─────────────────────────────────────────────────
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function cap(s){ return s?(s.charAt(0).toUpperCase()+s.slice(1).replace(/_/g,' ')):'' ; }
+
+// Enter key bindings
+document.getElementById('jobQuery').addEventListener('keydown',e=>{ if(e.key==='Enter') searchJobs(); });
+document.getElementById('locQuery').addEventListener('keydown',e=>{ if(e.key==='Enter') searchLocationIntel(); });
+document.getElementById('jdInput').addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) analyseJD(); });
+</script>
+<script src="qbit-agent.js"></script>
+</body>
+</html>
